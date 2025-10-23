@@ -2,6 +2,10 @@ package com.mashang.service;
 
 import com.mashang.domain.entity.Task;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.mashang.domain.vo.student.TaskVo;
+import com.ruoyi.common.core.domain.entity.SysUser;
+
+import java.util.List;
 
 /**
 * @author 20413
@@ -9,5 +13,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2025-10-22 18:01:40
 */
 public interface ITaskService extends IService<Task> {
-
+    /**
+     * 查询当前学生所有学习任务列表
+     * @param user 学生对象
+     * @return
+     */
+    List<TaskVo> listStudentTasks(SysUser user);
 }

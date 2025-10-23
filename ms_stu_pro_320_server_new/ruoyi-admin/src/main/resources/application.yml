@@ -15,8 +15,8 @@ ruoyi:
 
 # 开发环境配置
 server:
-  # todo:服务器的HTTP端口，000改为对应的组号
-  port: 11000
+
+  port: 11320
   servlet:
     # 应用的访问路径
     context-path: /
@@ -87,6 +87,9 @@ spring:
         max-active: 8
         # #连接池最大阻塞等待时间（使用负值表示没有限制）
         max-wait: -1ms
+#配置时区
+  jackson:
+    time-zone: GMT+8
 
 # token配置
 token:
@@ -99,7 +102,7 @@ token:
 
 # MyBatis配置
 mybatis:
-  typeAliasesPackage: com.ruoyi.**.domain,com.mashang.domain
+  typeAliasesPackage: com.ruoyi.**.domain,com.mashang.domain.entity,com.mashang.domain.vo,com.mashang.domain.query
   mapperLocations: classpath*:mapper/**/*Mapper.xml
 
 mybatis-plus:

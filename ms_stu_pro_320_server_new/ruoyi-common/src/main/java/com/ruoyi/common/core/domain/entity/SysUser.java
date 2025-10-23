@@ -24,6 +24,9 @@ public class SysUser extends BaseEntity
     /** 用户ID */
     @Excel(name = "用户序号", type = Type.EXPORT, cellType = ColumnType.NUMERIC, prompt = "用户编号")
     private Long userId;
+    /**班级ID */
+    @Excel(name = "班级id")
+    private Long classId;
 
     /** 部门ID */
     @Excel(name = "部门编号", type = Type.IMPORT)
@@ -131,6 +134,8 @@ public class SysUser extends BaseEntity
     {
         this.deptId = deptId;
     }
+
+
 
     @Xss(message = "用户昵称不能包含脚本字符")
     @Size(min = 0, max = 30, message = "用户昵称长度不能超过30个字符")
@@ -308,6 +313,14 @@ public class SysUser extends BaseEntity
     public void setRoleId(Long roleId)
     {
         this.roleId = roleId;
+    }
+
+    public Long getClassId() {
+        return classId;
+    }
+
+    public void setClassId(Long classId) {
+        this.classId = classId;
     }
 
     @Override

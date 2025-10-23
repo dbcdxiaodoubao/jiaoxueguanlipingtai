@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.mashang.domain.model.BaseModel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -36,6 +37,7 @@ public class Test extends BaseModel {
     private Integer testType;
 
     @ApiModelProperty(value = "试卷发布时间")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date startTime;
 
     @ApiModelProperty(value = "截止时间")

@@ -2,6 +2,9 @@ package com.mashang.mapper;
 
 import com.mashang.domain.entity.Task;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.mashang.domain.vo.student.TaskVo;
+
+import java.util.List;
 
 /**
 * @author 20413
@@ -10,6 +13,12 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @Entity com.mashang.domain.entity.Task
 */
 public interface TaskMapper extends BaseMapper<Task> {
+    /**
+     * 查询当前学生所有学习任务列表
+     * @param grade 年级
+     * @return 学生任务列表（包含试卷名，任务名）
+     */
+    List<TaskVo> listStudentTasks(Integer grade);
 
 }
 

@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @createDate 2025-10-22 18:01:40
 * @Entity com.mashang.domain.entity.Class
 */
-public interface MsClassMapper extends BaseMapper<Class> {
+public interface ClassMapper extends BaseMapper<Class> {
 
 }
 
