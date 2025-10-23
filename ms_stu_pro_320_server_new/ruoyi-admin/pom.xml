@@ -60,6 +60,13 @@
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-generator</artifactId>
         </dependency>
+
+        <!-- 业务模块 -->
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>ruoyi-manage</artifactId>
+            <version>${ruoyi.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
