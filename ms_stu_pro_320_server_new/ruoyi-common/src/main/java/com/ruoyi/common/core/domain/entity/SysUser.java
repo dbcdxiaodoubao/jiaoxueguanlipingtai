@@ -41,13 +41,17 @@ public class SysUser extends BaseEntity
     private Long deptId;
 
     /** 用户账号 */
-    @ApiModelProperty(value = "账号",required = true)
-    @Excel(name = "登录名称")
-    private String userName;
-
-    /** 用户昵称 */
     @ApiModelProperty(value = "用户名称",required = true)
     @Excel(name = "用户名称")
+    private String userName;
+
+    /** 年级 */
+    @ApiModelProperty(value = "年级（1-12代表一年级到高三）")
+    private Long grade;
+
+    /** 用户昵称 */
+    @ApiModelProperty(value = "真实姓名",required = true)
+    @Excel(name = "真实姓名")
     private String nickName;
 
     /** 用户邮箱 */
@@ -73,8 +77,12 @@ public class SysUser extends BaseEntity
     @ApiModelProperty(value = "用户头像")
     private String avatar;
 
+    /** 年龄 */
+    @ApiModelProperty(value = "年龄")
+    private Long age;
+
     /** 密码 */
-    @ApiModelProperty(value = "password")
+    @ApiModelProperty(value = "密码")
     private String password;
 
     /** 账号状态（0正常 1停用） */
@@ -360,6 +368,14 @@ public class SysUser extends BaseEntity
         this.birthday = birthday;
     }
 
+    public Long getAge() {
+        return age;
+    }
+
+    public void setAge(Long age) {
+        this.age = age;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -384,6 +400,7 @@ public class SysUser extends BaseEntity
             .append("remark", getRemark())
             .append("dept", getDept())
             .append("birthday", getBirthday())
+            .append("age", getAge())
             .toString();
     }
 }

@@ -21,10 +21,9 @@ public class StudentListVo {
     @Excel(name = "用户序号", type = Excel.Type.EXPORT, cellType = Excel.ColumnType.NUMERIC, prompt = "用户编号")
     private Long userId;
 
-
     /** 用户昵称 */
-    @ApiModelProperty(value = "用户名称",required = true)
-    @Excel(name = "用户名称")
+    @ApiModelProperty(value = "真实姓名",required = true)
+    @Excel(name = "真实姓名")
     private String nickName;
 
     /** 手机号码 */
@@ -45,7 +44,7 @@ public class StudentListVo {
     @ApiModelProperty(value = "创建时间")
     private Date createTime;
 
-    @ApiModelProperty(value = "年级")
+    @ApiModelProperty(value = "年级（1-12分别是一年级到高三）")
     private Long grade;
 
 }

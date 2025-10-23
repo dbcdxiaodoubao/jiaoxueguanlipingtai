@@ -1,6 +1,7 @@
 package com.mashang.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.mashang.domain.vo.management.StudentDtlVo;
 import com.mashang.domain.vo.management.StudentListVo;
 import com.ruoyi.common.core.domain.entity.SysUser;
 
@@ -15,4 +16,11 @@ public interface IStudentService extends IService<SysUser> {
      * @return
      */
     List<StudentListVo> list(String studentName);
+
+    /**
+     * 通过用户id查询学生详情
+     * @param userId
+     * @return
+     */
+    StudentDtlVo selectByid(Long userId);
 }

@@ -160,6 +160,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="createBy != null and createBy != ''">create_by,</if>
  			<if test="remark != null and remark != ''">remark,</if>
 			<if test="birthday != null">birthday,</if>
+			<if test="age != null and age != 0">age,</if>
+			<if test="grade != null and grade != 0">grade,</if>
  			create_time
  		)values(
  			<if test="userId != null and userId != ''">#{userId},</if>
@@ -176,6 +178,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="createBy != null and createBy != ''">#{createBy},</if>
  			<if test="remark != null and remark != ''">#{remark},</if>
  			<if test="birthday != null">#{birthday},</if>
+			<if test="age != null and age != 0">#{age},</if>
+			<if test="grade != null and grade != 0">#{grade},</if>
  			sysdate()
  		)
 	</insert>
@@ -195,6 +199,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="loginDate != null">login_date = #{loginDate},</if>
  			<if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
  			<if test="remark != null">remark = #{remark},</if>
+ 			<if test="birthday != null">remark = #{birthday},</if>
+ 			<if test="age != null and age != 0">age = #{age},</if>
+ 			<if test="grade != null and grade != 0">age = #{grade},</if>
  			update_time = sysdate()
  		</set>
  		where user_id = #{userId}

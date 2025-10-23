@@ -1,6 +1,7 @@
 package com.mashang.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.mashang.domain.vo.management.StudentDtlVo;
 import com.mashang.domain.vo.management.StudentListVo;
 import com.mashang.mapper.StudentMapper;
 import com.mashang.service.IStudentService;
@@ -21,5 +22,10 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, SysUser>
     @Override
     public List<StudentListVo> list(String studentName) {
         return studentMapper.list(studentName);
+    }
+
+    @Override
+    public StudentDtlVo selectByid(Long userId) {
+        return studentMapper.selectByid(userId);
     }
 }
