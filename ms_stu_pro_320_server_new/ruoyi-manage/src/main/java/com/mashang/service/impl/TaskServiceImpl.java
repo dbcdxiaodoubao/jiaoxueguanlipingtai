@@ -13,6 +13,8 @@ import com.mashang.service.ITaskService;
 import com.mashang.mapper.TaskMapper;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.exception.ServiceException;
+import com.ruoyi.system.mapper.SysRoleMapper;
+import com.ruoyi.system.mapper.SysUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,19 +32,25 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task>
 
     @Autowired
     private ClassMapper classMapper;
+    @Autowired
+    private SysUserMapper sysUserMapper;
+    @Autowired
+    private SysRoleMapper sysRoleMapper;
 
     /**
      * 查询当前学生所有学习任务列表
      *
-     * @param user 学生对象
+     * @param userId 学生id
      * @return
      */
     @Override
-    public List<TaskVo> listStudentTasks(SysUser user) {
+    public List<TaskVo> listStudentTasks(Long userId) {
+        SysUser user = sysUserMapper.selectUserById(userId);
         if (user == null) {
             throw new ServiceException(MessageConstant.UNKONWN_ERROR);
         }
-        if (!user.getRoleId().equals(RoleType.STUDENT_TYPE)) {
+        Long roleId = sysRoleMapper.selectByUserId(userId);
+        if (!roleId.equals(RoleType.STUDENT_TYPE)) {
             throw new ServiceException(MessageConstant.USER_NOT_STUDENT);
         }
         Long classId = user.getClassId();
@@ -51,7 +59,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task>
         //获取年级
         Integer grade = aClass.getGrade();
         //总业务
-        List<TaskVo> taskVos = baseMapper.listStudentTasks(grade);
+        List<TaskVo> taskVos = baseMapper.listStudentTasks(grade,userId);
         if (taskVos == null) {
             return Collections.emptyList();
         }

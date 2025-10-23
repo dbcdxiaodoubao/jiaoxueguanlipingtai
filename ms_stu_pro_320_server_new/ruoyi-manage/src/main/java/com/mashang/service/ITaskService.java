@@ -15,8 +15,8 @@ import java.util.List;
 public interface ITaskService extends IService<Task> {
     /**
      * 查询当前学生所有学习任务列表
-     * @param user 学生对象
+     * @param userId 学生ID
      * @return
      */
-    List<TaskVo> listStudentTasks(SysUser user);
+    List<TaskVo> listStudentTasks(Long userId);
 }

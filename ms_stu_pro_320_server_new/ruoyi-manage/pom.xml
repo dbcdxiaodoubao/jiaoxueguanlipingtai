@@ -53,6 +53,11 @@
             <version>5.7.17</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>ruoyi-system</artifactId>
+        </dependency>
+
     </dependencies>
     <build>
         <finalName>ruoyi-manage</finalName>

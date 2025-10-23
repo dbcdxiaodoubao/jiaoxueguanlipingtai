@@ -104,4 +104,11 @@ public interface SysRoleMapper
      * @return 结果
      */
     public int deleteRoleByIds(Long[] roleIds);
+
+    /**
+     * 获取用户对应的角色id
+     * @param userId
+     * @return
+     */
+    Long selectByUserId(Long userId);
 }

@@ -26,11 +26,12 @@ public class TaskController extends BaseController {
     @Autowired
     private ITaskService taskService;
 
+
     @GetMapping("/student/list")
     @ApiOperation("查询当前学生所有学习任务列表")
     public R<List<TaskVo>> listStudentTasks(){
-        SysUser user = SecurityUtils.getLoginUser().getUser();
-        List<TaskVo> taskVos = taskService.listStudentTasks(user);
+        Long userId = SecurityUtils.getUserId();
+        List<TaskVo> taskVos = taskService.listStudentTasks(userId);
         return R.ok(taskVos);
     }
 }

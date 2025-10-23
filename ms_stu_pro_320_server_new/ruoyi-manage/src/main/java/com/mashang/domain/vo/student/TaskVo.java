@@ -14,5 +14,5 @@ public class TaskVo {
     private String taskName;
 
     @ApiModelProperty(value = "学生试卷列表")
-    private List<TestListTaskVo> studentTests;
+    private List<TestAnswerListTaskVo> studentTests;
 }
