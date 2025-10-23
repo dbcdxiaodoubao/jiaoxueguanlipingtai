@@ -1,8 +1,19 @@
 package com.mashang.comming;
 
+import com.mashang.domain.entity.Test;
+import com.mashang.domain.entity.TestAnswer;
+import com.mashang.domain.query.student.TestSubmit;
+import com.mashang.domain.vo.student.TestAnswerInfo;
+import com.mashang.mapper.TestAnswerMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
+import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface TestAnswerMapping {
+    TestAnswerMapping INSTANCE = Mappers.getMapper(TestAnswerMapping.class);
+
+    TestAnswerInfo toTestAnswerInfo(Test test);
+
+    TestAnswer toTestAnswer(TestSubmit testSubmit);
 }

@@ -22,7 +22,7 @@ public class TestAnswer extends BaseModel {
 
     @ApiModelProperty(value = "答卷id")
     @TableId(value = "test_answer_id", type = IdType.AUTO)
-    private Integer testAnswerId;
+    private Long testAnswerId;
 
     @ApiModelProperty(value = "试卷id")
     private Integer testId;

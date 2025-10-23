@@ -1,9 +1,9 @@
 package com.mashang.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.mashang.domain.entity.TaskTest;
-import com.mashang.service.ITaskTestService;
-import com.mashang.mapper.TaskTestMapper;
+import com.mashang.domain.entity.TaskTestAnswer;
+import com.mashang.service.ITaskTestAnswerService;
+import com.mashang.mapper.TaskTestAnswerMapper;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 * @createDate 2025-10-22 18:01:40
 */
 @Service
-public class TaskTestServiceImpl extends ServiceImpl<TaskTestMapper, TaskTest>
-    implements ITaskTestService {
+public class TaskTestAnswerServiceImpl extends ServiceImpl<TaskTestAnswerMapper, TaskTestAnswer>
+    implements ITaskTestAnswerService {
 
 }
 

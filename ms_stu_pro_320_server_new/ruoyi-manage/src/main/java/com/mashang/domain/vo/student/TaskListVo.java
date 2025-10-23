@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class TaskVo {
+public class TaskListVo {
     @ApiModelProperty(value = "任务id")
     private Integer taskId;
 

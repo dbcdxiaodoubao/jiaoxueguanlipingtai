@@ -1,5 +1,6 @@
 package com.mashang.domain.entity;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -48,16 +49,21 @@ public class QuestionAnswer extends BaseModel {
     @ApiModelProperty(value = "题目类型")
     private Integer questionType;
 
+    @ApiModelProperty(value = "题目答案")
+    @ExcelProperty("题目答案")
+    private String rightAnswer;
+
     @ApiModelProperty(value = "题目分数")
     private Integer questionScore;
 
     @ApiModelProperty(value = "题目选项")
-    @TableField(typeHandler = JacksonTypeHandler.class)
+    @TableField(value = "`option`",typeHandler = JacksonTypeHandler.class)
     private Option option;
 
     @ApiModelProperty(value = "答题状态（0待批改 1正确 2错误）")
     private Integer status;
 
     @ApiModelProperty(value = "题目解析")
+    @TableField("`explain`")
     private String explain;
 }

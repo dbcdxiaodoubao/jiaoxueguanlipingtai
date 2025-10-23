@@ -41,11 +41,15 @@ public class Test extends BaseModel {
     private Date startTime;
 
     @ApiModelProperty(value = "截止时间")
-    private Integer deadline;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date deadline;
 
     @ApiModelProperty(value = "试卷总分")
     private Integer testScore;
 
     @ApiModelProperty(value = "建议考试时长（分钟）")
     private Integer suggestDuration;
+
+    @ApiModelProperty(value = "题目总数")
+    private Integer questionNum;
 }

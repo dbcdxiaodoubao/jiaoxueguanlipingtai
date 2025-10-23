@@ -1,13 +1,11 @@
 package com.mashang.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mashang.constant.MessageConstant;
 import com.mashang.constant.RoleType;
 import com.mashang.domain.entity.Class;
 import com.mashang.domain.entity.Task;
-import com.mashang.domain.vo.student.TaskVo;
+import com.mashang.domain.vo.student.TaskListVo;
 import com.mashang.mapper.ClassMapper;
 import com.mashang.service.ITaskService;
 import com.mashang.mapper.TaskMapper;
@@ -44,7 +42,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task>
      * @return
      */
     @Override
-    public List<TaskVo> listStudentTasks(Long userId) {
+    public List<TaskListVo> listStudentTasks(Long userId) {
         SysUser user = sysUserMapper.selectUserById(userId);
         if (user == null) {
             throw new ServiceException(MessageConstant.UNKONWN_ERROR);
@@ -59,7 +57,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task>
         //获取年级
         Integer grade = aClass.getGrade();
         //总业务
-        List<TaskVo> taskVos = baseMapper.listStudentTasks(grade,userId);
+        List<TaskListVo> taskVos = baseMapper.listStudentTasks(grade,userId);
         if (taskVos == null) {
             return Collections.emptyList();
         }

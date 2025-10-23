@@ -2,8 +2,7 @@ package com.mashang.service;
 
 import com.mashang.domain.entity.Task;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.mashang.domain.vo.student.TaskVo;
-import com.ruoyi.common.core.domain.entity.SysUser;
+import com.mashang.domain.vo.student.TaskListVo;
 
 import java.util.List;
 
@@ -18,5 +17,5 @@ public interface ITaskService extends IService<Task> {
      * @param userId 学生ID
      * @return
      */
-    List<TaskVo> listStudentTasks(Long userId);
+    List<TaskListVo> listStudentTasks(Long userId);
 }

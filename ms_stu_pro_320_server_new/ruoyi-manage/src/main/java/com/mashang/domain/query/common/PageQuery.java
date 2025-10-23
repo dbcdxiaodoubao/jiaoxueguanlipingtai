@@ -1,10 +1,8 @@
-package com.mashang.domain.query;
+package com.mashang.domain.query.common;
 
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiOperation;
 import lombok.Data;
 
 @ApiModel("分页实体")

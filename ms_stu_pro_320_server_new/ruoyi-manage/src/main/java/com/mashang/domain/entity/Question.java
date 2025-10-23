@@ -52,11 +52,12 @@ public class Question extends BaseModel {
     private String questionAnswer;
 
     @ApiModelProperty(value = "题目选项")
-    @TableField(typeHandler = JacksonTypeHandler.class)
+    @TableField(value = "`option`",typeHandler = JacksonTypeHandler.class)
     @ExcelProperty("题目选项")
     private Option option;
 
     @ApiModelProperty(value = "题目解析")
     @ExcelProperty("题目解析")
+    @TableField("`explain`")
     private String explain;
 }
