@@ -2,6 +2,9 @@ package com.mashang.mapper;
 
 import com.mashang.domain.entity.TestAnswer;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.mashang.domain.vo.student.VideoTestVo;
+
+import java.util.List;
 
 /**
 * @author 20413
@@ -10,7 +13,12 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @Entity com.mashang.domain.entity.TestAnswer
 */
 public interface TestAnswerMapper extends BaseMapper<TestAnswer> {
-
+    /**
+     * 查询未完成的视频试卷
+     * @param userId 学生id
+     * @return 视频试卷列表
+     */
+    List<VideoTestVo> getVideoTests(Long userId);
 }
 
 

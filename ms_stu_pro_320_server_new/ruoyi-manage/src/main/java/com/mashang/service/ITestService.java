@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.mashang.domain.query.student.TestSubmit;
 import com.mashang.domain.vo.student.TestAnswerInfo;
 import com.mashang.domain.vo.student.TestListVo;
+import com.mashang.domain.vo.student.VideoTestVo;
 
 import java.util.List;
 
@@ -34,4 +35,11 @@ public interface ITestService extends IService<Test> {
      * @return 影响行数
      */
     Integer submitTest(TestSubmit testSubmit);
+
+    /**
+     * 查询未完成的视频试卷
+     * @return 视频试卷列表
+     */
+    List<VideoTestVo> getVideoTests(Long userId);
+
 }

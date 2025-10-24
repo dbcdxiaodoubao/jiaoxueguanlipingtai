@@ -20,8 +20,9 @@ import lombok.Data;
 public class TestAnswer extends BaseModel {
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "答卷id")
+
     @TableId(value = "test_answer_id", type = IdType.AUTO)
+    @ApiModelProperty(value = "答卷id")
     private Long testAnswerId;
 
     @ApiModelProperty(value = "试卷id")

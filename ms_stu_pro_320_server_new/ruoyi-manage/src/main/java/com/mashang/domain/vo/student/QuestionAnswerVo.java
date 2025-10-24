@@ -10,12 +10,14 @@ import lombok.Data;
 
 @Data
 public class QuestionAnswerVo {
-    @ApiModelProperty(value = "答题id")
+
     @TableId(value = "question_answer_id", type = IdType.AUTO)
+    @ApiModelProperty(value = "答题id")
     private Integer questionAnswerId;
 
-    @ApiModelProperty(value = "题目选项")
+
     @TableField(value = "`option`",typeHandler = JacksonTypeHandler.class)
+    @ApiModelProperty(value = "题目选项")
     private Option option;
 
     @ApiModelProperty(value = "题目类型")

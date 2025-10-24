@@ -3,5 +3,33 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mashang.mapper.TestAnswerMapper">
-
+  <select id="getVideoTests" resultType="videoTestVo">
+      SELECT
+          t1.test_answer_id,
+          t2.test_name,
+          t3.subject_name,
+          t4.video_url,
+          t4.cover_url,
+          t4.video_id,
+          t4.video_name
+      FROM
+          ms_test_answer AS t1
+              JOIN
+          ms_test AS t2
+          ON
+              t1.test_id = t2.test_id AND
+              t2.test_type = 4
+              LEFT JOIN
+          ms_subjects AS t3
+          ON
+              t3.subject_id = t2.subject_id
+              LEFT JOIN
+          ms_video AS t4
+          ON
+              t4.test_id = t1.test_id
+      WHERE
+          t1.`status` = 2 AND
+          t1.user_id = #{userId} AND
+          t1.del_flag = 0
+  </select>
 </mapper>

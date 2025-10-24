@@ -1,5 +1,6 @@
 package com.mashang.comming;
 
+import com.mashang.domain.entity.Question;
 import com.mashang.domain.entity.QuestionAnswer;
 import com.mashang.domain.query.student.QuestionSubmit;
 import com.mashang.domain.vo.student.QuestionAnswerVo;
@@ -18,4 +19,7 @@ public interface QuestionAnswerMapping {
     List<QuestionAnswerVo> toQuestionAnswerVoList(List<QuestionAnswer> questionAnswers);
 
     List<QuestionAnswer> toQuestionAnswer(List<QuestionSubmit> questionSubmits);
+
+    @Mapping(source = "questionAnswer", target = "rightAnswer")
+    QuestionAnswer toQuestionAnswer(Question question);
 }

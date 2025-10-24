@@ -18,7 +18,7 @@ import lombok.Data;
  * 答题表
  * @TableName ms_question_answer
  */
-@TableName(value ="ms_question_answer")
+@TableName(value ="ms_question_answer",autoResultMap = true)
 @Data
 @ApiModel(value="QuestionAnswer对象", description="答题表")
 public class QuestionAnswer extends BaseModel {

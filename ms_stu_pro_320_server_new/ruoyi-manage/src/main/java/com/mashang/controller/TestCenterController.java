@@ -3,6 +3,7 @@ package com.mashang.controller;
 import com.mashang.domain.query.student.TestSubmit;
 import com.mashang.domain.vo.student.TestAnswerInfo;
 import com.mashang.domain.vo.student.TestListVo;
+import com.mashang.domain.vo.student.VideoTestVo;
 import com.mashang.service.ITestService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;

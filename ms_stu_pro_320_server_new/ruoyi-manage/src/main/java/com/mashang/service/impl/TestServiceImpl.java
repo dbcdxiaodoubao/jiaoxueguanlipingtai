@@ -16,6 +16,7 @@ import com.mashang.domain.query.student.TestSubmit;
 import com.mashang.domain.vo.student.QuestionAnswerVo;
 import com.mashang.domain.vo.student.TestAnswerInfo;
 import com.mashang.domain.vo.student.TestListVo;
+import com.mashang.domain.vo.student.VideoTestVo;
 import com.mashang.mapper.QuestionAnswerMapper;
 import com.mashang.mapper.QuestionMapper;
 import com.mashang.mapper.TestAnswerMapper;
@@ -75,7 +76,7 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test>
 
         //组装题目
         LambdaQueryWrapper<QuestionAnswer> qlqw = Wrappers.lambdaQuery();
-        qlqw.eq(QuestionAnswer::getQuestionAnswerId, testAnswerId);
+        qlqw.eq(QuestionAnswer::getTestAnswerId, testAnswerId);
         List<QuestionAnswer> questionAnswers = questionAnswerMapper.selectList(qlqw);
         List<QuestionAnswerVo> questionAnswerVoList = QuestionAnswerMapping.INSTANCE.toQuestionAnswerVoList(questionAnswers);
         result.setQuestionVos(questionAnswerVoList);
@@ -93,6 +94,7 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test>
     public Integer submitTest(TestSubmit testSubmit) {
         //先改题目
         List<QuestionSubmit> questionSubmits = testSubmit.getQuestionSubmits();
+        Integer userScore = 0;
         for (QuestionSubmit questionSubmit : questionSubmits) {
             if (questionSubmit.getQuestionType().equals(QuestionType.SUBJECTIVE)) {
                 questionSubmit.setStatus(StatusConstant.ANSWER_STATUS_PENDING);
@@ -100,22 +102,33 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test>
             }
             String userAnswer = questionSubmit.getUserAnswer();
             QuestionAnswer questionAnswer = questionAnswerMapper.selectById(questionSubmit.getQuestionAnswerId());
-            //获取正确答案 可待优化 TODO
+            //获取正确答案 可待优化
             String rightAnswer = questionAnswer.getRightAnswer();
-            if (userAnswer.equals(rightAnswer)) {
+            if (userAnswer.equalsIgnoreCase(rightAnswer)) {
                 questionSubmit.setStatus(StatusConstant.ANSWER_STATUS_CORRECT);
+                userScore+=questionAnswer.getQuestionScore();
             } else {
                 questionAnswer.setStatus(StatusConstant.ANSWER_STATUS_WRONG);
             }
         }
 
-         //将题目转换为可加入类型
+        //将题目转换为可加入类型
         List<QuestionAnswer> questionAnswerList = QuestionAnswerMapping.INSTANCE.toQuestionAnswer(questionSubmits);
         questionAnswerService.updateBatchById(questionAnswerList);
 
         //后改试卷
         TestAnswer testAnswer = TestAnswerMapping.INSTANCE.toTestAnswer(testSubmit);
+        testAnswer.setStatus(StatusConstant.EXAM_PAPER_STATUS_PENDING);
+        testAnswer.setUserTestScore(userScore);
         return testAnswerMapper.updateById(testAnswer);
+    }
+    /**
+     * 查询未完成的视频试卷
+     * @return 视频试卷列表
+     */
+    @Override
+    public List<VideoTestVo> getVideoTests(Long userId) {
+        return testAnswerMapper.getVideoTests(userId);
     }
 }
 
