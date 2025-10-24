@@ -17,6 +17,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,24 +38,23 @@ public class StudentController extends BaseController {
 
     @GetMapping("/list")
     @ApiOperation("查询学生信息列表")
-    public R<PageInfo<StudentListVo>> list(PageQuery pageQuery,String studentName){
+    public R<PageInfo<StudentListVo>> list(@Validated PageQuery pageQuery, String nickName){
         PageHelper.startPage(pageQuery.getPageNum(),pageQuery.getPageSize());
 
-        List<StudentListVo> list = studentService.list(studentName);
+        List<StudentListVo> list = studentService.list(nickName);
 
         return R.ok(new  PageInfo<StudentListVo>(list));
     }
 
     @GetMapping("/dtl/{userId}")
     @ApiOperation("根据id查询学生详情")
-    @ApiImplicitParam(value = "userId",name = "学生id")
     public R<StudentDtlVo> selectById(@PathVariable Long userId){
         return R.ok(studentService.selectByid(userId));
     }
 
     @GetMapping("/logininfo")
     @ApiOperation("查询学生登录日志列表")
-    public R<PageInfo<StuLoginInfoVo>> stuLoginInfoList(PageQuery pageQuery, String userName){
+    public R<PageInfo<StuLoginInfoVo>> stuLoginInfoList(@Validated PageQuery pageQuery, String userName){
         PageHelper.startPage(pageQuery.getPageNum(),pageQuery.getPageSize());
 
         List<StuLoginInfoVo> list = stuLogininfoService.list(userName);

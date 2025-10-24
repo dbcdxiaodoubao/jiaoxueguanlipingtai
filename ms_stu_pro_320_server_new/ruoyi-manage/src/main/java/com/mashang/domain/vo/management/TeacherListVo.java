@@ -1,22 +1,15 @@
 package com.mashang.domain.vo.management;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.annotation.Excel;
-import com.ruoyi.common.annotation.Excels;
-import com.ruoyi.common.core.domain.entity.SysDept;
-import com.ruoyi.common.core.domain.entity.SysRole;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.Date;
-import java.util.List;
 
 @Data
-@ApiModel("学生信息列表")
-public class StudentListVo {
+@ApiModel("教师信息列表")
+public class TeacherListVo {
 
     /** 用户ID */
     @ApiModelProperty(value = "用户id")
@@ -51,7 +44,5 @@ public class StudentListVo {
     @ApiModelProperty(value = "创建时间")
     private Date createTime;
 
-    @ApiModelProperty(value = "年级（1-12分别是一年级到高三）")
-    private Long grade;
 
 }

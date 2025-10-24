@@ -1,28 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.mashang.mapper.StudentMapper">
+<mapper namespace="com.mashang.mapper.TeacherMapper">
 
-
-    <select id="list" resultType="studentListVo">
+    <select id="list" resultType="teacherListVo">
         SELECT
-            t1.user_id,
-            t1.user_name,
-            t1.nick_name,
-            t1.grade,
-            t1.sex,
-            t1.phonenumber,
-            t1.create_time,
-            t1.`status`
+        t1.user_id,
+        t1.user_name,
+        t1.nick_name,
+        t1.sex,
+        t1.phonenumber,
+        t1.create_time,
+        t1.`status`
         FROM `sys_user` AS t1
-                 LEFT JOIN sys_user_role AS t3
-                           ON t1.user_id = t3.user_id
-        WHERE t3.role_id = 3
+        LEFT JOIN sys_user_role AS t3
+        ON t1.user_id = t3.user_id
+        WHERE t3.role_id = 4
         <if test="nickName != null and nickName != ''">
             AND t1.nick_name LIKE CONCAT('%', #{nickName}, '%')
         </if>
     </select>
 
-    <select id="selectByid" resultType="studentDtlVo">
+    <select id="selectByid" resultType="teacherDtlVo">
         SELECT
             t1.user_name,
             t1.password,

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.common.core.domain.R;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.ArrayUtils;
@@ -60,7 +61,6 @@ public class SysUserController extends BaseController
     /**
      * 获取用户列表
      */
-    @ApiOperation("查询用户列表")
     @PreAuthorize("@ss.hasPermi('system:user:list')")
     @GetMapping("/list")
     public TableDataInfo list(SysUser user)
@@ -102,7 +102,6 @@ public class SysUserController extends BaseController
     /**
      * 根据用户编号获取详细信息
      */
-    @ApiOperation("查询用户详情")
     @PreAuthorize("@ss.hasPermi('system:user:query')")
     @GetMapping(value = { "/", "/{userId}" })
     public AjaxResult getInfo(@PathVariable(value = "userId", required = false) Long userId)
@@ -163,17 +162,8 @@ public class SysUserController extends BaseController
         userService.checkUserDataScope(user.getUserId());
         deptService.checkDeptDataScope(user.getDeptId());
         roleService.checkRoleDataScope(user.getRoleIds());
-        if (!userService.checkUserNameUnique(user))
-        {
-            return error("修改用户'" + user.getUserName() + "'失败，登录账号已存在");
-        }
-        else if (StringUtils.isNotEmpty(user.getPhonenumber()) && !userService.checkPhoneUnique(user))
-        {
-            return error("修改用户'" + user.getUserName() + "'失败，手机号码已存在");
-        }
-        else if (StringUtils.isNotEmpty(user.getEmail()) && !userService.checkEmailUnique(user))
-        {
-            return error("修改用户'" + user.getUserName() + "'失败，邮箱账号已存在");
+        if(user.getUserId()==null || user.getUserId()==0){
+            return AjaxResult.error("用户id不能为空");
         }
         user.setUpdateBy(getUsername());
         return toAjax(userService.updateUser(user));
