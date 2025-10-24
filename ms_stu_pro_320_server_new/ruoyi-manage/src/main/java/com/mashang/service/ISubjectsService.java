@@ -2,6 +2,9 @@ package com.mashang.service;
 
 import com.mashang.domain.entity.Subjects;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.mashang.domain.vo.management.SubjectsListVo;
+
+import java.util.List;
 
 /**
 * @author 20413
@@ -10,4 +13,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface ISubjectsService extends IService<Subjects> {
 
+    /**
+     * 查询学科信息列表
+     * @param grade
+     * @return
+     */
+    List<SubjectsListVo> list(Long grade);
 }

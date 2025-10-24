@@ -48,7 +48,7 @@ public class StudentController extends BaseController {
 
     @GetMapping("/dtl/{userId}")
     @ApiOperation("根据id查询学生详情")
-    public R<StudentDtlVo> selectById(@PathVariable Long userId){
+    public R<StudentDtlVo> selectById(@PathVariable @Validated Long userId){
         return R.ok(studentService.selectByid(userId));
     }
 

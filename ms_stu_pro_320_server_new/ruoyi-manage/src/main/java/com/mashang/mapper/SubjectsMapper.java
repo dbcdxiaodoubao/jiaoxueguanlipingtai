@@ -2,6 +2,9 @@ package com.mashang.mapper;
 
 import com.mashang.domain.entity.Subjects;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.mashang.domain.vo.management.SubjectsListVo;
+
+import java.util.List;
 
 /**
 * @author 20413
@@ -10,6 +13,13 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @Entity com.mashang.domain.entity.Subjects
 */
 public interface SubjectsMapper extends BaseMapper<Subjects> {
+
+    /**
+     * 查询学科信息列表
+     * @param grade
+     * @return
+     */
+    List<SubjectsListVo> list(Long grade);
 
 }
 
