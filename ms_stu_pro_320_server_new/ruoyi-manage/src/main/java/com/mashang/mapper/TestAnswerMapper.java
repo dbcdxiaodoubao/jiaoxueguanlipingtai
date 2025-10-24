@@ -1,8 +1,12 @@
 package com.mashang.mapper;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mashang.domain.entity.TestAnswer;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.mashang.domain.query.student.TestPageQuery;
+import com.mashang.domain.vo.student.TestListVo;
 import com.mashang.domain.vo.student.VideoTestVo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -19,6 +23,12 @@ public interface TestAnswerMapper extends BaseMapper<TestAnswer> {
      * @return 视频试卷列表
      */
     List<VideoTestVo> getVideoTests(Long userId);
+    /**
+     *  查询学生未做完的答卷列表
+     * @param userId 学生id
+     * @return 学生未做完的试卷列表
+     */
+    List<TestListVo> getStudentTests(Long userId);
 }
 
 

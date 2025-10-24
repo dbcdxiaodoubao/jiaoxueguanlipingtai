@@ -1,8 +1,14 @@
 package com.mashang.controller;
 
+import com.github.pagehelper.Page;
+import com.mashang.domain.query.common.PageQuery;
+import com.mashang.domain.query.student.VideoTestPageQuery;
 import com.mashang.domain.vo.student.VideoTestVo;
+import com.mashang.service.ITestAnswerService;
 import com.mashang.service.ITestService;
+import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.R;
+import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -16,15 +22,26 @@ import java.util.List;
 @RestController
 @RequestMapping("/video")
 @Api(tags = "视频课堂")
-public class VideoLessonController {
+public class VideoLessonController extends BaseController {
     @Autowired
     private ITestService testService;
+    @Autowired
+    private ITestAnswerService testAnswerService;
 
     @GetMapping("/student/test")
     @ApiOperation("查询未完成的视频试卷")
     public R<List<VideoTestVo>> getVideoTests(){
         Long userId = SecurityUtils.getUserId();
-        List<VideoTestVo> videoTests = testService.getVideoTests(userId);
+        List<VideoTestVo> videoTests = testAnswerService.getVideoTests(userId);
         return R.ok(videoTests);
+    }
+
+    @GetMapping("/student/page")
+    @ApiOperation("根据条件分页查询对应的视频和关联的试卷信息")
+    public TableDataInfo pageVideoTests(PageQuery pageQuery, VideoTestPageQuery videoTestPageQuery){
+        Long userId = SecurityUtils.getUserId();
+        videoTestPageQuery.setUserId(userId);
+        Page<VideoTestVo> videoTestVoPage = testService.pageVideoTests(pageQuery, videoTestPageQuery);
+        return getDataTable(videoTestVoPage);
     }
 }

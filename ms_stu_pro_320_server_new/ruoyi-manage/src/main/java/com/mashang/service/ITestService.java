@@ -1,8 +1,12 @@
 package com.mashang.service;
 
+import com.github.pagehelper.Page;
 import com.mashang.domain.entity.Test;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.mashang.domain.query.common.PageQuery;
+import com.mashang.domain.query.student.TestPageQuery;
 import com.mashang.domain.query.student.TestSubmit;
+import com.mashang.domain.query.student.VideoTestPageQuery;
 import com.mashang.domain.vo.student.TestAnswerInfo;
 import com.mashang.domain.vo.student.TestListVo;
 import com.mashang.domain.vo.student.VideoTestVo;
@@ -15,31 +19,23 @@ import java.util.List;
 * @createDate 2025-10-22 18:01:40
 */
 public interface ITestService extends IService<Test> {
-    /**
-     *  查询学生未做完的答卷列表
-     * @param userId 学生id
-     * @return 学生未做完的试卷列表
-     */
-    List<TestListVo> getStudentTests(Long userId);
+
+
+
 
     /**
-     * 根据答卷id查询答卷详情
-     * @param id 答卷id
-     * @return 答卷详情
+     * 查询学生所有的答卷列表
+     * @param pageQuery 分页条件
+     * @param testPageQuery 试卷的分页条件 类型和学科
+     * @return 学生所有的试卷列表
      */
-    TestAnswerInfo getStudentTestInfo(Long id);
+    Page<TestListVo> pageStudentTests(PageQuery pageQuery, TestPageQuery testPageQuery);
 
     /**
-     * 提交试卷
-     * @param testSubmit 学生写完的试卷
-     * @return 影响行数
+     *  查询学生所有视频答卷列表
+     * @param pageQuery 分页参数
+     * @param videoTestPageQuery 视频查询条件
+     * @return 学生所有视频答卷列表
      */
-    Integer submitTest(TestSubmit testSubmit);
-
-    /**
-     * 查询未完成的视频试卷
-     * @return 视频试卷列表
-     */
-    List<VideoTestVo> getVideoTests(Long userId);
-
+    Page<VideoTestVo> pageVideoTests(PageQuery pageQuery, VideoTestPageQuery videoTestPageQuery);
 }

@@ -95,12 +95,9 @@ public class MyBatisConfig
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
         // 分页插件
         interceptor.addInnerInterceptor(paginationInnerInterceptor());
-        // 乐观锁插件
-        interceptor.addInnerInterceptor(optimisticLockerInnerInterceptor());
-        // 阻断插件
-        interceptor.addInnerInterceptor(blockAttackInnerInterceptor());
         return interceptor;
     }
+
 
     /**
      * 分页插件，自动识别数据库类型

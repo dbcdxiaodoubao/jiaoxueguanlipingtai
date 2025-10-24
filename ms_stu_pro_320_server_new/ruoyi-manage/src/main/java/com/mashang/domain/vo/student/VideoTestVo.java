@@ -16,6 +16,9 @@ public class VideoTestVo {
     @ApiModelProperty(value = "试卷名称")
     private String testName;
 
+    @ApiModelProperty(value = "答卷状态（0待批改 1已完成 2未完成）")
+    private Integer status;
+
     @ApiModelProperty("视频id")
     private Integer videoId;
 
