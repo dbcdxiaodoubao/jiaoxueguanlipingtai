@@ -4,12 +4,16 @@ import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.mashang.constant.MessageConstant;
 import com.mashang.constant.QuestionType;
 import com.mashang.constant.RedisConstant;
 import com.mashang.constant.TestType;
 import com.mashang.domain.entity.*;
+import com.mashang.domain.query.common.PageQuery;
 import com.mashang.domain.query.student.RandomTestQuery;
+import com.mashang.domain.vo.student.RandomTestVo;
 import com.mashang.mapper.QuestionMapper;
 import com.mashang.mapper.RandomTestQuestionMapper;
 import com.mashang.mapper.TestQuestionMapper;
@@ -17,6 +21,7 @@ import com.mashang.service.IRandomTestQuestionService;
 import com.mashang.service.IRandomTestService;
 import com.mashang.mapper.RandomTestMapper;
 import com.ruoyi.common.exception.ServiceException;
+import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -63,16 +68,16 @@ public class RandomTestServiceImpl extends ServiceImpl<RandomTestMapper, RandomT
 
         //选取题目
         LambdaQueryWrapper<Question> qlqw = Wrappers.lambdaQuery();
-        qlqw.eq(Question::getQuestionDifficult, randomTestQuery.getQuestionDifficult());
+        qlqw.eq(Question::getQuestionDifficulty, randomTestQuery.getQuestionDifficult());
         qlqw.eq(Question::getSubjectId, subjectId);
         List<Question> questions = questionMapper.selectList(qlqw);
         //通过题目类型进行分组
         Map<Integer, List<Question>> collect = questions.stream().collect(Collectors.groupingBy(Question::getQuestionType));
         //获取随机题目
         List<Question> associatedQuestions = new ArrayList<>();
-        associatedQuestions.addAll(getRandomQuestions(collect.get(QuestionType.SINGLE_CHOICE), singleNum,QuestionType.CN_SINGLE_CHOICE));
-        associatedQuestions.addAll(getRandomQuestions(collect.get(QuestionType.MULTIPLE_CHOICE), multipleNum,QuestionType.CN_MULTIPLE_CHOICE));
-        associatedQuestions.addAll(getRandomQuestions(collect.get(QuestionType.TRUE_FALSE), judgmentNum,QuestionType.CN_TRUE_FALSE));
+        associatedQuestions.addAll(getRandomQuestions(collect.get(QuestionType.SINGLE_CHOICE), singleNum, QuestionType.CN_SINGLE_CHOICE));
+        associatedQuestions.addAll(getRandomQuestions(collect.get(QuestionType.MULTIPLE_CHOICE), multipleNum, QuestionType.CN_MULTIPLE_CHOICE));
+        associatedQuestions.addAll(getRandomQuestions(collect.get(QuestionType.TRUE_FALSE), judgmentNum, QuestionType.CN_TRUE_FALSE));
         List<Long> associatedId = new ArrayList<>();
         Integer allScore = 0;
         for (Question associatedQuestion : associatedQuestions) {
@@ -89,6 +94,7 @@ public class RandomTestServiceImpl extends ServiceImpl<RandomTestMapper, RandomT
         randomTest.setSubjectId(subjectId);
         randomTest.setQuestionNum(associatedQuestions.size());
         randomTest.setTestScore(allScore);
+        randomTest.setUserId(SecurityUtils.getUserId());
         int result = baseMapper.insert(randomTest);
 
         //试卷关联题目
@@ -102,9 +108,33 @@ public class RandomTestServiceImpl extends ServiceImpl<RandomTestMapper, RandomT
         return result;
     }
 
-    public List<Question> getRandomQuestions(List<Question> allQuestions, Integer questionNum,String questionType) {
-        if(CollUtil.isEmpty(allQuestions)){
-            throw new ServiceException(questionType+MessageConstant.QUESTION_TOO_LESS);
+
+    /**
+     * 智能训练生成的试卷分页查询
+     *
+     * @param pageQuery 分页条件
+     * @param userId    学生id
+     * @return 随机试卷列表
+     */
+    @Override
+    public Page<RandomTestVo> listRandomTests(PageQuery pageQuery, Long userId) {
+        Page<RandomTestVo> page = PageHelper.startPage(pageQuery);
+        baseMapper.listRandomTests(userId);
+        return page;
+    }
+
+
+    private List<Question> getRandomQuestions(List<Question> allQuestions, Integer questionNum, String questionType) {
+        if (questionNum == 0) {
+            return Collections.emptyList();
+        }
+        //根本没有
+        if (allQuestions == null) {
+            throw new ServiceException(questionType + MessageConstant.QUESTION_TOO_LESS);
+        }
+        //有但是数量不够
+        if (questionNum > allQuestions.size()) {
+            throw new ServiceException(questionType + MessageConstant.QUESTION_TOO_LESS);
         }
         Random random = new Random();
         Set<Question> result = new HashSet<>();

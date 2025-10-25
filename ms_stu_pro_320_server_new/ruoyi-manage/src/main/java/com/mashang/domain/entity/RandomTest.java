@@ -42,6 +42,12 @@ public class RandomTest extends BaseModel {
     private Long subjectId;
 
     /**
+     * 学科id
+     */
+    @ApiModelProperty("学生id")
+    private Long userId;
+
+    /**
      * 试卷名称
      */
     @ApiModelProperty("试卷名称")

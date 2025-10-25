@@ -22,4 +22,7 @@ public interface QuestionAnswerMapping {
 
     @Mapping(source = "questionAnswer", target = "rightAnswer")
     QuestionAnswer toQuestionAnswer(Question question);
+
+    @Mapping(source = "questionAnswer", target = "rightAnswer")
+    List<QuestionAnswer> toQuestionAnswerList(List<Question> questions);
 }

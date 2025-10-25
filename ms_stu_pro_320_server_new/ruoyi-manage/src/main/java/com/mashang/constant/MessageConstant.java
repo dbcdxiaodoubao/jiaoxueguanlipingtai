@@ -35,6 +35,8 @@ public class MessageConstant {
     /********************************  答卷/成绩相关  ********************************/
     /** 答卷不存在 */
     public static final String ANSWER_SHEET_NOT_EXIST = "答卷不存在";
+    /** 试卷不存在 */
+    public static final String SHEET_NOT_EXIST = "试卷不存在";
     /** 成绩不存在 */
     public static final String SCORE_NOT_EXIST = "成绩不存在";
     /** 已交卷，无法重复提交 */

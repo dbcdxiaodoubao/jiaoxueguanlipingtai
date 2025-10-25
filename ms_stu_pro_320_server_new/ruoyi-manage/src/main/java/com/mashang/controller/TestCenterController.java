@@ -19,6 +19,7 @@ import com.ruoyi.common.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -49,13 +50,13 @@ public class TestCenterController extends BaseController {
 
     @PutMapping("/student/submit")
     @ApiOperation("提交试卷")
-    public AjaxResult submitTest(@RequestBody TestSubmit testSubmit){
+    public AjaxResult submitTest(@Validated @RequestBody TestSubmit testSubmit){
         return toAjax(testAnswerService.submitTest(testSubmit));
     }
 
     @GetMapping("/student/page")
     @ApiOperation("根据条件分页查询试卷列表")
-    public TableDataInfo pageStudentTests(PageQuery pageQuery, TestPageQuery testPageQuery){
+    public TableDataInfo pageStudentTests(@Validated PageQuery pageQuery,@Validated TestPageQuery testPageQuery){
         testPageQuery.setUserId(SecurityUtils.getUserId());
         Page<TestListVo> testListVos = testService.pageStudentTests(pageQuery, testPageQuery);
         return getDataTable(testListVos);

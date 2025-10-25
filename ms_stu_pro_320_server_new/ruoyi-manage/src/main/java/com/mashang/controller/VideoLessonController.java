@@ -13,6 +13,7 @@ import com.ruoyi.common.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,7 +39,7 @@ public class VideoLessonController extends BaseController {
 
     @GetMapping("/student/page")
     @ApiOperation("根据条件分页查询对应的视频和关联的试卷信息")
-    public TableDataInfo pageVideoTests(PageQuery pageQuery, VideoTestPageQuery videoTestPageQuery){
+    public TableDataInfo pageVideoTests(@Validated PageQuery pageQuery,@Validated VideoTestPageQuery videoTestPageQuery){
         Long userId = SecurityUtils.getUserId();
         videoTestPageQuery.setUserId(userId);
         Page<VideoTestVo> videoTestVoPage = testService.pageVideoTests(pageQuery, videoTestPageQuery);

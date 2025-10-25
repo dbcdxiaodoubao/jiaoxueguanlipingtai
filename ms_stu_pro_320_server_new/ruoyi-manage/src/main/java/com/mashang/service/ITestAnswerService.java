@@ -2,6 +2,7 @@ package com.mashang.service;
 
 import com.mashang.domain.entity.TestAnswer;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.mashang.domain.query.student.RandomTestSubmit;
 import com.mashang.domain.query.student.TestSubmit;
 import com.mashang.domain.vo.student.TestAnswerInfo;
 import com.mashang.domain.vo.student.TestListVo;
@@ -41,4 +42,20 @@ public interface ITestAnswerService extends IService<TestAnswer> {
      * @return 视频试卷列表
      */
     List<VideoTestVo> getVideoTests(Long userId);
+
+    /**
+     * 创建随机答卷
+     * @param randomTestId 随机答卷id
+     * @return 影响行数
+     */
+    Integer createRandomTest(Long randomTestId);
+
+    /**
+     * 查询随机试卷详情
+     * @param randomTestId 随机试卷id
+     * @return 随机试卷详情
+     */
+    TestAnswerInfo getRandomInfo(Long randomTestId);
+
+
 }

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.mashang.domain.model.BaseModel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -25,8 +26,12 @@ public class TestAnswer extends BaseModel {
     @ApiModelProperty(value = "答卷id")
     private Long testAnswerId;
 
+
     @ApiModelProperty(value = "试卷id")
     private Integer testId;
+
+    @ApiModelProperty(value = "试卷名称")
+    private String testName;
 
     @ApiModelProperty(value = "随机试卷id")
     private Long randomTestId;
@@ -45,4 +50,9 @@ public class TestAnswer extends BaseModel {
 
     @ApiModelProperty(value = "试卷得分")
     private Integer userTestScore;
+
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @ApiModelProperty(value = "提交时间")
+    private Date submitTime;
 }

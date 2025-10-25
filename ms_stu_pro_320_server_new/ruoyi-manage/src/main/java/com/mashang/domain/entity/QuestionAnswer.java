@@ -35,7 +35,7 @@ public class QuestionAnswer extends BaseModel {
     private Long userId;
 
     @ApiModelProperty(value = "答卷id")
-    private Integer testAnswerId;
+    private Long testAnswerId;
 
     @ApiModelProperty(value = "题目题干")
     private String questionTitle;

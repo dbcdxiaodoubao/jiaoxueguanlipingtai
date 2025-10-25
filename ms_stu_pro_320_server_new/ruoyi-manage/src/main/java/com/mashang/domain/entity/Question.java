@@ -19,7 +19,7 @@ import lombok.Data;
  * 题目表
  * @TableName ms_question
  */
-@TableName(value ="ms_question")
+@TableName(value ="ms_question",autoResultMap = true)
 @Data
 @ApiModel(value="Question对象", description="题目表")
 public class Question extends BaseModel {
@@ -38,7 +38,7 @@ public class Question extends BaseModel {
 
     @ApiModelProperty(value = "题目难度（1-10）")
     @ExcelProperty("题目难度（1-10）")
-    private Integer questionDifficult;
+    private Integer questionDifficulty;
 
     @ApiModelProperty(value = "题目类型")
     @ExcelProperty("题目类型")
