@@ -22,6 +22,14 @@ public interface ISubjectsService extends IService<Subjects> {
     List<SubjectsListVo> list(Long grade);
 
     /**
+     * 通过学科名称和年级查询是否存在相同学科
+     * @param subjectName
+     * @param grade
+     * @return
+     */
+    Integer selectBySubjectNameGrade(String subjectName, Integer grade);
+
+    /**
      * 根据学生的年级查询学科列表
      * @return 学科列表
      */
