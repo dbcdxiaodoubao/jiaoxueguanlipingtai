@@ -4,4 +4,79 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mashang.mapper.KnowledgeMapper">
 
+    <select id="list" resultType="knowledgeListVo">
+        SELECT
+            t1.subject_name,
+            t1.grade,
+            t1.subject_id,
+            COUNT(t2.knowledge_id) AS first_level_knowledge
+        FROM
+            ms_subjects t1
+                LEFT JOIN
+            ms_knowledge t2
+            ON t2.subject_id = t1.subject_id
+                AND t2.parent_id = 0
+        <if test="grade != null and grade != 0 ">
+            where t1.grade = #{grade}
+        </if>
+        GROUP BY
+             t1.subject_name, t1.grade
+        HAVING
+            COUNT(t2.knowledge_id) > 0
+        ORDER BY
+            t1.subject_id
+    </select>
+
+    <select id="selectBySubjectId" resultType="KnowledgeTreeVo">
+        SELECT
+            knowledge_id ,
+            knowledge_name ,
+            parent_id
+        FROM ms_knowledge
+        WHERE subject_id = #{subjectId}
+        ORDER BY parent_id
+    </select>
+
+    <select id="selectGradeByKnowledgeId" resultType="Integer">
+        SELECT
+            t1.grade
+        FROM
+            ms_knowledge t1
+        WHERE t1.knowledge_id = #{knowledgeId}
+    </select>
+
+    <select id="selectSubjectIdByKnowledgeId" resultType="Integer">
+        SELECT
+            t1.subject_id
+        FROM
+            ms_knowledge t1
+        WHERE t1.knowledge_id = #{knowledgeId}
+    </select>
+
+    <select id="selectDtl" resultType="KnowledgeDtlVo">
+        SELECT
+            t1.knowledge_name,
+            t1.grade,
+            t1.subject_id,
+            t1.parent_id
+        FROM
+            ms_knowledge t1
+        WHERE t1.knowledge_id = #{knowledgeId}
+    </select>
+
+    <select id="selectOneByKnowledgeName" resultType="Integer">
+        select
+            COUNT(*)
+        FROM
+            ms_knowledge t1
+        WHERE t1.parent_id = #{parentId} AND t1.knowledge_name = #{knowledgeName}
+    </select>
+
+    <select id="selectCountById" resultType="Integer">
+        select
+            COUNT(*)
+        FROM
+            ms_knowledge t1
+        WHERE t1.parent_id = #{knowledgeId}
+    </select>
 </mapper>
