@@ -4,9 +4,11 @@ package com.mashang.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mashang.comming.SubjectsMapping;
+import com.mashang.domain.entity.Subjects;
 import com.mashang.domain.query.common.PageQuery;
 import com.mashang.domain.vo.management.SubjectsDtlVo;
 import com.mashang.domain.vo.management.SubjectsListVo;
+import com.mashang.domain.vo.student.SubjectsListByGradeVo;
 import com.mashang.service.ISubjectsService;
 import com.ruoyi.common.core.domain.R;
 import io.swagger.annotations.Api;
@@ -42,5 +44,12 @@ public class SubjectsController {
     @ApiOperation("查询学科详情")
     public R<SubjectsDtlVo> selectById(@PathVariable @Validated Long subjectsId){
         return R.ok(SubjectsMapping.INSTANCE.toDtlVo(subjectsService.getById(subjectsId)));
+    }
+
+    @GetMapping("/student/list")
+    @ApiOperation("根据学生的年级查询学科列表")
+    public R<List<SubjectsListByGradeVo>> listByGrade(){
+        List<SubjectsListByGradeVo> subjectsListByGradeVos = subjectsService.listByGrade();
+        return R.ok(subjectsListByGradeVos);
     }
 }

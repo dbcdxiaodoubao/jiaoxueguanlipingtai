@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
+import java.util.Objects;
 
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.mashang.domain.model.BaseModel;
@@ -25,7 +26,7 @@ public class Question extends BaseModel {
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "question_id", type = IdType.AUTO)
-    private Integer questionId;
+    private Long questionId;
 
     @ApiModelProperty(value = "学科id")
     @ExcelProperty("学科id")
@@ -60,4 +61,18 @@ public class Question extends BaseModel {
     @ExcelProperty("题目解析")
     @TableField("`explain`")
     private String explain;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Question question = (Question) o;
+        return Objects.equals(questionId, question.questionId);
+    }
+
+    @Override
+    public int hashCode() {
+        return questionId == null ? 0 : questionId.hashCode();
+    }
 }

@@ -5,28 +5,22 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.mashang.comming.QuestionAnswerMapping;
-import com.mashang.comming.TestAnswerMapping;
-import com.mashang.constant.QuestionType;
-import com.mashang.constant.StatusConstant;
-import com.mashang.domain.entity.QuestionAnswer;
 import com.mashang.domain.entity.Test;
 import com.mashang.domain.entity.TestAnswer;
 import com.mashang.domain.query.common.PageQuery;
-import com.mashang.domain.query.student.QuestionSubmit;
-import com.mashang.domain.query.student.TestPageQuery;
-import com.mashang.domain.query.student.TestSubmit;
-import com.mashang.domain.query.student.VideoTestPageQuery;
+import com.mashang.domain.query.student.*;
 import com.mashang.domain.vo.student.QuestionAnswerVo;
 import com.mashang.domain.vo.student.TestAnswerInfo;
 import com.mashang.domain.vo.student.TestListVo;
 import com.mashang.domain.vo.student.VideoTestVo;
 import com.mashang.mapper.QuestionAnswerMapper;
 import com.mashang.mapper.TestAnswerMapper;
+import com.mashang.mapper.TestQuestionMapper;
 import com.mashang.service.IQuestionAnswerService;
 import com.mashang.service.ITestService;
 import com.mashang.mapper.TestMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,7 +38,8 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test>
 
     /**
      * 查询学生所有的答卷列表
-     * @param pageQuery 分页条件
+     *
+     * @param pageQuery     分页条件
      * @param testPageQuery 试卷的分页条件 类型和学科
      * @return 学生所有的试卷列表
      */
@@ -54,9 +49,11 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test>
         baseMapper.pageStudentTests(testPageQuery);
         return testListVoPage;
     }
+
     /**
-     *  查询学生所有视频答卷列表
-     * @param pageQuery 分页参数
+     * 查询学生所有视频答卷列表
+     *
+     * @param pageQuery          分页参数
      * @param videoTestPageQuery 视频查询条件
      * @return 学生所有视频答卷列表
      */
@@ -66,6 +63,8 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test>
         baseMapper.pageVideoTests(videoTestPageQuery);
         return videoTestVoPage;
     }
+
+
 }
 
 

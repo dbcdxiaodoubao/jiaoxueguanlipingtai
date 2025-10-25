@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.mashang.domain.entity.Test;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.mashang.domain.query.common.PageQuery;
+import com.mashang.domain.query.student.RandomTestQuery;
 import com.mashang.domain.query.student.TestPageQuery;
 import com.mashang.domain.query.student.TestSubmit;
 import com.mashang.domain.query.student.VideoTestPageQuery;
@@ -38,4 +39,6 @@ public interface ITestService extends IService<Test> {
      * @return 学生所有视频答卷列表
      */
     Page<VideoTestVo> pageVideoTests(PageQuery pageQuery, VideoTestPageQuery videoTestPageQuery);
+
+
 }

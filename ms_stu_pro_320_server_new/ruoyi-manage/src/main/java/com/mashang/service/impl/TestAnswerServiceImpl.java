@@ -21,6 +21,7 @@ import com.mashang.mapper.TestMapper;
 import com.mashang.service.IQuestionAnswerService;
 import com.mashang.service.ITestAnswerService;
 import com.mashang.mapper.TestAnswerMapper;
+import com.mashang.util.QuestionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -107,7 +108,7 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
         List<QuestionSubmit> questionSubmits = testSubmit.getQuestionSubmits();
         Integer userScore = 0;
         for (QuestionSubmit questionSubmit : questionSubmits) {
-            if (questionSubmit.getQuestionType().equals(QuestionType.SUBJECTIVE)) {
+            if (!QuestionUtils.isObjective(questionSubmit.getQuestionType())) {
                 questionSubmit.setStatus(StatusConstant.ANSWER_STATUS_PENDING);
                 continue;
             }

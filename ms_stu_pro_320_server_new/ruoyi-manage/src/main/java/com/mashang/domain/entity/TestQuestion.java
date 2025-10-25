@@ -25,7 +25,7 @@ public class TestQuestion extends BaseModel {
     private Integer testQuestionId;
 
     @ApiModelProperty(value = "题目id")
-    private Integer questionId;
+    private Long questionId;
 
     @ApiModelProperty(value = "试卷id")
     private Integer testId;

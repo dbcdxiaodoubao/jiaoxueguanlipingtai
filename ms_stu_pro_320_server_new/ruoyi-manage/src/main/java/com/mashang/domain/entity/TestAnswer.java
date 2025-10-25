@@ -28,6 +28,9 @@ public class TestAnswer extends BaseModel {
     @ApiModelProperty(value = "试卷id")
     private Integer testId;
 
+    @ApiModelProperty(value = "随机试卷id")
+    private Long randomTestId;
+
     @ApiModelProperty(value = "答卷人id")
     private Long userId;
 

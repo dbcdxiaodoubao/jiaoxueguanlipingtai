@@ -1,4 +1,4 @@
-package com.mashang.controller;
+package com.mashang.domain.entity;
 
 import com.mashang.domain.vo.student.TaskListVo;
 import com.mashang.service.ITaskService;

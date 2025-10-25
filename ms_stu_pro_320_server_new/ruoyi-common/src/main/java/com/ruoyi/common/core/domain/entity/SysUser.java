@@ -152,6 +152,14 @@ public class SysUser extends BaseEntity
         this.userId = userId;
     }
 
+    public Long getGrade() {
+        return grade;
+    }
+
+    public void setGrade(Long grade) {
+        this.grade = grade;
+    }
+
     public boolean isAdmin()
     {
         return isAdmin(this.userId);
