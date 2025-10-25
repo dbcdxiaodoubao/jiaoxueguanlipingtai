@@ -53,6 +53,11 @@ public class SubjectsServiceImpl extends ServiceImpl<SubjectsMapper, Subjects>
         }
         return subjectsListByGradeVoList;
     }
+
+    @Override
+    public Integer selectBySubjectNameGrade(String subjectName, Integer grade) {
+        return subjectsMapper.selectBySubjectNameGrade(subjectName, grade);
+    }
 }
 
 

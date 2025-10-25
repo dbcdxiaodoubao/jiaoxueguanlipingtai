@@ -2,7 +2,9 @@ package com.mashang.mapper;
 
 import com.mashang.domain.entity.Subjects;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.mashang.domain.vo.management.SubjectsDtlVo;
 import com.mashang.domain.vo.management.SubjectsListVo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -21,6 +23,14 @@ public interface SubjectsMapper extends BaseMapper<Subjects> {
      */
     List<SubjectsListVo> list(Long grade);
 
+    /**
+     * 通过学科名称和年级查询是否存在相同学科
+     * @param subjectName
+     * @param grade
+     * @return
+     */
+    Integer selectBySubjectNameGrade(@Param("subjectName")String subjectName
+            ,@Param("grade") Integer grade);
 }
 
 

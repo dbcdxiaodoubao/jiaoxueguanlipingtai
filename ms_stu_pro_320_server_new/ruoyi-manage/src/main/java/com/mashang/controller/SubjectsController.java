@@ -6,6 +6,8 @@ import com.github.pagehelper.PageInfo;
 import com.mashang.comming.SubjectsMapping;
 import com.mashang.domain.entity.Subjects;
 import com.mashang.domain.query.common.PageQuery;
+import com.mashang.domain.query.management.SubjectsCreat;
+import com.mashang.domain.query.management.SubjectsUpdate;
 import com.mashang.domain.vo.management.SubjectsDtlVo;
 import com.mashang.domain.vo.management.SubjectsListVo;
 import com.mashang.domain.vo.student.SubjectsListByGradeVo;
@@ -15,10 +17,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,7 +31,7 @@ public class SubjectsController {
 
     @GetMapping("/list")
     @ApiOperation("查询学科信息列表")
-    public R<PageInfo<SubjectsListVo>> list(PageQuery pageQuery, Long grade){
+    public R<PageInfo<SubjectsListVo>> list(@Validated PageQuery pageQuery, Long grade){
         PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize());
 
         List<SubjectsListVo> list = subjectsService.list(grade);
@@ -52,4 +51,42 @@ public class SubjectsController {
         List<SubjectsListByGradeVo> subjectsListByGradeVos = subjectsService.listByGrade();
         return R.ok(subjectsListByGradeVos);
     }
+
+    @PostMapping
+    @ApiOperation("新增学科信息")
+    public R insert(@RequestBody @Validated SubjectsCreat subjectsCreat){
+
+        if(subjectsService.selectBySubjectNameGrade(subjectsCreat.getSubjectName()
+                ,subjectsCreat.getGrade())!=0){
+            return R.fail("该学科已经存在");
+        }
+
+        subjectsService.save(SubjectsMapping.INSTANCE.toCreate(subjectsCreat));
+
+        return R.ok();
+    }
+
+    @PutMapping
+    @ApiOperation("修改学科信息")
+    public R update(@Validated @RequestBody SubjectsUpdate subjectsUpdate){
+
+        if(subjectsService.selectBySubjectNameGrade(subjectsUpdate.getSubjectName()
+                ,subjectsUpdate.getGrade())!=0){
+            return R.fail("该学科已经存在");
+        }
+
+        subjectsService.updateById(SubjectsMapping.INSTANCE.toUpdate(subjectsUpdate));
+
+        return R.ok();
+    }
+
+    @DeleteMapping("/{subjectId}")
+    @ApiOperation("删除学科信息")
+    public R delete(@PathVariable @Validated Integer subjectId){
+        if (subjectsService.removeById(subjectId)) {
+            return R.ok();
+        }
+        return R.fail();
+    }
+
 }
