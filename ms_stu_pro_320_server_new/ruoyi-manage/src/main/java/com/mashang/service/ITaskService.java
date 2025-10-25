@@ -2,8 +2,10 @@ package com.mashang.service;
 
 import com.mashang.domain.entity.Task;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.mashang.domain.vo.management.TaskDtlVo;
 import com.mashang.domain.vo.student.TaskListVo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,4 +20,27 @@ public interface ITaskService extends IService<Task> {
      * @return
      */
     List<TaskListVo> listStudentTasks(Long userId);
+
+    /**
+     * 新增任务
+     * @param task
+     * @param testIds
+     * @return
+     */
+    boolean add(Task task, List<Integer> testIds);
+
+    /**
+     * 修改任务
+     * @param task
+     * @param testIds
+     * @return
+     */
+    boolean update(Task task, ArrayList<Integer> testIds);
+
+    /**
+     * 任务详情
+     * @param taskId
+     * @return
+     */
+    TaskDtlVo detail(Integer taskId);
 }

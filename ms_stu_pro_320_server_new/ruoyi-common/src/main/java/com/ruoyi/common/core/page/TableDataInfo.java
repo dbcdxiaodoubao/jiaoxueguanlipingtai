@@ -1,5 +1,7 @@
 package com.ruoyi.common.core.page;
 
+import com.ruoyi.common.constant.HttpStatus;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -41,6 +43,8 @@ public class TableDataInfo implements Serializable
     {
         this.rows = list;
         this.total = total;
+        this.code = HttpStatus.SUCCESS;
+        this.msg = "查询成功";
     }
 
     public long getTotal()

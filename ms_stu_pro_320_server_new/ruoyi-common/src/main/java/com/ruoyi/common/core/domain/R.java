@@ -73,6 +73,12 @@ public class R<T> implements Serializable
         return apiResult;
     }
 
+    public static <T> R<T> result(boolean success)
+    {
+        if (success)return ok();
+        return fail();
+    }
+
     public int getCode()
     {
         return code;

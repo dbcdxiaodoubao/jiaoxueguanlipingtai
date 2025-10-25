@@ -10,6 +10,10 @@
             <result property="testAnswerId" column="test_answer_id"></result>
         </collection>
     </resultMap>
+
+    <resultMap id="taskTestMap" type="TaskDtlVo" autoMapping="true">
+        <collection property="taskTests" ofType="TaskTestVo" autoMapping="true"/>
+    </resultMap>
     <select id="listStudentTasks" resultMap="listStudentTasksMap">
         SELECT
             t1.task_name,
@@ -37,5 +41,18 @@
         WHERE
             t1.grade = #{grade}
           AND t1.del_flag=0
+    </select>
+    <select id="detail" resultMap="taskTestMap" parameterType="java.lang.Integer">
+        select
+            ta.task_name,
+            ta.grade,
+            te.test_id,
+            te.test_name,
+            s.subject_name,
+            te.create_time
+        from ms_task ta left join ms_task_test tt on ta.task_id=tt.task_id and tt.del_flag='0'
+                        left join ms_test te on tt.test_id=te.test_id and te.del_flag='0'
+                        left join ms_subjects s on te.subject_id=s.subject_id and s.del_flag='0'
+        where ta.task_id=#{taskId} and ta.del_flag='0'
     </select>
 </mapper>

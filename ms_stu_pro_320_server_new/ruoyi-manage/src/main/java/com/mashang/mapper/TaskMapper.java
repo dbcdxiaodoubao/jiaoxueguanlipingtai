@@ -2,6 +2,7 @@ package com.mashang.mapper;
 
 import com.mashang.domain.entity.Task;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.mashang.domain.vo.management.TaskDtlVo;
 import com.mashang.domain.vo.student.TaskListVo;
 import org.apache.ibatis.annotations.Param;
 
@@ -22,6 +23,12 @@ public interface TaskMapper extends BaseMapper<Task> {
      */
     List<TaskListVo> listStudentTasks(@Param("grade") Integer grade, @Param("userId") Long userId);
 
+    /**
+     * 获取任务详情
+     * @param taskId 任务id
+     * @return 任务详情
+     */
+    TaskDtlVo detail(Integer taskId);
 }
 
 
