@@ -2,9 +2,11 @@ package com.mashang.service;
 
 import com.mashang.domain.entity.Question;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.mashang.domain.query.management.QuestionCteat;
 import com.mashang.domain.query.management.QuestionListQuery;
 import com.mashang.domain.vo.management.QuestionDtlVo;
 import com.mashang.domain.vo.management.QuestionListVo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -34,4 +36,21 @@ public interface IQuestionService extends IService<Question> {
      * @return
      */
     QuestionDtlVo dtl(Integer questionId);
+
+    /**
+     * 新增问题
+     * @param questionCteat
+     * @return
+     */
+    boolean insert(QuestionCteat questionCteat);
+
+    /**
+     * 问题和知识点关联
+     * @param questionId
+     * @param knowledgeId
+     * @return
+     */
+    Integer linkQuestionKnowledge(@Param("questionId") Long questionId
+            ,@Param("knowledgeId")  Integer knowledgeId);
+
 }

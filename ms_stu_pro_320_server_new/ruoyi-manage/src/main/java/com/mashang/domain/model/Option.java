@@ -2,6 +2,8 @@ package com.mashang.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,13 +12,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@ApiModel("题目选项")
 public class Option {
     @JsonProperty("a")
+    @ApiModelProperty("选项A")
     private String A;
     @JsonProperty("b")
+    @ApiModelProperty("选项B")
     private String B;
     @JsonProperty("c")
+    @ApiModelProperty("选项C")
     private String C;
     @JsonProperty("d")
+    @ApiModelProperty("选项D")
     private String D;
 }

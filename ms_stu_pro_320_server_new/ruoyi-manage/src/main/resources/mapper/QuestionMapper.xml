@@ -110,4 +110,9 @@
         WHERE question_id = #{questionId}
     </select>
 
+    <insert id="linkQuestionKnowledge">
+        INSERT INTO ms_knowledge_question(knowledge_id,question_id)
+        VALUES (#{knowledgeId},#{questionId})
+    </insert>
+
 </mapper>

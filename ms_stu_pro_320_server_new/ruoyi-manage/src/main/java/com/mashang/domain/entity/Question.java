@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
@@ -62,6 +63,10 @@ public class Question extends BaseModel {
     @ExcelProperty("题目解析")
     @TableField("`explain`")
     private String explain;
+
+    @TableField(exist = false)
+    @ApiModelProperty(value = "知识点id")
+    private List<Integer> knowledgeId;
 
     @Override
     public boolean equals(Object o) {
