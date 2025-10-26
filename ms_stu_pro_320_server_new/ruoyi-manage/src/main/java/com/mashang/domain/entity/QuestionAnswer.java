@@ -22,8 +22,8 @@ import lombok.Data;
 @Data
 @ApiModel(value="QuestionAnswer对象", description="答题表")
 public class QuestionAnswer extends BaseModel {
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = 1L;
     @ApiModelProperty(value = "答题id")
     @TableId(value = "question_answer_id", type = IdType.AUTO)
     private Integer questionAnswerId;

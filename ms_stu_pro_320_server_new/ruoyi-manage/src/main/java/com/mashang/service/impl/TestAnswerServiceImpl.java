@@ -4,6 +4,8 @@ import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.mashang.comming.QuestionAnswerMapping;
 import com.mashang.comming.RandomTestMapping;
 import com.mashang.comming.TestAnswerMapping;
@@ -11,13 +13,12 @@ import com.mashang.constant.MessageConstant;
 import com.mashang.constant.QuestionType;
 import com.mashang.constant.StatusConstant;
 import com.mashang.domain.entity.*;
+import com.mashang.domain.query.common.PageQuery;
 import com.mashang.domain.query.student.QuestionSubmit;
 import com.mashang.domain.query.student.RandomTestSubmit;
+import com.mashang.domain.query.student.TestRecordQuery;
 import com.mashang.domain.query.student.TestSubmit;
-import com.mashang.domain.vo.student.QuestionAnswerVo;
-import com.mashang.domain.vo.student.TestAnswerInfo;
-import com.mashang.domain.vo.student.TestListVo;
-import com.mashang.domain.vo.student.VideoTestVo;
+import com.mashang.domain.vo.student.*;
 import com.mashang.mapper.*;
 import com.mashang.service.IQuestionAnswerService;
 import com.mashang.service.ITestAnswerService;
@@ -211,6 +212,20 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
     public TestAnswerInfo getRandomInfo(Long randomTestId) {
         TestAnswer testAnswer = getTestAnswerByRandomTestId(randomTestId);
         return getStudentTestInfo(testAnswer.getTestAnswerId());
+    }
+
+
+    /**
+     * 根据提交时间倒叙分页查询该学生做过的试卷基本信息
+     * @param pageQuery 分页条件
+     * @param testRecordQuery 查询条件
+     * @return 学生做过的试卷基本信息
+     */
+    @Override
+    public Page<TestRecordListVo> listTestRecord(PageQuery pageQuery, TestRecordQuery testRecordQuery) {
+        Page<TestRecordListVo> page = PageHelper.startPage(pageQuery);
+        baseMapper.listTestRecord(testRecordQuery);
+        return page;
     }
 
 

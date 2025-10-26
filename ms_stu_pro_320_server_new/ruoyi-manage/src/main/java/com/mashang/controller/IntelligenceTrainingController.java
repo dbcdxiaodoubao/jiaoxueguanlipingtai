@@ -3,8 +3,6 @@ package com.mashang.controller;
 import com.github.pagehelper.Page;
 import com.mashang.domain.query.common.PageQuery;
 import com.mashang.domain.query.student.RandomTestQuery;
-import com.mashang.domain.query.student.RandomTestSubmit;
-import com.mashang.domain.vo.student.RandomTestInfo;
 import com.mashang.domain.vo.student.RandomTestVo;
 import com.mashang.domain.vo.student.TestAnswerInfo;
 import com.mashang.service.IRandomTestService;
@@ -49,7 +47,7 @@ public class IntelligenceTrainingController extends BaseController {
     }
 
     @GetMapping("/info/{randomTestId}")
-    @ApiOperation("查询随机试卷详情")
+    @ApiOperation("查询随机答卷详情")
     public R<TestAnswerInfo> getRandomInfo(@PathVariable Long randomTestId){
         TestAnswerInfo randomInfo = testAnswerService.getRandomInfo(randomTestId);
         return R.ok(randomInfo);

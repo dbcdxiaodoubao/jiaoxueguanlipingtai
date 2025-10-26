@@ -19,11 +19,11 @@ public class TestListVo {
     private String testName;
 
     @ApiModelProperty(value = "试卷发布时间")
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startTime;
 
     @ApiModelProperty(value = "截止时间")
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date deadline;
 
     @ApiModelProperty(value = "试卷总分")

@@ -1,11 +1,15 @@
 package com.mashang.service;
 
+import com.github.pagehelper.Page;
 import com.mashang.domain.entity.TestAnswer;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.mashang.domain.query.common.PageQuery;
 import com.mashang.domain.query.student.RandomTestSubmit;
+import com.mashang.domain.query.student.TestRecordQuery;
 import com.mashang.domain.query.student.TestSubmit;
 import com.mashang.domain.vo.student.TestAnswerInfo;
 import com.mashang.domain.vo.student.TestListVo;
+import com.mashang.domain.vo.student.TestRecordListVo;
 import com.mashang.domain.vo.student.VideoTestVo;
 
 import java.util.List;
@@ -57,5 +61,11 @@ public interface ITestAnswerService extends IService<TestAnswer> {
      */
     TestAnswerInfo getRandomInfo(Long randomTestId);
 
-
+    /**
+     * 根据提交时间倒叙分页查询该学生做过的试卷基本信息
+     * @param pageQuery 分页条件
+     * @param testRecordQuery 查询条件
+     * @return 学生做过的试卷基本信息
+     */
+    Page<TestRecordListVo> listTestRecord(PageQuery pageQuery, TestRecordQuery testRecordQuery);
 }

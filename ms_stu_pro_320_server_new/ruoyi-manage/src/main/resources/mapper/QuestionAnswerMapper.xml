@@ -3,5 +3,35 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mashang.mapper.QuestionAnswerMapper">
-
+    <resultMap id="pageWrongBookMap" type="wrongBookListVo" autoMapping="true">
+        <result property="option" column="option" typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler"></result>
+    </resultMap>
+    <select id="pageWrongBook" resultMap="pageWrongBookMap">
+        SELECT
+        t1.question_answer_id,
+        t2.subject_name,
+        t1.question_type,
+        t1.question_title,
+        t1.question_difficulty,
+        t1.user_answer,
+        t1.right_answer,
+        t1.question_score,
+        t1.`explain`,
+        t1.`option`
+        FROM
+        ms_question_answer AS t1
+        LEFT JOIN
+        ms_subjects AS t2
+        ON
+        t1.subject_id = t2.subject_id
+        <where>
+            t1.user_id = #{userId} AND
+            t1.del_flag = 0 AND
+            t1.`status` = 2
+            <if test="subjectId!=null">
+                AND t1.subject_id=#{subjectId}
+            </if>
+        </where>
+        ORDER BY t1.create_time DESC
+    </select>
 </mapper>

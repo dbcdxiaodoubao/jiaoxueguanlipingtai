@@ -52,7 +52,7 @@ public class TestAnswer extends BaseModel {
     private Integer userTestScore;
 
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(value = "提交时间")
     private Date submitTime;
 }

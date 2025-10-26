@@ -76,7 +76,6 @@ public class SubjectsController {
         }
 
         subjectsService.updateById(SubjectsMapping.INSTANCE.toUpdate(subjectsUpdate));
-
         return R.ok();
     }
 

@@ -65,12 +65,17 @@ public class RandomTestServiceImpl extends ServiceImpl<RandomTestMapper, RandomT
         //学科
         Long subjectId = randomTestQuery.getSubjectId();
 
-
+        if (judgmentNum == 0 && multipleNum == 0 && singleNum == 0) {
+            throw new ServiceException(MessageConstant.QUESTION_NOT_EXIST);
+        }
         //选取题目
         LambdaQueryWrapper<Question> qlqw = Wrappers.lambdaQuery();
         qlqw.eq(Question::getQuestionDifficulty, randomTestQuery.getQuestionDifficult());
         qlqw.eq(Question::getSubjectId, subjectId);
         List<Question> questions = questionMapper.selectList(qlqw);
+        if (CollUtil.isEmpty(questions)) {
+            throw new ServiceException(MessageConstant.QUESTION_TOO_LESS);
+        }
         //通过题目类型进行分组
         Map<Integer, List<Question>> collect = questions.stream().collect(Collectors.groupingBy(Question::getQuestionType));
         //获取随机题目
