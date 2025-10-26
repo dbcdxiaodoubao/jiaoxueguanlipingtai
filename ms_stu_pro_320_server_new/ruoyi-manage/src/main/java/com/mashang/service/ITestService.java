@@ -21,9 +21,6 @@ import java.util.List;
 */
 public interface ITestService extends IService<Test> {
 
-
-
-
     /**
      * 查询学生所有的答卷列表
      * @param pageQuery 分页条件
@@ -40,5 +37,10 @@ public interface ITestService extends IService<Test> {
      */
     Page<VideoTestVo> pageVideoTests(PageQuery pageQuery, VideoTestPageQuery videoTestPageQuery);
 
-
+    /**
+     * 根据学科id查有没有试卷
+     * @param subjectId
+     * @return
+     */
+    Integer haveTest(Integer subjectId);
 }

@@ -85,6 +85,11 @@ public class KnowledgeServiceImpl extends ServiceImpl<KnowledgeMapper, Knowledge
     public Integer selectCountById(Integer knowledgeId) {
         return knowledgeMapper.selectCountById(knowledgeId);
     }
+
+    @Override
+    public Integer haveKnowledege(Integer subjectId) {
+        return knowledgeMapper.haveKnowledege(subjectId);
+    }
 }
 
 

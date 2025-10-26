@@ -79,4 +79,12 @@
             ms_knowledge t1
         WHERE t1.parent_id = #{knowledgeId}
     </select>
+
+    <select id="haveKnowledege" resultType="Integer">
+        select
+            COUNT(*)
+        FROM
+            ms_knowledge t1
+        WHERE t1.subject_id = #{subjectId}
+    </select>
 </mapper>

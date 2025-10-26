@@ -65,4 +65,11 @@ public interface IKnowledgeService extends IService<Knowledge> {
      * @return
      */
     Integer selectCountById(Integer knowledgeId);
+
+    /**
+     * 根据学科id查询是有知识点
+     * @param subjectId
+     * @return
+     */
+    Integer haveKnowledege(Integer subjectId);
 }

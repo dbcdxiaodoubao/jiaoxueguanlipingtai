@@ -35,6 +35,8 @@ import java.util.List;
 public class TestServiceImpl extends ServiceImpl<TestMapper, Test>
         implements ITestService {
 
+    @Autowired
+    private TestMapper testMapper;
 
     /**
      * 查询学生所有的答卷列表
@@ -62,6 +64,11 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test>
         Page<VideoTestVo> videoTestVoPage = PageHelper.startPage(pageQuery);
         baseMapper.pageVideoTests(videoTestPageQuery);
         return videoTestVoPage;
+    }
+
+    @Override
+    public Integer haveTest(Integer subjectId) {
+        return testMapper.haveTest(subjectId);
     }
 
 

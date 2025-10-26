@@ -32,6 +32,13 @@ public interface TestMapper extends BaseMapper<Test> {
      * @return 学生所有视频答卷列表
      */
     Page<VideoTestVo> pageVideoTests(@Param("v") VideoTestPageQuery videoTestPageQuery);
+
+    /**
+     * 根据学科id查有没有试卷
+     * @param subjectId
+     * @return
+     */
+    Integer haveTest(Integer subjectId);
 }
 
 

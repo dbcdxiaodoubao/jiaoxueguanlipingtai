@@ -11,7 +11,10 @@ import com.mashang.domain.query.management.SubjectsUpdate;
 import com.mashang.domain.vo.management.SubjectsDtlVo;
 import com.mashang.domain.vo.management.SubjectsListVo;
 import com.mashang.domain.vo.student.SubjectsListByGradeVo;
+import com.mashang.service.IKnowledgeService;
+import com.mashang.service.IQuestionService;
 import com.mashang.service.ISubjectsService;
+import com.mashang.service.ITestService;
 import com.ruoyi.common.core.domain.R;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,6 +31,15 @@ public class SubjectsController {
 
     @Autowired
     ISubjectsService subjectsService;
+
+    @Autowired
+    IKnowledgeService knowledgeService;
+
+    @Autowired
+    IQuestionService questionService;
+
+    @Autowired
+    ITestService testService;
 
     @GetMapping("/list")
     @ApiOperation("查询学科信息列表")
@@ -82,6 +94,18 @@ public class SubjectsController {
     @DeleteMapping("/{subjectId}")
     @ApiOperation("删除学科信息")
     public R delete(@PathVariable @Validated Integer subjectId){
+        if (knowledgeService.haveKnowledege(subjectId)!=0){
+            return R.fail("该学科下存在知识点，请先删除知识点再删除学科");
+        }
+
+        if (questionService.haveQuestion(subjectId)!=0){
+            return R.fail("该学科下存在题目，请先删除题目再删除学科");
+        }
+
+        if (testService.haveTest(subjectId)!=0){
+            return R.fail("该学科下存在试卷，请先删除试卷再删除学科");
+        }
+
         if (subjectsService.removeById(subjectId)) {
             return R.ok();
         }

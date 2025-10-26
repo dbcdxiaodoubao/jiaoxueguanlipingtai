@@ -70,4 +70,11 @@
         </where>
 
     </select>
+
+    <select id="haveTest" resultType="Integer">
+        SELECT
+            COUNT(*)
+        FROM  ms_test t1
+        WHERE  t1.subject_id = #{subjectId}
+    </select>
 </mapper>
