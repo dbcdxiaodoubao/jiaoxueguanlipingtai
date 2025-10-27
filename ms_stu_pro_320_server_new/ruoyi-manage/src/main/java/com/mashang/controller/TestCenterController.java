@@ -2,13 +2,14 @@ package com.mashang.controller;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.mashang.domain.query.common.PageQuery;
+import com.mashang.domain.query.management.TestListQuery;
 import com.mashang.domain.query.student.TestPageQuery;
 import com.mashang.domain.query.student.TestSubmit;
+import com.mashang.domain.vo.management.ManageTestListVo;
 import com.mashang.domain.vo.student.TestAnswerInfo;
 import com.mashang.domain.vo.student.TestListVo;
-import com.mashang.domain.vo.student.VideoTestVo;
-import com.mashang.service.ITaskTestAnswerService;
 import com.mashang.service.ITestAnswerService;
 import com.mashang.service.ITestService;
 import com.ruoyi.common.core.controller.BaseController;
@@ -60,6 +61,17 @@ public class TestCenterController extends BaseController {
         testPageQuery.setUserId(SecurityUtils.getUserId());
         Page<TestListVo> testListVos = testService.pageStudentTests(pageQuery, testPageQuery);
         return getDataTable(testListVos);
+    }
+
+    @GetMapping
+    @ApiOperation("管理端查询试卷列表")
+    public R<PageInfo<ManageTestListVo>> list(@Validated PageQuery pageQuery
+            ,TestListQuery testListQuery){
+        PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize());
+
+        List<ManageTestListVo> list = testService.list(testListQuery);
+
+        return R.ok(PageInfo.of(list));
     }
     
 }

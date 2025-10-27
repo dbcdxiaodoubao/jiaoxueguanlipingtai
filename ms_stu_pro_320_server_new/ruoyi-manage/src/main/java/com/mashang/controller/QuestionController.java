@@ -8,6 +8,7 @@ import com.mashang.domain.query.common.PageQuery;
 import com.mashang.domain.query.management.QuestionCteat;
 import com.mashang.domain.query.management.QuestionExcelCteat;
 import com.mashang.domain.query.management.QuestionListQuery;
+import com.mashang.domain.query.management.QuestionUpdate;
 import com.mashang.domain.vo.management.QuestionDtlVo;
 import com.mashang.domain.vo.management.QuestionListVo;
 import com.mashang.service.IQuestionService;
@@ -92,6 +93,30 @@ public class QuestionController {
         }
 
         return R.fail("导入失败");
+    }
+
+    @PutMapping
+    @ApiOperation("修改题目")
+    public R update(@RequestBody @Validated QuestionUpdate questionUpdate){
+        if (iQuestionService.updateById(QuestionMapping.INSTANCE.toUpdate(questionUpdate))){
+            return R.ok();
+        }
+        return R.fail("修改失败");
+    }
+
+    @ApiOperation("删除题目")
+    @DeleteMapping("/{questionId}")
+    public R delete(@PathVariable @Validated Integer questionId){
+
+        if (iQuestionService.haveOnTest(questionId)!=0){
+            return R.fail("该题目与试卷关联，请先删除相关试卷再删除题目");
+        }
+
+        if(iQuestionService.removeById(questionId)){
+            iQuestionService.deleteLink(questionId);
+            return R.ok();
+        }
+        return R.fail();
     }
 
 }

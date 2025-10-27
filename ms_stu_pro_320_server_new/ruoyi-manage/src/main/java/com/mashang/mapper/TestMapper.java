@@ -3,8 +3,10 @@ package com.mashang.mapper;
 import com.github.pagehelper.Page;
 import com.mashang.domain.entity.Test;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.mashang.domain.query.management.TestListQuery;
 import com.mashang.domain.query.student.TestPageQuery;
 import com.mashang.domain.query.student.VideoTestPageQuery;
+import com.mashang.domain.vo.management.ManageTestListVo;
 import com.mashang.domain.vo.student.TestListVo;
 import com.mashang.domain.vo.student.VideoTestVo;
 import org.apache.ibatis.annotations.Param;
@@ -39,6 +41,13 @@ public interface TestMapper extends BaseMapper<Test> {
      * @return
      */
     Integer haveTest(Integer subjectId);
+
+    /**
+     * 管理端查询试卷列表
+     * @param testListQuery
+     * @return
+     */
+    List<ManageTestListVo> list(TestListQuery testListQuery);
 }
 
 

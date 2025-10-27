@@ -4,10 +4,12 @@ import com.github.pagehelper.Page;
 import com.mashang.domain.entity.Test;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.mashang.domain.query.common.PageQuery;
+import com.mashang.domain.query.management.TestListQuery;
 import com.mashang.domain.query.student.RandomTestQuery;
 import com.mashang.domain.query.student.TestPageQuery;
 import com.mashang.domain.query.student.TestSubmit;
 import com.mashang.domain.query.student.VideoTestPageQuery;
+import com.mashang.domain.vo.management.ManageTestListVo;
 import com.mashang.domain.vo.student.TestAnswerInfo;
 import com.mashang.domain.vo.student.TestListVo;
 import com.mashang.domain.vo.student.VideoTestVo;
@@ -43,4 +45,11 @@ public interface ITestService extends IService<Test> {
      * @return
      */
     Integer haveTest(Integer subjectId);
+
+    /**
+     * 管理端查询试卷列表
+     * @param testListQuery
+     * @return
+     */
+    List<ManageTestListVo> list(TestListQuery testListQuery);
 }

@@ -3,6 +3,7 @@ package com.mashang.comming;
 import com.mashang.domain.entity.Question;
 import com.mashang.domain.query.management.QuestionCteat;
 import com.mashang.domain.query.management.QuestionExcelCteat;
+import com.mashang.domain.query.management.QuestionUpdate;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
@@ -18,4 +19,5 @@ public interface QuestionMapping {
 
     List<Question> toList(List<QuestionExcelCteat> questionExcelCteats);
 
+    Question toUpdate(QuestionUpdate questionUpdate);
 }

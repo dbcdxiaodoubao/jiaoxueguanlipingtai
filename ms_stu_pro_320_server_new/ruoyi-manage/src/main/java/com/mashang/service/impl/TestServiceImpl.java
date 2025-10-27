@@ -8,7 +8,9 @@ import com.github.pagehelper.PageHelper;
 import com.mashang.domain.entity.Test;
 import com.mashang.domain.entity.TestAnswer;
 import com.mashang.domain.query.common.PageQuery;
+import com.mashang.domain.query.management.TestListQuery;
 import com.mashang.domain.query.student.*;
+import com.mashang.domain.vo.management.ManageTestListVo;
 import com.mashang.domain.vo.student.QuestionAnswerVo;
 import com.mashang.domain.vo.student.TestAnswerInfo;
 import com.mashang.domain.vo.student.TestListVo;
@@ -24,6 +26,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -69,6 +72,11 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test>
     @Override
     public Integer haveTest(Integer subjectId) {
         return testMapper.haveTest(subjectId);
+    }
+
+    @Override
+    public List<ManageTestListVo> list(TestListQuery testListQuery) {
+        return testMapper.list(testListQuery);
     }
 
 

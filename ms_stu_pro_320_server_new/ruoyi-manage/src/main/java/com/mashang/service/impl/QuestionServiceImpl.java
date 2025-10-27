@@ -67,6 +67,16 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
         return questionMapper.linkQuestionKnowledge(questionId, knowledgeId);
     }
 
+    @Override
+    public Integer deleteLink(Integer questionId) {
+        return questionMapper.deleteLink(questionId);
+    }
+
+    @Override
+    public Integer haveOnTest(Integer questionId) {
+        return questionMapper.haveOnTest(questionId);
+    }
+
 
 }
 

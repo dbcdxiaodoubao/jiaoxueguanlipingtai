@@ -51,6 +51,21 @@ public interface QuestionMapper extends BaseMapper<Question> {
      */
     Integer linkQuestionKnowledge(@Param("questionId") Long questionId
             ,@Param("knowledgeId")  Integer knowledgeId);
+
+    /**
+     * 根据id删除和知识点的关联
+     * @param questionId
+     * @return
+     */
+    Integer deleteLink(Integer questionId);
+
+    /**
+     * 根据问题id查询是否与试卷关联
+     * @param questionId
+     * @return
+     */
+    Integer haveOnTest(Integer questionId);
+
 }
 
 

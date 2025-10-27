@@ -115,4 +115,15 @@
         VALUES (#{knowledgeId},#{questionId})
     </insert>
 
+    <delete id="deleteLink">
+        DELETE FROM ms_knowledge_question WHERE question_id = #{questionId}
+    </delete>
+
+    <select id="haveOnTest" resultType="Integer">
+        SELECT
+            COUNT(*)
+        FROM ms_test_qustion
+        WHERE question_id = #{questionId}
+    </select>
+
 </mapper>
