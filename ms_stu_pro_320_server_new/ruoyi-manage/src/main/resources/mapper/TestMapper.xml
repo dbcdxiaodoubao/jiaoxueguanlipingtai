@@ -103,4 +103,65 @@
             </if>
         </where>
     </select>
+
+    <resultMap id="selectDtl" type="testDtlVo">
+        <result column="test_name" property="testName"></result>
+        <result column="subject_id" property="subjectId"></result>
+        <result column="grade" property="grade"></result>
+        <result column="test_type" property="testType"></result>
+        <result column="suggest_duration" property="suggestDuration"></result>
+        <collection property="question" ofType="questionTestVo">
+            <result column="question_title" property="questionTitle"></result>
+            <result column="big_title" property="bigTitle"></result>
+            <result column="order" property="order"></result>
+            <result property="option" column="option"
+                    typeHandler="com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler"></result>
+        </collection>
+    </resultMap>
+
+
+    <select id="dtl" resultMap="selectDtl">
+        SELECT
+            ms_test.test_name,
+            ms_test.subject_id,
+            ms_subjects.grade,
+            ms_test.test_type,
+            ms_test.suggest_duration,
+            ms_test_question.`order`,
+            ms_test_question.big_title,
+            ms_question.question_title,
+            ms_question.`option`
+        FROM
+            ms_test
+                INNER JOIN
+            ms_test_question
+            ON
+                ms_test.test_id = ms_test_question.test_id
+                INNER JOIN
+            ms_subjects
+            ON
+                ms_test.subject_id = ms_subjects.subject_id
+                INNER JOIN
+            ms_question
+            ON
+                ms_test_question.question_id = ms_question.question_id AND
+                ms_subjects.subject_id = ms_question.subject_id
+        WHERE  ms_test.test_id = #{testId}
+    </select>
+
+    <insert id="linkTestQuestion">
+        INSERT INTO ms_test_question (question_id,test_id,big_title,`order`)
+        VALUES (#{questionTestCreat.questionId},#{testId}
+               ,#{questionTestCreat.bigTitle},#{questionTestCreat.order})
+    </insert>
+
+    <delete id="breakTestQuestion">
+        DELETE FROM ms_test_question WHERE test_id = #{testId}
+    </delete>
+
+    <select id="haveTestAnswer" resultType="Integer">
+        SELECT COUNT(*)
+        FROM ms_test_answer
+        WHERE test_id = #{testId}
+    </select>
 </mapper>

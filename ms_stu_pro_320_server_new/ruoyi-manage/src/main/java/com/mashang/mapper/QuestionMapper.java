@@ -3,6 +3,7 @@ package com.mashang.mapper;
 import com.mashang.domain.entity.Question;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.mashang.domain.query.management.QuestionListQuery;
+import com.mashang.domain.vo.management.MonthQuestion;
 import com.mashang.domain.vo.management.QuestionDtlVo;
 import com.mashang.domain.vo.management.QuestionListVo;
 import org.apache.ibatis.annotations.Param;
@@ -65,6 +66,12 @@ public interface QuestionMapper extends BaseMapper<Question> {
      * @return
      */
     Integer haveOnTest(Integer questionId);
+
+    /**
+     * 查询题目月数量
+     * @return
+     */
+    List<MonthQuestion> monthQuestionList();
 
 }
 

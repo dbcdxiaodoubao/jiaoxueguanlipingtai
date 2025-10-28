@@ -3,14 +3,17 @@ package com.mashang.mapper;
 import com.github.pagehelper.Page;
 import com.mashang.domain.entity.Test;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.mashang.domain.query.management.QuestionTestCreat;
 import com.mashang.domain.query.management.TestListQuery;
 import com.mashang.domain.query.student.TestPageQuery;
 import com.mashang.domain.query.student.VideoTestPageQuery;
 import com.mashang.domain.vo.management.ManageTestListVo;
+import com.mashang.domain.vo.management.TestDtlVo;
 import com.mashang.domain.vo.student.TestListVo;
 import com.mashang.domain.vo.student.VideoTestVo;
 import org.apache.ibatis.annotations.Param;
 
+import java.beans.Introspector;
 import java.util.List;
 
 /**
@@ -48,6 +51,37 @@ public interface TestMapper extends BaseMapper<Test> {
      * @return
      */
     List<ManageTestListVo> list(TestListQuery testListQuery);
+
+    /**
+     * 根据试卷id查询试卷详情
+     * @param testId
+     * @return
+     */
+    TestDtlVo dtl(Integer testId);
+
+    /**
+     * 根据试卷id绑定问题
+     * @param testId
+     * @param questionTestCreat
+     * @return
+     */
+    Integer linkTestQuestion(@Param("testId") Integer testId
+            ,@Param("questionTestCreat") QuestionTestCreat questionTestCreat);
+
+    /**
+     * 根据试卷id删除题目关联
+     * @param testId
+     * @return
+     */
+    Integer breakTestQuestion(Integer testId);
+
+    /**
+     * 根据试卷id查询是否存在答卷
+     * @param testId
+     * @return
+     */
+    Integer haveTestAnswer(Integer testId);
+
 }
 
 

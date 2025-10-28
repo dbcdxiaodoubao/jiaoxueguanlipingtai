@@ -8,9 +8,11 @@ import com.github.pagehelper.PageHelper;
 import com.mashang.domain.entity.Test;
 import com.mashang.domain.entity.TestAnswer;
 import com.mashang.domain.query.common.PageQuery;
+import com.mashang.domain.query.management.QuestionTestCreat;
 import com.mashang.domain.query.management.TestListQuery;
 import com.mashang.domain.query.student.*;
 import com.mashang.domain.vo.management.ManageTestListVo;
+import com.mashang.domain.vo.management.TestDtlVo;
 import com.mashang.domain.vo.student.QuestionAnswerVo;
 import com.mashang.domain.vo.student.TestAnswerInfo;
 import com.mashang.domain.vo.student.TestListVo;
@@ -77,6 +79,26 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test>
     @Override
     public List<ManageTestListVo> list(TestListQuery testListQuery) {
         return testMapper.list(testListQuery);
+    }
+
+    @Override
+    public TestDtlVo dtl(Integer testId) {
+        return testMapper.dtl(testId);
+    }
+
+    @Override
+    public Integer linkTestQuestion(Integer testId, QuestionTestCreat questionTestCreat) {
+        return testMapper.linkTestQuestion(testId, questionTestCreat);
+    }
+
+    @Override
+    public Integer breakTestQuestion(Integer testId) {
+        return testMapper.breakTestQuestion(testId);
+    }
+
+    @Override
+    public Integer haveTestAnswer(Integer testId) {
+        return testMapper.haveTestAnswer(testId);
     }
 
 

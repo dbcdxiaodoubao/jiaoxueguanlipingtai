@@ -7,4 +7,14 @@
         from sys_logininfor
         where user_name = #{userName}
     </select>
+
+
+    <select id="getUserActivity" resultType="userActivity">
+        SELECT
+            DATE(login_time) AS date ,
+            COUNT(DISTINCT user_name) AS user_sum
+        FROM sys_logininfor
+        GROUP BY DATE(login_time)
+        ORDER BY DATE(login_time) ;
+    </select>
 </mapper>

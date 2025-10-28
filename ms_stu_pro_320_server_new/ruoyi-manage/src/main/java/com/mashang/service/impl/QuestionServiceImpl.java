@@ -5,6 +5,7 @@ import com.mashang.comming.QuestionMapping;
 import com.mashang.domain.entity.Question;
 import com.mashang.domain.query.management.QuestionCteat;
 import com.mashang.domain.query.management.QuestionListQuery;
+import com.mashang.domain.vo.management.MonthQuestion;
 import com.mashang.domain.vo.management.QuestionDtlVo;
 import com.mashang.domain.vo.management.QuestionListVo;
 import com.mashang.service.IQuestionService;
@@ -75,6 +76,11 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
     @Override
     public Integer haveOnTest(Integer questionId) {
         return questionMapper.haveOnTest(questionId);
+    }
+
+    @Override
+    public List<MonthQuestion> monthQuestionList() {
+        return questionMapper.monthQuestionList();
     }
 
 

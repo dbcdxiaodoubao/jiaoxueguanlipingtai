@@ -4,6 +4,7 @@ import com.mashang.domain.entity.Question;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.mashang.domain.query.management.QuestionCteat;
 import com.mashang.domain.query.management.QuestionListQuery;
+import com.mashang.domain.vo.management.MonthQuestion;
 import com.mashang.domain.vo.management.QuestionDtlVo;
 import com.mashang.domain.vo.management.QuestionListVo;
 import org.apache.ibatis.annotations.Param;
@@ -66,4 +67,10 @@ public interface IQuestionService extends IService<Question> {
      * @return
      */
     Integer haveOnTest(Integer questionId);
+
+    /**
+     * 查询题目月数量
+     * @return
+     */
+    List<MonthQuestion> monthQuestionList();
 }

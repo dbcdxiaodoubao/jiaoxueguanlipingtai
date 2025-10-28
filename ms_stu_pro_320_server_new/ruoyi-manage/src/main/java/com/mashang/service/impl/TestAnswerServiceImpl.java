@@ -244,6 +244,11 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
         return page;
     }
 
+    @Override
+    public Long getTestAnswerCount() {
+        return testAnswerMapper.getTestAnswerCount();
+    }
+
 
     private TestAnswer getTestAnswerByRandomTestId(Long randomTestId) {
         LambdaQueryWrapper<TestAnswer> tlqw = Wrappers.lambdaQuery();

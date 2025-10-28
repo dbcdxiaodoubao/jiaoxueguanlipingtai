@@ -3,11 +3,17 @@ package com.mashang.controller;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.mashang.comming.TestMapping;
+import com.mashang.domain.entity.Test;
 import com.mashang.domain.query.common.PageQuery;
+import com.mashang.domain.query.management.QuestionTestCreat;
+import com.mashang.domain.query.management.TestCreat;
 import com.mashang.domain.query.management.TestListQuery;
+import com.mashang.domain.query.management.TestUpdate;
 import com.mashang.domain.query.student.TestPageQuery;
 import com.mashang.domain.query.student.TestSubmit;
 import com.mashang.domain.vo.management.ManageTestListVo;
+import com.mashang.domain.vo.management.TestDtlVo;
 import com.mashang.domain.vo.student.TestAnswerInfo;
 import com.mashang.domain.vo.student.TestListVo;
 import com.mashang.service.ITestAnswerService;
@@ -73,5 +79,43 @@ public class TestCenterController extends BaseController {
 
         return R.ok(PageInfo.of(list));
     }
-    
+
+
+    @GetMapping("/dtl/{testId}")
+    @ApiOperation("查询试卷详情")
+    public R<TestDtlVo> dtl(@PathVariable @Validated Integer testId){
+        return R.ok(testService.dtl(testId));
+    }
+
+    @PostMapping
+    @ApiOperation("新增试卷")
+    public R insert(@RequestBody @Validated TestCreat testCreat){
+        Test test = TestMapping.INSTANCE.toCreat(testCreat);
+        testService.save(test);
+        for(QuestionTestCreat questionTestCreat: testCreat.getQuestion()){
+            testService.linkTestQuestion(test.getTestId(),questionTestCreat);
+        }
+        return R.ok();
+    }
+
+    @PutMapping
+    @ApiOperation("修改试卷")
+    public R update(TestUpdate testUpdate){
+        testService.updateById(TestMapping.INSTANCE.toUpdate(testUpdate));
+        testService.breakTestQuestion(testUpdate.getTestId());
+        for(QuestionTestCreat questionTestCreat: testUpdate.getQuestion()){
+            testService.linkTestQuestion(testUpdate.getTestId(),questionTestCreat);
+        }
+        return R.ok();
+    }
+
+    @DeleteMapping
+    @ApiOperation("删除试卷")
+    public R delete(Integer testId){
+        if (testService.haveTestAnswer(testId) != 0){
+            return R.fail("该试卷下存在答案请删除答案再删除试卷");
+        }
+        testService.removeById(testId);
+        return R.ok();
+    }
 }

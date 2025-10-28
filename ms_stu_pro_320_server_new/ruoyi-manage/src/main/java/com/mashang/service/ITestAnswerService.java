@@ -73,6 +73,12 @@ public interface ITestAnswerService extends IService<TestAnswer> {
     Page<TestRecordListVo> listTestRecord(PageQuery pageQuery, TestRecordQuery testRecordQuery);
 
     /**
+     * 查询一共有多少答卷
+     * @return
+     */
+    Long getTestAnswerCount();
+
+    /**
      * 答卷分页查询
      * @param pageQuery 分页条件
      * @return 分页集合

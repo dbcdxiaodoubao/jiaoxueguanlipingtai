@@ -126,4 +126,12 @@
         WHERE question_id = #{questionId}
     </select>
 
+    <select id="monthQuestionList" resultType="monthQuestion">
+        SELECT
+            DATE(create_time) AS date ,
+            COUNT(DISTINCT question_id) AS question_sum
+        FROM ms_question
+        GROUP BY DATE(create_time)
+        ORDER BY DATE(create_time) ;
+    </select>
 </mapper>

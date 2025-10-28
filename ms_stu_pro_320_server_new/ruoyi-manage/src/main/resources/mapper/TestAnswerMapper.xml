@@ -137,6 +137,12 @@
             </if>
 
     </select>
+
+
+    <select id="getTestAnswerCount" resultType="Long">
+        SELECT COUNT(DISTINCT test_id)
+        FROM ms_test_answer;
+    </select>
     <select id="getTestAnswerInfo" resultMap="TestAnswerDtlMap" parameterType="java.lang.Long">
         select
             task.task_name,

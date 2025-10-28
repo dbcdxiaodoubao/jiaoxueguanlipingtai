@@ -48,6 +48,12 @@ public interface TestAnswerMapper extends BaseMapper<TestAnswer> {
     Page<TestRecordListVo> listTestRecord(TestRecordQuery testRecordQuery);
 
     /**
+     * 查询一共有多少答卷
+     * @return
+     */
+    Long getTestAnswerCount();
+
+    /**
      * 根据答卷id查询答卷详情
      * @param testAnswerId 答卷id
      * @return 答卷详情

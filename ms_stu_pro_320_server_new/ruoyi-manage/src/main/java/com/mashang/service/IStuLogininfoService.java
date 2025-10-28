@@ -2,6 +2,7 @@ package com.mashang.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.mashang.domain.vo.management.StuLoginInfoVo;
+import com.mashang.domain.vo.management.UserActivity;
 import com.ruoyi.system.domain.SysLogininfor;
 import org.springframework.stereotype.Service;
 
@@ -15,4 +16,10 @@ public interface IStuLogininfoService extends IService<SysLogininfor> {
      * @return
      */
     List<StuLoginInfoVo> list(String userName);
+
+    /**
+     * 查询用户活跃度
+     * @return
+     */
+    List<UserActivity> getUserActivity();
 }
