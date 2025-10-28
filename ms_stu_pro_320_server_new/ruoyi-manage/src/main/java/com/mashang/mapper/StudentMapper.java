@@ -3,6 +3,7 @@ package com.mashang.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.mashang.domain.vo.management.StudentDtlVo;
 import com.mashang.domain.vo.management.StudentListVo;
+import com.mashang.domain.vo.student.StudentInfoVo;
 import com.ruoyi.common.core.domain.entity.SysUser;
 
 import java.util.List;
@@ -22,4 +23,6 @@ public interface StudentMapper  extends BaseMapper<SysUser> {
      * @return
      */
     StudentDtlVo selectByid(Long userId);
+
+    StudentInfoVo infoByid(Long userId);
 }

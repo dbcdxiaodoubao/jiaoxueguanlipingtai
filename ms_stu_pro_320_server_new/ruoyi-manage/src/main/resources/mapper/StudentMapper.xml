@@ -36,4 +36,13 @@
         FROM `sys_user` AS t1
         WHERE  user_id =  #{userId}
     </select>
+    <select id="infoByid" resultType="com.mashang.domain.vo.student.StudentInfoVo" parameterType="java.lang.Long">
+        select
+            u.nick_name,
+            u.grade,
+            c.class_name,
+            u.create_time
+        from sys_user u left join ms_class c on u.class_id = c.class_id
+        where u.user_id=#{userId}
+    </select>
 </mapper>

@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +57,9 @@ public class TaskManageController {
 
     @PutMapping
     @ApiOperation("修改任务")
-    public R<Void> update(@RequestBody Task task,@ApiParam("任务关联的试卷id") @RequestParam ArrayList<Integer> testIds) {
+    public R<Void> update(@RequestBody Task task,
+                          @ApiParam("任务关联的试卷id")
+                          @RequestParam ArrayList<Integer> testIds) {
         // 判断任务名称是否存在
         if(taskService.lambdaQuery()
                 .eq(Task::getTaskName,task.getTaskName())
@@ -69,7 +72,9 @@ public class TaskManageController {
 
     @DeleteMapping("/{taskId}")
     @ApiOperation("删除任务")
-    public R<Void> delete(@ApiParam("任务id") @PathVariable Integer taskId) {
+    public R<Void> delete(@ApiParam("任务id")
+                              @NotNull(message = "任务id为空")
+                              @PathVariable Integer taskId) {
         if (taskTestService.lambdaQuery()
                 .eq(TaskTest::getTaskId,taskId)
                 .exists()
@@ -79,7 +84,9 @@ public class TaskManageController {
 
     @GetMapping("/{taskId}")
     @ApiOperation("查询任务详情")
-    public R<TaskDtlVo> detail(@ApiParam("任务id") @PathVariable Integer taskId){
+    public R<TaskDtlVo> detail(@ApiParam("任务id")
+                                   @NotNull(message = "任务id为空")
+                                   @PathVariable Integer taskId){
         return R.ok(taskService.detail(taskId));
     }
 

@@ -3,6 +3,11 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mashang.mapper.TestAnswerMapper">
+    <resultMap id="TestAnswerDtlMap" type="TestAnswerDtlVo" autoMapping="true">
+        <id property="testAnswerId" column="test_answer_id" />
+        <collection property="questionAnswers" ofType="TestAnswerQuestionAnswerVo" autoMapping="true"/>
+    </resultMap>
+    
   <select id="getVideoTests" resultType="videoTestVo">
       SELECT
           t1.test_answer_id,
@@ -61,6 +66,8 @@
             t1.del_flag = 0
     </select>
 
+
+
     <select id="listTestRecord" resultType="testRecordListVo">
         SELECT
         t1.test_answer_id,
@@ -101,6 +108,60 @@
         GROUP BY
         t1.test_answer_id
         ORDER BY t1.submit_time DESC
+    </select>
+    <select id="testAnswerList" resultType="com.mashang.domain.vo.management.TestAnswerListVo">
+            select
+                ta.test_answer_id,
+                t.test_name,
+                u.nick_name,
+                ta.user_test_score,
+                ta.sum_score,
+                ta.duration,
+                ta.submit_time,
+                (select count(*) from ms_question_answer qa where test_answer_id=ta.test_answer_id and qa.`status`=1) as right_count,
+                (select count(*) from ms_test_question tq where tq.test_id=ta.test_id and tq.del_flag='0') as question_count
+            from ms_test_answer ta left join ms_test t on ta.test_id=t.test_id
+            left join sys_user u on ta.user_id=u.user_id
+            where ta.del_flag='0'
+            <if test="subjectId!=null">
+                and t.subject_id=#{subjectId}
+            </if>
+              <if test="status!=null">
+                and ta.`status`=#{status}
+            </if>
+            <if test="userIds!=null">
+                and ta.user_id in
+                <foreach item="userId" collection="userIds" open="(" separator="," close=")">
+                    #{userId}
+                </foreach>
+            </if>
 
     </select>
+    <select id="getTestAnswerInfo" resultMap="TestAnswerDtlMap" parameterType="java.lang.Long">
+        select
+            task.task_name,
+            ta.test_answer_id,
+            ta.test_name,
+            u.nick_name,
+            ta.sum_score,
+            ta.duration,
+            ta.user_test_score,
+            qa.question_answer_id,
+            qa.question_title,
+            qa.question_difficulty,
+            qa.user_answer,
+            qa.explain,
+            qa.`status`,
+            qa.right_answer,
+            qa.question_score,
+            qa.option,
+            qa.question_type
+        from ms_test_answer ta left join ms_question_answer qa on ta.test_answer_id=qa.test_answer_id
+            left join ms_task_test tt on ta.test_id=tt.test_id and tt.del_flag='0'
+            left join ms_task task on tt.task_id=task.task_id
+            left join sys_user u on ta.user_id=u.user_id
+        where ta.test_answer_id=#{testAnswerId} and ta.del_flag='0' and ta.status=0
+    </select>
+
+
 </mapper>

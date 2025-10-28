@@ -1,9 +1,12 @@
 package com.mashang.mapper;
 
-import com.github.pagehelper.Page;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mashang.domain.entity.TestAnswer;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.mashang.domain.query.student.TestPageQuery;
+import com.mashang.domain.vo.management.TestAnswerDtlVo;
+import com.mashang.domain.vo.management.TestAnswerListVo;
 import com.mashang.domain.query.student.TestRecordQuery;
 import com.mashang.domain.vo.student.TestListVo;
 import com.mashang.domain.vo.student.TestRecordListVo;
@@ -33,12 +36,23 @@ public interface TestAnswerMapper extends BaseMapper<TestAnswer> {
     List<TestListVo> getStudentTests(Long userId);
 
 
+    List<TestAnswerListVo> testAnswerList(Page<TestAnswer> page, @Param("subjectId") Integer subjectId,
+                                          @Param("userIds") List<Long> userIds, @Param("status") Integer status );
+
+
     /**
      * 根据提交时间倒叙分页查询该学生做过的试卷基本信息
      * @param testRecordQuery 查询条件
      * @return 学生做过的试卷基本信息
      */
     Page<TestRecordListVo> listTestRecord(TestRecordQuery testRecordQuery);
+
+    /**
+     * 根据答卷id查询答卷详情
+     * @param testAnswerId 答卷id
+     * @return 答卷详情
+     */
+    TestAnswerDtlVo getTestAnswerInfo(Long testAnswerId);
 }
 
 

@@ -26,7 +26,6 @@ public class TestAnswer extends BaseModel {
     @ApiModelProperty(value = "答卷id")
     private Long testAnswerId;
 
-
     @ApiModelProperty(value = "试卷id")
     private Integer testId;
 
@@ -51,8 +50,8 @@ public class TestAnswer extends BaseModel {
     @ApiModelProperty(value = "试卷得分")
     private Integer userTestScore;
 
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty(value = "提交时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date submitTime;
+
 }

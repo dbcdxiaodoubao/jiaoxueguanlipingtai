@@ -2,33 +2,47 @@ package com.mashang.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.mashang.comming.QuestionAnswerMapping;
-import com.mashang.comming.RandomTestMapping;
 import com.mashang.comming.TestAnswerMapping;
 import com.mashang.constant.MessageConstant;
-import com.mashang.constant.QuestionType;
 import com.mashang.constant.StatusConstant;
+import com.mashang.domain.entity.QuestionAnswer;
+import com.mashang.domain.entity.Test;
+import com.mashang.domain.entity.TestAnswer;
+import com.mashang.domain.query.manage.TestAnswerPageQuery;
 import com.mashang.domain.entity.*;
 import com.mashang.domain.query.common.PageQuery;
 import com.mashang.domain.query.student.QuestionSubmit;
-import com.mashang.domain.query.student.RandomTestSubmit;
 import com.mashang.domain.query.student.TestRecordQuery;
 import com.mashang.domain.query.student.TestSubmit;
+import com.mashang.domain.vo.management.TestAnswerDtlVo;
+import com.mashang.domain.vo.management.TestAnswerListVo;
+import com.mashang.domain.vo.student.QuestionAnswerVo;
+import com.mashang.domain.vo.student.TestAnswerInfo;
+import com.mashang.domain.vo.student.TestListVo;
+import com.mashang.domain.vo.student.VideoTestVo;
+import com.mashang.mapper.QuestionAnswerMapper;
+import com.mashang.mapper.TestMapper;
 import com.mashang.domain.vo.student.*;
 import com.mashang.mapper.*;
 import com.mashang.service.IQuestionAnswerService;
 import com.mashang.service.ITestAnswerService;
 import com.mashang.util.QuestionUtils;
+import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.SecurityUtils;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.system.mapper.SysUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -53,6 +67,8 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
     private RandomTestMapper randomTestMapper;
     @Autowired
     private QuestionMapper questionMapper;
+    @Autowired
+    private SysUserMapper sysUserMapper;
 
     /**
      * 查询学生未做完的答卷列表
@@ -222,8 +238,8 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
      * @return 学生做过的试卷基本信息
      */
     @Override
-    public Page<TestRecordListVo> listTestRecord(PageQuery pageQuery, TestRecordQuery testRecordQuery) {
-        Page<TestRecordListVo> page = PageHelper.startPage(pageQuery);
+    public com.github.pagehelper.Page<TestRecordListVo> listTestRecord(PageQuery pageQuery, TestRecordQuery testRecordQuery) {
+        com.github.pagehelper.Page<TestRecordListVo> page = PageHelper.startPage(pageQuery);
         baseMapper.listTestRecord(testRecordQuery);
         return page;
     }
@@ -256,6 +272,75 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
         }
         return set.size() == length;
     }
+    /**
+     * 获取答卷列表
+     * @param pageQuery 分页参数
+     * @return 答卷列表
+     */
+    @Override
+    public List<TestAnswerListVo> testAnswerlist(TestAnswerPageQuery pageQuery,Integer status) {
+        List<Long> userIds = null;
+        if (StringUtils.isNotNull(pageQuery.getClassId())){
+            //查出班级学生id集合
+            LambdaQueryWrapper<SysUser> UserQueryWrapper = new LambdaQueryWrapper<SysUser>()
+                    .eq(StringUtils.isNotNull(pageQuery.getClassId()), SysUser::getClassId, pageQuery.getClassId())
+                    .select(SysUser::getUserId);
+            userIds = sysUserMapper.selectObjs(UserQueryWrapper).stream()
+                    .map(obj -> (Long) obj)
+                    .collect(Collectors.toList());
+        }
+
+        return baseMapper.testAnswerList(new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize())
+                ,pageQuery.getSubjectId(),userIds,status);
+    }
+
+    /**
+     * 获取答卷详情
+     * @param testAnswerId 答卷id
+     * @return
+     */
+    @Override
+    public TestAnswerDtlVo getTestAnswerInfo(Long testAnswerId) {
+        return baseMapper.getTestAnswerInfo(testAnswerId);
+    }
+
+    /**
+     * 自动批改
+     * @param testAnswerId 答卷id
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void submitAutoCorrect(Long testAnswerId) {
+        LambdaUpdateWrapper<QuestionAnswer> uqwCorrect = new LambdaUpdateWrapper<QuestionAnswer>()
+                .eq(QuestionAnswer::getTestAnswerId, testAnswerId)
+                .apply("user_answer = right_answer")
+                .set(QuestionAnswer::getStatus, StatusConstant.ANSWER_STATUS_CORRECT)
+                .setSql("user_question_score = question_score");
+        questionAnswerService.update(uqwCorrect);
+
+        LambdaUpdateWrapper<QuestionAnswer> uqwError = new LambdaUpdateWrapper<QuestionAnswer>()
+                .eq(QuestionAnswer::getTestAnswerId, testAnswerId)
+                .apply("user_answer != right_answer")
+                .set(QuestionAnswer::getStatus, StatusConstant.ANSWER_STATUS_WRONG);
+        questionAnswerService.update(uqwError);
+    }
+
+    /**
+     * 手动批改主观题
+     * @param questionAnswerList 答题列表
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void correct(List<QuestionAnswer> questionAnswerList) {
+        for (QuestionAnswer questionAnswer : questionAnswerList) {
+            LambdaUpdateWrapper<QuestionAnswer> uqw = new LambdaUpdateWrapper<QuestionAnswer>()
+                    .eq(QuestionAnswer::getQuestionAnswerId, questionAnswer.getQuestionAnswerId())
+                    .set(QuestionAnswer::getStatus, questionAnswer.getStatus())
+                    .set(QuestionAnswer::getUserQuestionScore,questionAnswer.getUserQuestionScore());
+            questionAnswerService.update(uqw);
+        }
+    }
+
 }
 
 
