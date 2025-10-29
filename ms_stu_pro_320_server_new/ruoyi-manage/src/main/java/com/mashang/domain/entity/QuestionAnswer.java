@@ -69,4 +69,11 @@ public class QuestionAnswer extends BaseModel {
     @ApiModelProperty(value = "题目解析")
     @TableField("`explain`")
     private String explain;
+
+    @ApiModelProperty(value = "大标题")
+    private String bigTitle;
+
+    @ApiModelProperty(value = "顺序")
+    @TableField("`order`")
+    private Integer order;
 }

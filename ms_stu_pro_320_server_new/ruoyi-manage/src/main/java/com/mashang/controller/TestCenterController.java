@@ -25,6 +25,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -49,8 +50,8 @@ public class TestCenterController extends BaseController {
     }
 
     @GetMapping("/student/info/{id}")
-    @ApiOperation("查询试卷详情信息")
-    public R<TestAnswerInfo> getStudentTestInfo(@PathVariable Long id){
+    @ApiOperation("查询答卷详情信息")
+    public R<TestAnswerInfo> getStudentTestInfo(@ApiParam("答卷id") @PathVariable Long id){
         TestAnswerInfo studentTestInfo = testAnswerService.getStudentTestInfo(id);
         return R.ok(studentTestInfo);
     }

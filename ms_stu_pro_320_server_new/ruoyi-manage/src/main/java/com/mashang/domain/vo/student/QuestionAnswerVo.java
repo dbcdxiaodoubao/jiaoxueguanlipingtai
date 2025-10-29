@@ -38,4 +38,7 @@ public class QuestionAnswerVo {
     @ApiModelProperty(value = "题目答案")
     private String rightAnswer;
 
+    @ApiModelProperty(value = "大标题")
+    private String bigTitle;
+
 }

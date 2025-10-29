@@ -62,11 +62,8 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task>
         if (!roleId.equals(RoleType.STUDENT_TYPE)) {
             throw new ServiceException(MessageConstant.USER_NOT_STUDENT);
         }
-        Long classId = user.getClassId();
-        //获取班级信息
-        Class aClass = classMapper.selectById(classId);
         //获取年级
-        Integer grade = aClass.getGrade();
+        Long grade = user.getGrade();
         //总业务
         List<TaskListVo> taskVos = baseMapper.listStudentTasks(grade,userId);
         if (taskVos == null) {

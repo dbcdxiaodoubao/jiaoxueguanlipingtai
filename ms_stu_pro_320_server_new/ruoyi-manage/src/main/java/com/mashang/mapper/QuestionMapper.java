@@ -6,6 +6,7 @@ import com.mashang.domain.query.management.QuestionListQuery;
 import com.mashang.domain.vo.management.MonthQuestion;
 import com.mashang.domain.vo.management.QuestionDtlVo;
 import com.mashang.domain.vo.management.QuestionListVo;
+import com.mashang.domain.vo.student.QuestionAnswerVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

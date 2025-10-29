@@ -21,7 +21,7 @@ public interface TaskMapper extends BaseMapper<Task> {
      * @param userId 学生id
      * @return 学生任务列表（包含答卷名，任务名）
      */
-    List<TaskListVo> listStudentTasks(@Param("grade") Integer grade, @Param("userId") Long userId);
+    List<TaskListVo> listStudentTasks(@Param("grade") Long grade, @Param("userId") Long userId);
 
     /**
      * 获取任务详情

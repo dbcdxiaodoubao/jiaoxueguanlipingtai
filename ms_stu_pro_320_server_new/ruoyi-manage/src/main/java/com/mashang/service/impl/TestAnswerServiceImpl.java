@@ -96,10 +96,12 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
         //组装考试信息
         TestAnswerInfo result = TestAnswerMapping.INSTANCE.toTestAnswerInfo(testAnswer);
         if (testAnswer.getTestId() != null) {
+            //如果不是随机试卷
             Test test = testMapper.selectById(testAnswer.getTestId());
             result.setSuggestDuration(test.getSuggestDuration());
             result.setQuestionNum(test.getQuestionNum());
         } else if (testAnswer.getRandomTestId() != null) {
+            //随机试卷
             RandomTest randomTest = randomTestMapper.selectById(testAnswer.getRandomTestId());
             result.setQuestionNum(randomTest.getQuestionNum());
         } else {
@@ -109,6 +111,7 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
         //组装题目
         LambdaQueryWrapper<QuestionAnswer> qlqw = Wrappers.lambdaQuery();
         qlqw.eq(QuestionAnswer::getTestAnswerId, testAnswerId);
+        qlqw.orderByAsc(QuestionAnswer::getOrder);
         List<QuestionAnswer> questionAnswers = questionAnswerMapper.selectList(qlqw);
         if (CollUtil.isEmpty(questionAnswers)) {
             throw new ServiceException(MessageConstant.QUESTION_NOT_EXIST);
@@ -154,9 +157,11 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
             String rightAnswer = questionAnswer.getRightAnswer();
             if (checkRightOrError(userAnswer, rightAnswer)) {
                 questionSubmit.setStatus(StatusConstant.ANSWER_STATUS_CORRECT);
+                questionSubmit.setUserQuestionScore(questionAnswer.getQuestionScore());
                 userScore += questionAnswer.getQuestionScore();
             } else {
                 questionSubmit.setStatus(StatusConstant.ANSWER_STATUS_WRONG);
+                questionSubmit.setUserQuestionScore(0);
             }
         }
 

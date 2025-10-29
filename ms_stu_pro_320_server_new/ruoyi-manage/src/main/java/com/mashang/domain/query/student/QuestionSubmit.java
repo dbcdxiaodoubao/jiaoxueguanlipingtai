@@ -19,4 +19,8 @@ public class QuestionSubmit {
 
     @ApiModelProperty(value = "答题状态（0待批改 1正确 2错误）")
     private Integer status;
+
+    @ApiModelProperty(value = "题目得分")
+    private Integer userQuestionScore;
+
 }

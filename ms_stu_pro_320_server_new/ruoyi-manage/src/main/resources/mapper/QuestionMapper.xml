@@ -134,4 +134,5 @@
         GROUP BY DATE(create_time)
         ORDER BY DATE(create_time) ;
     </select>
+
 </mapper>

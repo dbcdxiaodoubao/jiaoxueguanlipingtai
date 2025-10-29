@@ -29,4 +29,10 @@ public class TestQuestion extends BaseModel {
 
     @ApiModelProperty(value = "试卷id")
     private Integer testId;
+
+    @ApiModelProperty(value = "大标题")
+    private String bigTitle;
+
+    @ApiModelProperty(value = "顺序")
+    private Integer order;
 }
