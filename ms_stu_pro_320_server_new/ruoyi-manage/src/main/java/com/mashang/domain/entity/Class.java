@@ -9,6 +9,7 @@ import com.mashang.domain.model.BaseModel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * 班级表
@@ -16,6 +17,7 @@ import lombok.Data;
  */
 @TableName(value ="ms_class")
 @Data
+@Accessors(chain = true)
 @ApiModel(value="Class对象", description="班级表")
 public class Class extends BaseModel  {
     private static final long serialVersionUID = 1L;

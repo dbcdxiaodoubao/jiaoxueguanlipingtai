@@ -35,6 +35,11 @@ public class SysUser extends BaseEntity
     @Excel(name = "班级id")
     private Long classId;
 
+    /** 加入班级时间 */
+    @ApiModelProperty(value = "加入班级时间")
+    @Excel(name = "加入班级时间")
+    private Date joinClassTime;
+
     /** 部门ID */
     @ApiModelProperty(value = "部门id")
     @Excel(name = "部门编号", type = Type.IMPORT)

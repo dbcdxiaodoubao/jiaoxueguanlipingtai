@@ -1,11 +1,14 @@
 package com.mashang.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.mashang.domain.query.teacher.StudentPageQuery;
 import com.mashang.domain.vo.management.StudentDtlVo;
 import com.mashang.domain.vo.management.StudentListVo;
 import com.mashang.domain.vo.student.LoginInfoVo;
 import com.mashang.domain.vo.student.StudentInfoVo;
+import com.mashang.domain.vo.teacher.TeacherClassListVo;
 import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.common.core.page.TableDataInfo;
 
 import java.util.List;
 
@@ -44,5 +47,19 @@ public interface IStudentService extends IService<SysUser> {
      * @return
      */
     LoginInfoVo loginInfo();
+
+    /**
+     * 分页查询学生列表
+     * @param query
+     * @return
+     */
+    TableDataInfo pageQuery(StudentPageQuery query);
+
+    /**
+     * 移除学生
+     * @param userId
+     */
+    void exitClass(Integer userId);
+
 
 }

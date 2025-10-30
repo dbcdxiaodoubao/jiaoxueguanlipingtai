@@ -3,9 +3,13 @@ package com.mashang.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.mashang.domain.vo.management.TeacherDtlVo;
 import com.mashang.domain.vo.management.TeacherListVo;
+import com.mashang.domain.vo.teacher.ClassSizeDistributionVo;
+import com.mashang.domain.vo.teacher.ClassTestDistributionVo;
 import com.ruoyi.common.core.domain.entity.SysUser;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TeacherMapper extends BaseMapper<SysUser> {
 
@@ -22,4 +26,8 @@ public interface TeacherMapper extends BaseMapper<SysUser> {
      * @return
      */
     TeacherDtlVo selectByid(Long id);
+
+    List<ClassSizeDistributionVo> classSizeDistribution(@Param("classIds")List<Integer> classIds);
+
+    List<ClassTestDistributionVo> classTestDistribution(@Param("classIds")List<Integer> classIds);
 }
