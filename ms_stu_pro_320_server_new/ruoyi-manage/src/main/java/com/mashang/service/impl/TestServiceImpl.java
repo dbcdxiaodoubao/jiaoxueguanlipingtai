@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.mashang.comming.TestMapping;
 import com.mashang.domain.entity.Test;
 import com.mashang.domain.entity.TestAnswer;
+import com.mashang.domain.entity.TestClass;
 import com.mashang.domain.query.common.PageQuery;
 import com.mashang.domain.query.management.QuestionTestCreat;
 import com.mashang.domain.query.management.TestListQuery;
@@ -17,12 +19,10 @@ import com.mashang.domain.vo.student.QuestionAnswerVo;
 import com.mashang.domain.vo.student.TestAnswerInfo;
 import com.mashang.domain.vo.student.TestListVo;
 import com.mashang.domain.vo.student.VideoTestVo;
-import com.mashang.mapper.QuestionAnswerMapper;
-import com.mashang.mapper.TestAnswerMapper;
-import com.mashang.mapper.TestQuestionMapper;
+import com.mashang.mapper.*;
 import com.mashang.service.IQuestionAnswerService;
 import com.mashang.service.ITestService;
-import com.mashang.mapper.TestMapper;
+import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -30,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author 20413
@@ -42,6 +43,12 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test>
 
     @Autowired
     private TestMapper testMapper;
+
+    @Autowired
+    private TestClassMapper testClassMapper;
+
+    @Autowired
+    private TestMapping testMapping;
 
     /**
      * 查询学生所有的答卷列表
@@ -99,6 +106,61 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test>
     @Override
     public Integer haveTestAnswer(Integer testId) {
         return testMapper.haveTestAnswer(testId);
+    }
+
+    /**
+     * 教师端查询试卷列表
+     * @param query
+     * @return
+     */
+    @Override
+    public List<com.mashang.domain.vo.teacher.TestListVo> pageQueryTeacher(com.mashang.domain.query.teacher.TestPageQuery query) {
+        return baseMapper.pageQueryTeacher(new Page<Test>(query.getPageNum(),query.getPageSize()),query,
+                SecurityUtils.getLoginUser().getUser().getGrade());
+    }
+
+    /**
+     * 教师端修改试卷
+     * @param test
+     * @param classIds
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void update(Test test, List<Integer> classIds) {
+        Integer testId = test.getTestId();
+        testMapper.updateById(test);
+        testClassMapper.delete(new LambdaQueryWrapper<TestClass>().eq(TestClass::getTestId, testId));
+        for (Integer classId : classIds) {
+            testClassMapper.insert(new TestClass().setTestId(testId).setClassId(classId));
+        }
+    }
+
+    /**
+     * 教师端查询试卷详情
+     * @param testId
+     * @return
+     */
+    @Override
+    public com.mashang.domain.vo.teacher.TestDtlVo getById(Integer testId) {
+        com.mashang.domain.vo.teacher.TestDtlVo testDtlVo = testMapping.toTestDtlVo(testMapper.selectById(testId));
+        List<Object> list = testClassMapper.selectObjs(new LambdaQueryWrapper<TestClass>()
+                .select(TestClass::getClassId).eq(TestClass::getTestId, testId));
+        testDtlVo.setClassIds(list.stream().map(Integer.class::cast).collect(Collectors.toList()));
+        return testDtlVo;
+    }
+
+    /**
+     * 教师端添加试卷
+     * @param test
+     * @param classIds
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void insert(Test test, List<Integer> classIds) {
+        baseMapper.insert(test);
+        for (Integer classId : classIds) {
+            testClassMapper.insert(new TestClass().setTestId(test.getTestId()).setClassId(classId));
+        }
     }
 
 

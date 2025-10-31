@@ -82,6 +82,9 @@ public interface TestMapper extends BaseMapper<Test> {
      */
     Integer haveTestAnswer(Integer testId);
 
+    List<com.mashang.domain.vo.teacher.TestListVo> pageQueryTeacher(@Param("page") Page<Test> page,
+                                                                    @Param("query") com.mashang.domain.query.teacher.TestPageQuery query,
+                                                                    @Param("grade") Long grade);
 }
 
 

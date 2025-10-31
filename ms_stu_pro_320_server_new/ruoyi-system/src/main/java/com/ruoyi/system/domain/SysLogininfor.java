@@ -1,6 +1,9 @@
 package com.ruoyi.system.domain;
 
 import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.annotation.Excel.ColumnType;
@@ -17,6 +20,7 @@ public class SysLogininfor extends BaseEntity
 
     /** ID */
     @Excel(name = "序号", cellType = ColumnType.NUMERIC)
+    @TableId(value = "info_id", type = IdType.AUTO)
     private Long infoId;
 
     /** 用户账号 */

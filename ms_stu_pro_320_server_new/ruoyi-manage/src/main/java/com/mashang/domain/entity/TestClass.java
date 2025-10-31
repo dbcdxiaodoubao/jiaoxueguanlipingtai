@@ -9,6 +9,7 @@ import com.mashang.domain.model.BaseModel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * 试卷-班级表
@@ -16,6 +17,7 @@ import lombok.Data;
  */
 @TableName(value ="ms_test_class")
 @Data
+@Accessors(chain = true)
 @ApiModel(value="TestClass对象", description="试卷-班级表")
 public class TestClass extends BaseModel {
     private static final long serialVersionUID = 1L;

@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 import javax.validation.constraints.*;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -28,6 +30,7 @@ public class SysUser extends BaseEntity
     /** 用户ID */
     @ApiModelProperty(value = "用户id")
     @Excel(name = "用户序号", type = Type.EXPORT, cellType = ColumnType.NUMERIC, prompt = "用户编号")
+    @TableId(value = "user_id", type = IdType.AUTO)
     private Long userId;
 
     /**班级ID */

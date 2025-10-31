@@ -3,6 +3,14 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.mashang.mapper.TestMapper">
+
+    <resultMap id="pageQueryTeacherMap" type="TestListVo" autoMapping="true">
+        <id property="testId" column="test_id"/>
+        <collection property="classNames" ofType="java.lang.String" javaType="java.util.List">
+            <result column="class_name"/>
+        </collection>
+    </resultMap>
+    
    <select id="pageStudentTests" resultType="testListVo">
        SELECT t2.test_name,
               t2.start_time,
@@ -163,5 +171,24 @@
         SELECT COUNT(*)
         FROM ms_test_answer
         WHERE test_id = #{testId}
+    </select>
+    <select id="pageQueryTeacher" resultMap="pageQueryTeacherMap">
+        select
+            t.test_id,
+            s.subject_name,
+            s.grade,
+            t.test_name,
+            c.class_name,
+            t.create_time
+        from ms_test t left join ms_subjects s on t.subject_id=s.subject_id
+        left join ms_test_class tc on t.test_id = tc.test_id
+        left join ms_class c on tc.class_id = c.class_id
+        where t.del_flag='0' and s.grade=#{grade}
+        <if test="query.testId!=null">
+            and t.test_id=#{query.testId}
+        </if>
+        <if test="query.subjectId!=null">
+            and s.subject_id=#{query.subjectId}
+        </if>
     </select>
 </mapper>

@@ -85,4 +85,32 @@ public interface ITestService extends IService<Test> {
      * @return
      */
     Integer haveTestAnswer(Integer testId);
+
+    /**
+     * 分页查询教师端试卷列表
+     * @param query
+     * @return
+     */
+    List<com.mashang.domain.vo.teacher.TestListVo> pageQueryTeacher(com.mashang.domain.query.teacher.TestPageQuery query);
+
+    /**
+     * 教师端修改试卷信息
+     * @param test
+     * @param classIds
+     */
+    void update(Test test, List<Integer> classIds);
+
+    /**
+     * 教师端查询试卷详情
+     * @param testId
+     * @return
+     */
+    com.mashang.domain.vo.teacher.TestDtlVo getById(Integer testId);
+
+    /**
+     * 教师端添加试卷
+     * @param test
+     * @param classIds
+     */
+    void insert(Test test, List<Integer> classIds);
 }

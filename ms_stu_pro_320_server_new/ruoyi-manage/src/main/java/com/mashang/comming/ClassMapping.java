@@ -1,8 +1,10 @@
 package com.mashang.comming;
 
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.mashang.domain.entity.Class;
 import com.mashang.domain.vo.teacher.ClassListVo;
 import com.mashang.domain.vo.teacher.TeacherClassListVo;
+import com.mashang.domain.vo.teacher.TestClassListVo;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
@@ -13,4 +15,6 @@ public interface ClassMapping {
     List<TeacherClassListVo> toTeacherClassListVo(List<Class> list);
 
     List<ClassListVo> toClassListVo(List<Class> records);
+
+    List<TestClassListVo> toTestClassListVo(List<Class> list);
 }

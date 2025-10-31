@@ -3,7 +3,6 @@ package com.mashang.domain.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.util.Date;
 
 import com.mashang.domain.model.BaseModel;
 import io.swagger.annotations.ApiModel;
