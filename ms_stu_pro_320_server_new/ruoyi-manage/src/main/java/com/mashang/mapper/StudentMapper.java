@@ -8,6 +8,7 @@ import com.mashang.domain.vo.management.StudentListVo;
 import com.mashang.domain.vo.student.StudentInfoVo;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -45,4 +46,21 @@ public interface StudentMapper  extends BaseMapper<SysUser> {
                                                                 @Param("userName") String userName,
                                                                 @Param("grade") Integer grade,
                                                                 @Param("classIds") List<Integer> classIds);
+
+
+    /**
+     * 通过班级id查询班级下的所有学生id
+     * @param classId
+     * @return
+     */
+    @Select("select user_id from sys_user where class_id = #{classId}")
+    List<Integer> selectUserIds(Integer classId);
+
+    /**
+     * 通过用户id查询用户昵称
+     * @param userId
+     * @return
+     */
+    @Select("select nick_name from sys_user where user_id = #{userId}")
+    String selectNickNameById(Integer userId);
 }

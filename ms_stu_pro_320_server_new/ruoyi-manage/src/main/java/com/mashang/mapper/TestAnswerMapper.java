@@ -12,6 +12,7 @@ import com.mashang.domain.vo.student.TestListVo;
 import com.mashang.domain.vo.student.TestRecordListVo;
 import com.mashang.domain.vo.student.VideoTestVo;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -59,6 +60,28 @@ public interface TestAnswerMapper extends BaseMapper<TestAnswer> {
      * @return 答卷详情
      */
     TestAnswerDtlVo getTestAnswerInfo(Long testAnswerId);
+
+    /**
+     * 根据用户id查询答卷id
+     * @param userIds 用户id
+     * @return 答卷id
+     */
+    List<Integer> selectIdsByUserIds(@Param("userIds") List<Integer> userIds);
+
+    /**
+     * 根据答卷id查询总分
+     * @param testAnswerIds 答卷id
+     * @return 总分
+     */
+    Integer getSumScore(@Param("testAnswerIds") List<Integer> testAnswerIds);
+
+    /**
+     * 根据用户id查询答卷id集合
+     * @param userId
+     * @return
+     */
+    @Select("select test_answer_id from ms_test_answer where user_id = #{userId}")
+    List<Integer> selectIdsByUserId(Integer userId);
 }
 
 

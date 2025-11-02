@@ -3,9 +3,7 @@ package com.mashang.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.mashang.domain.vo.management.TeacherDtlVo;
 import com.mashang.domain.vo.management.TeacherListVo;
-import com.mashang.domain.vo.teacher.ClassSizeDistributionVo;
-import com.mashang.domain.vo.teacher.ClassTestDistributionVo;
-import com.mashang.domain.vo.teacher.TotalVo;
+import com.mashang.domain.vo.teacher.*;
 import com.ruoyi.common.core.domain.entity.SysUser;
 
 import java.util.List;
@@ -44,4 +42,17 @@ public interface ITeacherServicee extends IService<SysUser> {
      * @return
      */
     List<ClassTestDistributionVo> classTestDistribution();
+
+    /**
+     * 查询班级平均分
+     * @return
+     */
+    List<TestAverageVo> testAverage();
+
+    /**
+     * 查询班级下学生的成绩
+     * @param classId
+     * @return
+     */
+    List<StudentAverageVo> studentAverage(Integer classId);
 }

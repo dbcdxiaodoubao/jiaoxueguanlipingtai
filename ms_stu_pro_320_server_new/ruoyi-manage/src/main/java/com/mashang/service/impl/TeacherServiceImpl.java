@@ -5,12 +5,11 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mashang.domain.entity.Class;
 import com.mashang.domain.entity.Test;
+import com.mashang.domain.entity.TestAnswer;
 import com.mashang.domain.entity.TestClass;
 import com.mashang.domain.vo.management.TeacherDtlVo;
 import com.mashang.domain.vo.management.TeacherListVo;
-import com.mashang.domain.vo.teacher.ClassSizeDistributionVo;
-import com.mashang.domain.vo.teacher.ClassTestDistributionVo;
-import com.mashang.domain.vo.teacher.TotalVo;
+import com.mashang.domain.vo.teacher.*;
 import com.mashang.mapper.*;
 import com.mashang.service.ITeacherServicee;
 import com.ruoyi.common.core.domain.entity.SysUser;
@@ -18,6 +17,7 @@ import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +41,9 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, SysUser>
 
     @Autowired
     private TestMapper testMapper;
+
+    @Autowired
+    private TestAnswerMapper testAnswerMapper;
 
     @Override
     public List<TeacherListVo> list(String nickName) {
@@ -108,5 +111,57 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, SysUser>
         List<Integer> classIds = classMapper.selectClassIds(SecurityUtils.getUserId());
         if(ObjectUtil.isEmpty(classIds))return Collections.emptyList();
         return baseMapper.classTestDistribution(classIds);
+    }
+
+    /**
+     * 获取班级试卷平均分
+     * @return
+     */
+    @Override
+    public List<TestAverageVo> testAverage() {
+        List<TestAverageVo> result = new ArrayList<>();
+        //查询当前教师管理班级id集合
+        List<Integer> classIds = classMapper.selectClassIds(SecurityUtils.getUserId());
+        if(ObjectUtil.isEmpty(classIds))return Collections.emptyList();
+        //根据班级id查询班级平均分
+        for (Integer classId : classIds) {
+            //根据班级id查询学生id集合
+            List<Integer> userIds = studentMapper.selectUserIds(classId);
+            //根据学生id集合查询答卷id集合
+            List<Integer> testAnswerIds =testAnswerMapper.selectIdsByUserIds(userIds);
+            //根据答卷id集合查询答题总分
+            Integer scoreSum =testAnswerMapper.getSumScore(testAnswerIds);
+            result.add(new TestAverageVo(classMapper.selectById(classId).getClassName(),
+                    ((int)(scoreSum*100.0/testAnswerIds.size()))/100.0));
+
+        }
+        return result;
+    }
+
+    /**
+     * 获取班级学生平均分
+     * @param classId
+     * @return
+     */
+    @Override
+    public List<StudentAverageVo> studentAverage(Integer classId) {
+        List<StudentAverageVo> result = new ArrayList<>();
+        //根据班级id查询学生id集合
+        List<Integer> userIds = studentMapper.selectUserIds(classId);
+        int index=0;
+        for (Integer userId : userIds) {
+          //根据学生id查询答卷集合
+          List<Integer> testAnswerIds = testAnswerMapper.selectIdsByUserId(userId);
+          if(ObjectUtil.isEmpty(testAnswerIds)){
+              result.add(new StudentAverageVo(studentMapper.selectNickNameById(userId), 0.00));
+              continue;
+          }
+          //根据答卷id集合查询答题总分
+            Integer scoreSum = testAnswerMapper.getSumScore(testAnswerIds);
+            System.out.println(index++);
+            result.add(new StudentAverageVo(studentMapper.selectNickNameById(userId),
+                    ((int)(scoreSum*100.0/testAnswerIds.size()))/100.0));
+        }
+        return result;
     }
 }

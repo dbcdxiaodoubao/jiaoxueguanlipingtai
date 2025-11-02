@@ -5,6 +5,7 @@ import com.mashang.domain.vo.management.TeacherDtlVo;
 import com.mashang.domain.vo.management.TeacherListVo;
 import com.mashang.domain.vo.teacher.ClassSizeDistributionVo;
 import com.mashang.domain.vo.teacher.ClassTestDistributionVo;
+import com.mashang.domain.vo.teacher.TestAverageVo;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import org.apache.ibatis.annotations.Param;
 
@@ -30,4 +31,7 @@ public interface TeacherMapper extends BaseMapper<SysUser> {
     List<ClassSizeDistributionVo> classSizeDistribution(@Param("classIds")List<Integer> classIds);
 
     List<ClassTestDistributionVo> classTestDistribution(@Param("classIds")List<Integer> classIds);
+
+
+
 }
