@@ -46,7 +46,7 @@ public interface TestAnswerMapper extends BaseMapper<TestAnswer> {
      * @param testRecordQuery 查询条件
      * @return 学生做过的试卷基本信息
      */
-    Page<TestRecordListVo> listTestRecord(TestRecordQuery testRecordQuery);
+    com.github.pagehelper.Page<TestRecordListVo> listTestRecord(TestRecordQuery testRecordQuery);
 
     /**
      * 查询一共有多少答卷

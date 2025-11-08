@@ -11,6 +11,7 @@
   <select id="getVideoTests" resultType="videoTestVo">
       SELECT
           t1.test_answer_id,
+          t1.status,
           t2.test_name,
           t3.subject_name,
           t4.video_url,
@@ -78,7 +79,7 @@
         t1.create_time,
         t1.duration,
         COUNT(t3.question_answer_id) AS question_num,
-        COUNT(IF(t3.`status`=1,1,0)) AS right_num,
+        SUM(IF(t3.`status`=1,1,0)) AS right_num,
         COUNT(IF(t3.question_type IN(3,4,5),1,0)) AS auto_checking,
         IF(t1.`status`=1,t1.user_test_score,NULL) AS final_score,
         t4.subject_name,
@@ -100,7 +101,8 @@
         t3.subject_id = t4.subject_id
         <where>
             t1.user_id = #{userId} AND
-            t1.del_flag = 0
+            t1.del_flag = 0 AND
+            t1.`status`!=2
             <if test="subjectId!=null">
                 AND t4.subject_id=#{subjectId}
             </if>

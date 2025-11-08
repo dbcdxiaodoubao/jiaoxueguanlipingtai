@@ -23,7 +23,7 @@ public class QuestionAnswerVo {
     @ApiModelProperty(value = "题目选项")
     private Option option;
 
-    @ApiModelProperty(value = "题目类型")
+    @ApiModelProperty(value = "题目类型(1填空题2简答题3单选4多选5判断)")
     private Integer questionType;
 
     @ApiModelProperty(value = "题目题干")

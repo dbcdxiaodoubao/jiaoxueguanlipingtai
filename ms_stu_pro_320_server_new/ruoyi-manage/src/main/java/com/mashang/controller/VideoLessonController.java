@@ -30,7 +30,7 @@ public class VideoLessonController extends BaseController {
     private ITestAnswerService testAnswerService;
 
     @GetMapping("/student/test")
-    @ApiOperation("查询未完成的视频试卷")
+    @ApiOperation("查询未完成的视频试卷信息列表")
     public R<List<VideoTestVo>> getVideoTests(){
         Long userId = SecurityUtils.getUserId();
         List<VideoTestVo> videoTests = testAnswerService.getVideoTests(userId);
