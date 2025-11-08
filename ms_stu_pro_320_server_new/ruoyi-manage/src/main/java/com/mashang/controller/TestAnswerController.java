@@ -8,6 +8,7 @@ import com.mashang.domain.vo.management.TestAnswerListVo;
 import com.mashang.domain.vo.management.TestAnswerQuestionAnswerVo;
 import com.mashang.service.ITestAnswerService;
 import com.ruoyi.common.core.domain.R;
+import com.ruoyi.common.core.page.TableDataInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +28,8 @@ public class TestAnswerController {
 
     @GetMapping("/correctList")
     @ApiOperation("批改试卷列表查询")
-    public R<List<TestAnswerListVo>> correctList(@Validated TestAnswerPageQuery pageQuery) {
-        return R.ok(testAnswerService.testAnswerlist(pageQuery, StatusConstant.ANSWER_STATUS_PENDING));
+    public TableDataInfo correctList(@Validated TestAnswerPageQuery pageQuery) {
+        return testAnswerService.testAnswerlist(pageQuery, StatusConstant.ANSWER_STATUS_PENDING);
     }
 
     @GetMapping("/{testAnswerId}")
@@ -37,12 +38,12 @@ public class TestAnswerController {
         return R.ok(testAnswerService.getTestAnswerInfo(testAnswerId));
     }
 
-    @PutMapping("/submitAutoCorrect/{testAnswerId}")
+    /*@PutMapping("/submitAutoCorrect/{testAnswerId}")
     @ApiOperation("客观题自动批改")
     public R<Void> submitAutoCorrect(@NotNull(message = "答卷id为空") @PathVariable Long testAnswerId) {
         testAnswerService.submitAutoCorrect(testAnswerId);
         return R.ok();
-    }
+    }*/
 
     @PutMapping("/correct")
     @ApiOperation("主观题批改")
@@ -52,9 +53,9 @@ public class TestAnswerController {
     }
 
     @GetMapping("/list")
-    @ApiOperation("查询答卷列表")
-    public R<List<TestAnswerListVo>> list(@Validated TestAnswerPageQuery pageQuery) {
-        return R.ok(testAnswerService.testAnswerlist(pageQuery,null));
+    @ApiOperation("分页查询答卷列表")
+    public TableDataInfo list(@Validated TestAnswerPageQuery pageQuery) {
+        return testAnswerService.testAnswerlist(pageQuery,null);
     }
 
 }

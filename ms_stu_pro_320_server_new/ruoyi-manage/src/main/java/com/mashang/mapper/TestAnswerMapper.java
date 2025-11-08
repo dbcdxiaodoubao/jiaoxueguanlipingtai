@@ -37,7 +37,7 @@ public interface TestAnswerMapper extends BaseMapper<TestAnswer> {
     List<TestListVo> getStudentTests(Long userId);
 
 
-    List<TestAnswerListVo> testAnswerList(Page<TestAnswer> page, @Param("subjectId") Integer subjectId,
+    Page<TestAnswerListVo> testAnswerList(Page<TestAnswer> page, @Param("subjectId") Integer subjectId,
                                           @Param("userIds") List<Long> userIds, @Param("status") Integer status );
 
 

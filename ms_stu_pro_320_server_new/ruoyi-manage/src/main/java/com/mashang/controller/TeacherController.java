@@ -2,12 +2,15 @@ package com.mashang.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.mashang.domain.entity.Class;
 import com.mashang.domain.query.common.PageQuery;
 import com.mashang.domain.vo.management.TeacherDtlVo;
 import com.mashang.domain.vo.management.TeacherListVo;
 import com.mashang.domain.vo.teacher.*;
+import com.mashang.service.IClassService;
 import com.mashang.service.ITeacherServicee;
 import com.ruoyi.common.core.domain.R;
+import com.ruoyi.common.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -29,6 +32,9 @@ public class TeacherController {
 
     @Autowired
     ITeacherServicee iTeacherServicee;
+
+    @Autowired
+    private IClassService classService;
 
     @GetMapping("/list")
     @ApiOperation("查询教师信息列表")
@@ -74,6 +80,10 @@ public class TeacherController {
     @ApiOperation("查询班级下学生的成绩")
     public R<List<StudentAverageVo>> studentAverage(@PathVariable @NotNull(message = "班级id不能为空")
                                                         @ApiParam("班级id") Integer classId){
+        Long teacherId = classService.lambdaQuery().eq(Class::getClassId, classId).one().getTeacherId();
+        if (!teacherId.equals(SecurityUtils.getUserId())){
+            return R.fail("查询班级不属于当前教师");
+        }
         return R.ok(iTeacherServicee.studentAverage(classId));
     }
 }

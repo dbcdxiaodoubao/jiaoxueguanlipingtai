@@ -14,6 +14,7 @@ import com.mashang.domain.vo.student.TestAnswerInfo;
 import com.mashang.domain.vo.student.TestListVo;
 import com.mashang.domain.vo.student.TestRecordListVo;
 import com.mashang.domain.vo.student.VideoTestVo;
+import com.ruoyi.common.core.page.TableDataInfo;
 
 import java.util.List;
 
@@ -83,7 +84,7 @@ public interface ITestAnswerService extends IService<TestAnswer> {
      * @param pageQuery 分页条件
      * @return 分页集合
      */
-    List<TestAnswerListVo> testAnswerlist(TestAnswerPageQuery pageQuery, Integer status);
+    TableDataInfo testAnswerlist(TestAnswerPageQuery pageQuery, Integer status);
 
     /**
      * 根据答卷id查询答卷详情

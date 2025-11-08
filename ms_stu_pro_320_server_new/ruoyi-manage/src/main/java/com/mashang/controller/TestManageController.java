@@ -65,12 +65,12 @@ public class TestManageController {
         return R.ok();
     }
 
-    @PostMapping
+    /*@PostMapping
     @ApiOperation("添加试卷")
     public R<Void> insert(@ApiParam("新增试卷信息") @RequestBody Test test, @ApiParam("绑定班级id集合") List<Integer> classIds) {
         testService.insert(test, classIds);
         return R.ok();
-    }
+    }*/
 
     @GetMapping("/subjects")
     @ApiOperation("查询学科列表")

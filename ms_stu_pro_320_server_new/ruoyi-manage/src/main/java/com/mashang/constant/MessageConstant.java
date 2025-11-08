@@ -43,4 +43,8 @@ public class MessageConstant {
     public static final String ANSWER_SHEET_ALREADY_SUBMIT = "已交卷，无法重复提交";
     /** 答卷超时 */
     public static final String ANSWER_SHEET_TIMEOUT = "答卷超时";
+
+    public static final String SCORE_NOT_RIGHT = "该答题批改分数不合理";
+
+
 }

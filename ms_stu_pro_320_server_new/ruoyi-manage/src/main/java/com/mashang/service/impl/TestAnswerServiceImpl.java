@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.mashang.comming.QuestionAnswerMapping;
 import com.mashang.comming.TestAnswerMapping;
 import com.mashang.constant.MessageConstant;
@@ -34,6 +35,7 @@ import com.mashang.service.IQuestionAnswerService;
 import com.mashang.service.ITestAnswerService;
 import com.mashang.util.QuestionUtils;
 import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.StringUtils;
@@ -288,7 +290,7 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
      * @return 答卷列表
      */
     @Override
-    public List<TestAnswerListVo> testAnswerlist(TestAnswerPageQuery pageQuery,Integer status) {
+    public TableDataInfo testAnswerlist(TestAnswerPageQuery pageQuery, Integer status) {
         List<Long> userIds = null;
         if (StringUtils.isNotNull(pageQuery.getClassId())){
             //查出班级学生id集合
@@ -299,9 +301,10 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
                     .map(obj -> (Long) obj)
                     .collect(Collectors.toList());
         }
+        Page<TestAnswerListVo> list = baseMapper.testAnswerList(new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize())
+                , pageQuery.getSubjectId(), userIds, status);
 
-        return baseMapper.testAnswerList(new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize())
-                ,pageQuery.getSubjectId(),userIds,status);
+        return new TableDataInfo(list.getRecords(), list.getTotal());
     }
 
     /**
@@ -342,13 +345,26 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void correct(List<QuestionAnswer> questionAnswerList) {
+        //获取答题对应试卷
+        TestAnswer testAnswer = getById(questionAnswerList.get(0).getTestAnswerId());
         for (QuestionAnswer questionAnswer : questionAnswerList) {
+            //查出该答题的原数据
+            QuestionAnswer one = questionAnswerService.lambdaQuery()
+                    .eq(QuestionAnswer::getQuestionAnswerId, questionAnswer.getQuestionAnswerId()).one();
+            //校验传来的答题打分是否合理
+            if (questionAnswer.getUserQuestionScore()<0||questionAnswer.getUserQuestionScore() > one.getQuestionScore()){
+                throw new RuntimeException(MessageConstant.SCORE_NOT_RIGHT+"题干："+one.getQuestionTitle()+"，分数："+questionAnswer.getUserQuestionScore());
+            }
+            //更新答题分数
             LambdaUpdateWrapper<QuestionAnswer> uqw = new LambdaUpdateWrapper<QuestionAnswer>()
                     .eq(QuestionAnswer::getQuestionAnswerId, questionAnswer.getQuestionAnswerId())
                     .set(QuestionAnswer::getStatus, questionAnswer.getStatus())
                     .set(QuestionAnswer::getUserQuestionScore,questionAnswer.getUserQuestionScore());
             questionAnswerService.update(uqw);
+            testAnswer.setUserTestScore(testAnswer.getUserTestScore()+questionAnswer.getUserQuestionScore());
         }
+        //更新答卷分数
+        updateById(testAnswer);
     }
 
 }
