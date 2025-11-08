@@ -56,7 +56,7 @@ public class QuestionAnswer extends BaseModel {
     @ApiModelProperty(value = "题目分数")
     private Integer questionScore;
 
-    @ApiModelProperty(value = "题目得分")
+    @ApiModelProperty(value = "学生得分")
     private Integer userQuestionScore;
 
     @ApiModelProperty(value = "题目选项")

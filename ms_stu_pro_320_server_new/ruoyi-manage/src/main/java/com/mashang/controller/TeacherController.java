@@ -1,5 +1,6 @@
 package com.mashang.controller;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mashang.domain.entity.Class;
@@ -11,6 +12,7 @@ import com.mashang.service.IClassService;
 import com.mashang.service.ITeacherServicee;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.R;
+import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

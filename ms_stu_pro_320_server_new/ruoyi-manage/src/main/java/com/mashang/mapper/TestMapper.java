@@ -30,7 +30,7 @@ public interface TestMapper extends BaseMapper<Test> {
      * @param testPageQuery 试卷的分页条件 类型和学科
      * @return 学生所有的试卷列表
      */
-    Page<TestListVo> pageStudentTests(@Param("t") TestPageQuery testPageQuery);
+    Page<TestListVo> pageStudentTests(@Param("t") TestPageQuery testPageQuery,@Param("id") Long userId);
     /**
      *  查询学生所有视频答卷列表
      * @param videoTestPageQuery 视频查询条件

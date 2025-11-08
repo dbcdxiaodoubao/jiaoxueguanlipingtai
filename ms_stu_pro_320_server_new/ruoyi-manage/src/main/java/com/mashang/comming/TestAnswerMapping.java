@@ -4,6 +4,7 @@ import com.mashang.domain.entity.RandomTest;
 import com.mashang.domain.entity.Test;
 import com.mashang.domain.entity.TestAnswer;
 import com.mashang.domain.query.student.TestSubmit;
+import com.mashang.domain.query.student.TestSubmitQuery;
 import com.mashang.domain.vo.student.TestAnswerInfo;
 import com.mashang.mapper.TestAnswerMapper;
 import org.mapstruct.Mapper;
@@ -20,5 +21,7 @@ public interface TestAnswerMapping {
     TestAnswer toTestAnswer(TestSubmit testSubmit);
      @Mapping(source = "testScore",target = "sumScore")
     TestAnswer toTestAnswer(RandomTest randomTest);
+
+     TestSubmit toTestSubmit(TestSubmitQuery testSubmitQuery);
 
 }

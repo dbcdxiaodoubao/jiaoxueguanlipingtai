@@ -58,9 +58,9 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test>
      * @return 学生所有的试卷列表
      */
     @Override
-    public Page<TestListVo> pageStudentTests(PageQuery pageQuery, TestPageQuery testPageQuery) {
+    public Page<TestListVo> pageStudentTests(PageQuery pageQuery, TestPageQuery testPageQuery,Long userId) {
         Page<TestListVo> testListVoPage = PageHelper.startPage(pageQuery);
-        baseMapper.pageStudentTests(testPageQuery);
+        baseMapper.pageStudentTests(testPageQuery,userId);
         return testListVoPage;
     }
 

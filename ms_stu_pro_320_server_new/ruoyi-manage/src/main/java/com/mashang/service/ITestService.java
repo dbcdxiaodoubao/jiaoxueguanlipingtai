@@ -30,9 +30,10 @@ public interface ITestService extends IService<Test> {
      * 查询学生所有的答卷列表
      * @param pageQuery 分页条件
      * @param testPageQuery 试卷的分页条件 类型和学科
+     * @param userId 学生id
      * @return 学生所有的试卷列表
      */
-    Page<TestListVo> pageStudentTests(PageQuery pageQuery, TestPageQuery testPageQuery);
+    Page<TestListVo> pageStudentTests(PageQuery pageQuery, TestPageQuery testPageQuery,Long userId);
 
     /**
      *  查询学生所有视频答卷列表

@@ -2,6 +2,7 @@ package com.mashang.controller;
 
 import com.github.pagehelper.Page;
 import com.mashang.domain.query.common.PageQuery;
+import com.mashang.domain.query.student.TestPageQuery;
 import com.mashang.domain.query.student.TestRecordQuery;
 import com.mashang.domain.vo.student.TestRecordListVo;
 import com.mashang.service.ITestAnswerService;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/record")
@@ -27,9 +30,11 @@ public class TestRecordController extends BaseController {
 
     @GetMapping("/page")
     @ApiOperation("根据提交时间倒叙分页查询该学生做过的试卷基本信息")
-    public TableDataInfo pageTestRecord(@Validated PageQuery pageQuery, @Validated TestRecordQuery testRecordQuery){
+    public TableDataInfo<List<TestRecordListVo>> pageTestRecord(@Validated PageQuery pageQuery, Integer subjectId){
+        TestRecordQuery testRecordQuery = new TestRecordQuery();
         Long userId = SecurityUtils.getUserId();
         testRecordQuery.setUserId(userId);
+        testRecordQuery.setSubjectId(subjectId);
         Page<TestRecordListVo> page = testAnswerService.listTestRecord(pageQuery, testRecordQuery);
         return getDataTable(page);
     }

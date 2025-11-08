@@ -1,5 +1,6 @@
 package com.mashang.controller;
 
+import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.github.pagehelper.Page;
 import com.mashang.domain.query.common.PageQuery;
 import com.mashang.domain.query.student.RandomTestQuery;
@@ -10,12 +11,15 @@ import com.mashang.service.ITestAnswerService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.R;
+import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/intelligence")
@@ -34,10 +38,10 @@ public class IntelligenceTrainingController extends BaseController {
 
     @GetMapping("/list")
     @ApiOperation("智能训练生成的试卷分页查询")
-    public R<Page<RandomTestVo>> listRandomTests(@Validated PageQuery pageQuery){
+    public TableDataInfo<List<RandomTestVo>> listRandomTests(@Validated PageQuery pageQuery){
         Long userId = SecurityUtils.getUserId();
         Page<RandomTestVo> randomTestVos = randomTestService.listRandomTests(pageQuery, userId);
-        return R.ok(randomTestVos);
+        return getDataTable(randomTestVos);
     }
 
     @PostMapping("/create/{randomTestId}")
@@ -47,7 +51,7 @@ public class IntelligenceTrainingController extends BaseController {
     }
 
     @GetMapping("/info/{randomTestId}")
-    @ApiOperation("查询随机答卷详情")
+    @ApiOperation("开始答题（随机试卷）")
     public R<TestAnswerInfo> getRandomInfo(@PathVariable Long randomTestId){
         TestAnswerInfo randomInfo = testAnswerService.getRandomInfo(randomTestId);
         return R.ok(randomInfo);

@@ -129,6 +129,7 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
                 questionVo.setStatus(null);
                 questionVo.setUserAnswer(null);
                 questionVo.setRightAnswer(null);
+                questionVo.setUserQuestionScore(null);
             }
         }
         return result;
@@ -203,9 +204,19 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Integer createRandomTest(Long randomTestId) {
+        LambdaQueryWrapper<TestAnswer> testAnswerLambdaQueryWrapper = Wrappers.lambdaQuery(TestAnswer.class);
+        testAnswerLambdaQueryWrapper.eq(TestAnswer::getRandomTestId,randomTestId);
+        testAnswerLambdaQueryWrapper.eq(TestAnswer::getStatus,StatusConstant.EXAM_PAPER_STATUS_INCOMPLETE);
+        TestAnswer testAnswerCheck = testAnswerMapper.selectOne(testAnswerLambdaQueryWrapper);
+        if(testAnswerCheck!=null){
+           throw new ServiceException("随机答卷"+testAnswerCheck.getRandomTestId()+MessageConstant.RANDOM_TEST_ANSWER_EXIST);
+        }
         Long userId = SecurityUtils.getUserId();
         //创造答卷
         RandomTest randomTest = randomTestMapper.selectById(randomTestId);
+        if(randomTest==null){
+            throw new ServiceException(MessageConstant.SHEET_NOT_EXIST);
+        }
         TestAnswer testAnswer = TestAnswerMapping.INSTANCE.toTestAnswer(randomTest);
         testAnswer.setStatus(StatusConstant.EXAM_PAPER_STATUS_INCOMPLETE);
         int result = baseMapper.insert(testAnswer);

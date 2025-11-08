@@ -80,7 +80,7 @@
         t1.duration,
         COUNT(t3.question_answer_id) AS question_num,
         SUM(IF(t3.`status`=1,1,0)) AS right_num,
-        COUNT(IF(t3.question_type IN(3,4,5),1,0)) AS auto_checking,
+        SUM(IF(t3.question_type IN(3,4,5),1,0)) AS auto_checking,
         IF(t1.`status`=1,t1.user_test_score,NULL) AS final_score,
         t4.subject_name,
         IFNULL( t2.test_type, 6 ) AS test_type

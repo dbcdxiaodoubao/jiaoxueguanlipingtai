@@ -41,4 +41,10 @@ public class QuestionAnswerVo {
     @ApiModelProperty(value = "大标题")
     private String bigTitle;
 
+    @ApiModelProperty(value = "学生得分")
+    private Integer userQuestionScore;
+
+    @ApiModelProperty(value = "题目分数")
+    private Integer questionScore;
+
 }

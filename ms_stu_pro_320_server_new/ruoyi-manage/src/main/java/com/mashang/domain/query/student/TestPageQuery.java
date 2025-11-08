@@ -12,6 +12,4 @@ public class TestPageQuery {
     @ApiModelProperty(value = "学科id")
     private Integer subjectId;
 
-    @ApiModelProperty(value = "答卷人id")
-    private Long userId;
 }

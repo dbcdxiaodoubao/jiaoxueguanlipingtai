@@ -3,6 +3,7 @@ package com.mashang.comming;
 import com.mashang.domain.entity.Question;
 import com.mashang.domain.entity.QuestionAnswer;
 import com.mashang.domain.query.student.QuestionSubmit;
+import com.mashang.domain.query.student.QuestionSubmitQuery;
 import com.mashang.domain.vo.student.QuestionAnswerVo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -25,4 +26,5 @@ public interface QuestionAnswerMapping {
 
     @Mapping(source = "questionAnswer", target = "rightAnswer")
     List<QuestionAnswer> toQuestionAnswerList(List<Question> questions);
+
 }

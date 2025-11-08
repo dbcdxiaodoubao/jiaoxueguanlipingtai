@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/wrong")
 @Api(tags = "错题本")
@@ -24,9 +26,11 @@ public class WrongBookController extends BaseController {
 
     @GetMapping("/page")
     @ApiOperation("根据条件分页查询错题信息")
-    public TableDataInfo pageWrongBook(PageQuery pageQuery, WrongBookQuery wrongBookQuery){
+    public TableDataInfo<List<WrongBookListVo>> pageWrongBook(PageQuery pageQuery, Integer subjectId){
+        WrongBookQuery wrongBookQuery = new WrongBookQuery();
         Long userId = SecurityUtils.getUserId();
         wrongBookQuery.setUserId(userId);
+        wrongBookQuery.setSubjectId(subjectId);
         Page<WrongBookListVo> page = questionAnswerService.pageWrongBook(pageQuery, wrongBookQuery);
         return getDataTable(page);
     }

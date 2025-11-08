@@ -3,6 +3,7 @@ package com.mashang.controller;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.mashang.comming.TestAnswerMapping;
 import com.mashang.comming.TestMapping;
 import com.mashang.domain.entity.Test;
 import com.mashang.domain.query.common.PageQuery;
@@ -12,6 +13,7 @@ import com.mashang.domain.query.management.TestListQuery;
 import com.mashang.domain.query.management.TestUpdate;
 import com.mashang.domain.query.student.TestPageQuery;
 import com.mashang.domain.query.student.TestSubmit;
+import com.mashang.domain.query.student.TestSubmitQuery;
 import com.mashang.domain.vo.management.ManageTestListVo;
 import com.mashang.domain.vo.management.TestDtlVo;
 import com.mashang.domain.vo.student.TestAnswerInfo;
@@ -49,24 +51,26 @@ public class TestCenterController extends BaseController {
         return R.ok(studentTests);
     }
 
-    @GetMapping("/student/info/{id}")
-    @ApiOperation("查询答卷详情信息")
-    public R<TestAnswerInfo> getStudentTestInfo(@ApiParam("答卷id") @PathVariable Long id){
-        TestAnswerInfo studentTestInfo = testAnswerService.getStudentTestInfo(id);
+    @GetMapping("/student/info/{testAnswerId}")
+    @ApiOperation("查询答卷查询详情信息")
+    public R<TestAnswerInfo> getStudentTestInfo( @PathVariable Long testAnswerId){
+        TestAnswerInfo studentTestInfo = testAnswerService.getStudentTestInfo(testAnswerId);
         return R.ok(studentTestInfo);
     }
 
     @PutMapping("/student/submit")
     @ApiOperation("提交试卷")
-    public AjaxResult submitTest(@Validated @RequestBody TestSubmit testSubmit){
+    public AjaxResult submitTest(@RequestBody TestSubmitQuery testSubmitQuery){
+        TestSubmit testSubmit = TestAnswerMapping.INSTANCE.toTestSubmit(testSubmitQuery);
         return toAjax(testAnswerService.submitTest(testSubmit));
     }
 
     @GetMapping("/student/page")
     @ApiOperation("根据条件分页查询试卷列表")
-    public TableDataInfo pageStudentTests(@Validated PageQuery pageQuery,@Validated TestPageQuery testPageQuery){
-        testPageQuery.setUserId(SecurityUtils.getUserId());
-        Page<TestListVo> testListVos = testService.pageStudentTests(pageQuery, testPageQuery);
+    public TableDataInfo<List<TestListVo>> pageStudentTests(@Validated PageQuery pageQuery,@Validated TestPageQuery testPageQuery){
+
+        Long userId = SecurityUtils.getUserId();
+        Page<TestListVo> testListVos = testService.pageStudentTests(pageQuery, testPageQuery,userId);
         return getDataTable(testListVos);
     }
 

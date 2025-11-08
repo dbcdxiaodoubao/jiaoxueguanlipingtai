@@ -39,9 +39,11 @@ public class VideoLessonController extends BaseController {
 
     @GetMapping("/student/page")
     @ApiOperation("根据条件分页查询对应的视频和关联的试卷信息")
-    public TableDataInfo pageVideoTests(@Validated PageQuery pageQuery,@Validated VideoTestPageQuery videoTestPageQuery){
+    public TableDataInfo<List<VideoTestVo>> pageVideoTests(@Validated PageQuery pageQuery,Long subjectId){
+        VideoTestPageQuery videoTestPageQuery = new VideoTestPageQuery();
         Long userId = SecurityUtils.getUserId();
         videoTestPageQuery.setUserId(userId);
+        videoTestPageQuery.setSubjectId(subjectId);
         Page<VideoTestVo> videoTestVoPage = testService.pageVideoTests(pageQuery, videoTestPageQuery);
         return getDataTable(videoTestVoPage);
     }
