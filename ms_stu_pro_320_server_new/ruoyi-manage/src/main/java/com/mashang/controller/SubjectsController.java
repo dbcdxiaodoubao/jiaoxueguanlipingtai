@@ -1,6 +1,7 @@
 package com.mashang.controller;
 
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mashang.comming.SubjectsMapping;
@@ -15,7 +16,9 @@ import com.mashang.service.IKnowledgeService;
 import com.mashang.service.IQuestionService;
 import com.mashang.service.ISubjectsService;
 import com.mashang.service.ITestService;
+import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.R;
+import com.ruoyi.common.core.page.TableDataInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +30,7 @@ import java.util.List;
 @RequestMapping("/subject")
 @RestController
 @Api(tags = "学科管理")
-public class SubjectsController {
+public class SubjectsController extends BaseController {
 
     @Autowired
     ISubjectsService subjectsService;
@@ -43,12 +46,12 @@ public class SubjectsController {
 
     @GetMapping("/list")
     @ApiOperation("查询学科信息列表")
-    public R<PageInfo<SubjectsListVo>> list(@Validated PageQuery pageQuery, Long grade){
-        PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize());
+    public TableDataInfo<List<SubjectsListVo>> list(@Validated PageQuery pageQuery, Long grade){
+        Page<Object> page = PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize());
 
         List<SubjectsListVo> list = subjectsService.list(grade);
 
-        return R.ok(new PageInfo<>(list));
+        return getDataTable(page.getResult(),page.getTotal());
     }
 
     @GetMapping("/dtl/{subjectsId}")

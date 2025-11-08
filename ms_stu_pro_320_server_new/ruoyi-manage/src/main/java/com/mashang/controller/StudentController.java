@@ -1,6 +1,7 @@
 package com.mashang.controller;
 
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mashang.domain.entity.Class;
@@ -45,12 +46,12 @@ public class StudentController extends BaseController {
 
     @GetMapping("/list")
     @ApiOperation("查询学生信息列表")
-    public R<PageInfo<StudentListVo>> list(@Validated PageQuery pageQuery, String nickName){
-        PageHelper.startPage(pageQuery.getPageNum(),pageQuery.getPageSize());
+    public TableDataInfo<List<StudentListVo>> list(@Validated PageQuery pageQuery, String nickName){
+        Page<Object> page = PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize());
 
         List<StudentListVo> list = studentService.list(nickName);
 
-        return R.ok(new  PageInfo<StudentListVo>(list));
+        return getDataTable(page.getResult(),page.getTotal());
     }
 
     @GetMapping("/dtl/{userId}")

@@ -1,5 +1,6 @@
 package com.mashang.controller;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mashang.comming.KnowledgeMapping;
@@ -10,7 +11,9 @@ import com.mashang.domain.vo.management.KnowledgeDtlVo;
 import com.mashang.domain.vo.management.KnowledgeListVo;
 import com.mashang.domain.vo.management.KnowledgeTreeVo;
 import com.mashang.service.IKnowledgeService;
+import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.R;
+import com.ruoyi.common.core.page.TableDataInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,19 +25,19 @@ import java.util.List;
 @RestController
 @RequestMapping("/knowledge")
 @Api(tags =  "知识点管理")
-public class knowledgeController {
+public class knowledgeController extends BaseController {
 
     @Autowired
     IKnowledgeService knowledgeService;
 
     @GetMapping("/list")
     @ApiOperation("查询知识点信息列表")
-    public R<PageInfo<KnowledgeListVo>> list(@Validated PageQuery pageQuery , Integer grade){
-        PageHelper.startPage(pageQuery.getPageNum(),pageQuery.getPageSize());
+    public TableDataInfo<List<KnowledgeListVo>> list(@Validated PageQuery pageQuery , Integer grade){
+        Page<Object> page = PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize());
 
         List<KnowledgeListVo> list = knowledgeService.list(grade);
 
-        return R.ok(PageInfo.of(list));
+        return getDataTable(page.getResult(),page.getTotal());
     }
 
     @GetMapping("/tree/{subjectId}")

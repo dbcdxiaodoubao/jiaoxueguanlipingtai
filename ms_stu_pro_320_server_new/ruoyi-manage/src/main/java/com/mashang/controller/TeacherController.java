@@ -9,6 +9,7 @@ import com.mashang.domain.vo.management.TeacherListVo;
 import com.mashang.domain.vo.teacher.*;
 import com.mashang.service.IClassService;
 import com.mashang.service.ITeacherServicee;
+import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.utils.SecurityUtils;
 import io.swagger.annotations.Api;
@@ -28,7 +29,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/teacher")
 @Api(tags = "教师管理")
-public class TeacherController {
+public class TeacherController extends BaseController {
 
     @Autowired
     ITeacherServicee iTeacherServicee;
@@ -38,12 +39,12 @@ public class TeacherController {
 
     @GetMapping("/list")
     @ApiOperation("查询教师信息列表")
-    public R<PageInfo<TeacherListVo>> list(@Validated PageQuery pageQuery , String nickName){
-        PageHelper.startPage(pageQuery.getPageNum(),pageQuery.getPageSize());
+    public TableDataInfo<List<TeacherListVo>> list(@Validated PageQuery pageQuery , String nickName){
+        Page<Object> page = PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize());
 
         List<TeacherListVo> list = iTeacherServicee.list(nickName);
 
-        return R.ok(new PageInfo<TeacherListVo>(list));
+        return getDataTable(page.getResult(),page.getTotal())   ;
     }
 
     @GetMapping("/dtl/{userId}")

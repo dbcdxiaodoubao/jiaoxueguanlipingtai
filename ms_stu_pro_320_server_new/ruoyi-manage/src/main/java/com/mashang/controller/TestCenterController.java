@@ -72,13 +72,13 @@ public class TestCenterController extends BaseController {
 
     @GetMapping
     @ApiOperation("管理端查询试卷列表")
-    public R<PageInfo<ManageTestListVo>> list(@Validated PageQuery pageQuery
+    public TableDataInfo<List<ManageTestListVo>> list(@Validated PageQuery pageQuery
             ,TestListQuery testListQuery){
-        PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize());
+        Page<Object> page = PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize());
 
         List<ManageTestListVo> list = testService.list(testListQuery);
 
-        return R.ok(PageInfo.of(list));
+        return getDataTable(page.getResult(),page.getTotal());
     }
 
 
