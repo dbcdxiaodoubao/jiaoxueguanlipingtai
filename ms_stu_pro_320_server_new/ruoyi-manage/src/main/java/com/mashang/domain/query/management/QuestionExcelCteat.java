@@ -67,32 +67,28 @@ public class QuestionExcelCteat {
 
 
 
-    public List<Map<String, Object>> getOption() {
-        // 处理空字符串情况
+    public List<Option> getOption() {
         if (optionStr == null || optionStr.trim().isEmpty()) {
             return new ArrayList<>();
         }
 
         try {
-            // 将 JSON 字符串解析为 List<Map<String, Object>>
-            List<Map<String, Object>> optionList = JSON.parseObject(
+            List<Option> optionList = JSON.parseObject(
                     optionStr.trim(),
-                    new TypeReference<List<Map<String, Object>>>() {}
+                    new TypeReference<List<Option>>() {}
             );
 
-            // 遍历处理每个 Map 中的空值
-            for (Map<String, Object> optionMap : optionList) {
-                // 确保 Map 中的值不为 null，空字符串保持不变
-                for (Map.Entry<String, Object> entry : optionMap.entrySet()) {
-                    if (entry.getValue() == null) {
-                        entry.setValue("");
-                    }
+            for (Option option : optionList) {
+                if (option.getValue() == null) {
+                    option.setValue("");
+                }
+                if (option.getText() == null) {
+                    option.setText("");
                 }
             }
 
             return optionList;
         } catch (Exception e) {
-            // 解析失败时返回空列表
             return new ArrayList<>();
         }
     }

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashang.comming.QuestionMapping;
 import com.mashang.domain.entity.Question;
+import com.mashang.domain.model.Option;
 import com.mashang.domain.query.management.QuestionCteat;
 import com.mashang.domain.query.management.QuestionListQuery;
 import com.mashang.domain.vo.management.MonthQuestion;
@@ -98,7 +99,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
 
         Integer type = questionCteat.getQuestionType();
 
-        List<Map<String, Object>> list = questionCteat.getOption();
+        List<Option> list = questionCteat.getOption();
 
         if (type == 0 && list.size()!=4) {
             throw new ServiceException("单选题的选项应为4个", 500);

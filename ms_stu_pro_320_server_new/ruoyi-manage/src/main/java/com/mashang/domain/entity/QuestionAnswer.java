@@ -63,7 +63,7 @@ public class QuestionAnswer extends BaseModel {
 
     @ApiModelProperty(value = "题目选项")
     @TableField(value = "`option`",typeHandler = JacksonTypeHandler.class)
-    private List<Map<String, Object>> option;
+    private List<Option> option;
 
     @ApiModelProperty(value = "答题状态（0待批改 1正确 2错误）")
     private Integer status;

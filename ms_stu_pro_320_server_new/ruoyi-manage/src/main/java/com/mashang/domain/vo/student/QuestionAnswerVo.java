@@ -24,7 +24,7 @@ public class QuestionAnswerVo {
 
     @TableField(value = "`option`",typeHandler = JacksonTypeHandler.class)
     @ApiModelProperty(value = "题目选项")
-    private List<Map<String, Object>> option;
+    private List<Option> option;
 
     @ApiModelProperty(value = "题目类型(1填空题2简答题3单选4多选5判断)")
     private Integer questionType;

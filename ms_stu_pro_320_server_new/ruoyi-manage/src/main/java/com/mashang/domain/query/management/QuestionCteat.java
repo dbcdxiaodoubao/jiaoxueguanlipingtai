@@ -52,7 +52,7 @@ public class QuestionCteat {
     @ApiModelProperty(value = "题目选项")
     @Excel(name = "题目选项(jason)")
     @TableField(value = "`option`",typeHandler = JacksonTypeHandler.class)
-    private List<Map<String, Object>> option;
+    private List<Option> option;
 
     @ApiModelProperty(value = "题目解析", required = true)
     @Excel(name = "题目解析")

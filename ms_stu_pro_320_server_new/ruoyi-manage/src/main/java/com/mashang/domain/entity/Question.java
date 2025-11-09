@@ -58,7 +58,7 @@ public class Question extends BaseModel {
     @ApiModelProperty(value = "题目选项")
     @TableField(value = "`option`",typeHandler = JacksonTypeHandler.class)
     @ExcelProperty("题目选项")
-    private List<Map<String, Object>> option;
+    private List<Option> option;
 
     @ApiModelProperty(value = "题目解析")
     @ExcelProperty("题目解析")
