@@ -56,6 +56,9 @@ public class MageTestController extends BaseController {
     @PostMapping
     @ApiOperation("新增试卷")
     public R insert(@RequestBody @Validated TestCreat testCreat){
+        if(testCreat.getTestType()<0||testCreat.getTestType()>5){
+            return R.fail("试卷类型非法，应为0-5");
+        }
         Test test = TestMapping.INSTANCE.toCreat(testCreat);
         testService.save(test);
         for(QuestionTestCreat questionTestCreat: testCreat.getQuestion()){

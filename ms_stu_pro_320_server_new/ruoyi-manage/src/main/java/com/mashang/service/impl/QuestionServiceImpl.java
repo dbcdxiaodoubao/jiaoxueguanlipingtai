@@ -101,15 +101,24 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
 
         List<Option> list = questionCteat.getOption();
 
+        if(type<0 || type>4){
+            throw new ServiceException("题目类型非法，应为0-4", 500);
+        }
+        if(questionCteat.getQuestionDifficulty()<1 || questionCteat.getQuestionDifficulty()>10){
+            throw new ServiceException("题目难度非法，应为1-10", 500);
+        }
+        if(questionCteat.getQuestionScore()<=0){
+            throw new ServiceException("题目分数应大于0", 500);
+        }
         if (type == 0 && list.size()!=4) {
             throw new ServiceException("单选题的选项应为4个", 500);
         }
-       if (type == 2 && list.size()!=2) {
-           throw new ServiceException("判断题选项应为2个", 500);
-       }
-       if(type == 3 || type == 4){
-           questionCteat.setOption(null);
-       }
+        if (type == 2 && list.size()!=2) {
+            throw new ServiceException("判断题选项应为2个", 500);
+        }
+        if(type == 3 || type == 4){
+            questionCteat.setOption(null);
+        }
 
        return questionMapper.insert(QuestionMapping.INSTANCE.toCreat(questionCteat));
     }
