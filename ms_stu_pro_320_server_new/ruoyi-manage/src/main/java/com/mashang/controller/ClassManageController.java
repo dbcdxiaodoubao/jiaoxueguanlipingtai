@@ -27,7 +27,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/teacher-class-manage")
-@Api(tags = "教师端班级管理")
+@Api(tags = "班级管理")
 @RequiredArgsConstructor
 public class ClassManageController {
 

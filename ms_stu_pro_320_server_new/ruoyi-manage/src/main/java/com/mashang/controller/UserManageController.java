@@ -17,10 +17,10 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
-@RequestMapping("/teacher-student-manage")
-@Api(tags = "教师端学生管理")
+@RequestMapping("/teacher-user-manage")
+@Api(tags = "用户管理")
 @RequiredArgsConstructor
-public class StudentManageController {
+public class UserManageController {
 
     private final IStudentService studentService;
     private final IClassService classService;

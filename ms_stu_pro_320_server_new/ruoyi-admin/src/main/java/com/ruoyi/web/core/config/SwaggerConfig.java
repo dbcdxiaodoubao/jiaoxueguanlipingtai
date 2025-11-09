@@ -2,6 +2,8 @@ package com.ruoyi.web.core.config;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.mashang.controller.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -46,20 +48,57 @@ public class SwaggerConfig
      * 创建API
      */
     @Bean
-    public Docket createRestApi()
+    public Docket teacherApi()
     {
-        return new Docket(DocumentationType.OAS_30)
+        return new Docket(DocumentationType.SWAGGER_2)
                 // 是否启用Swagger
                 .enable(enabled)
+                .groupName("教师端")
                 // 用来创建该API的基本信息，展示在文档的页面中（自定义展示的信息）
                 .apiInfo(apiInfo())
                 // 设置哪些接口暴露给Swagger展示
                 .select()
                 // 扫描所有有注解的api，用这种方式更灵活
-                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
+//                .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 // 扫描指定包中的swagger注解
-                // .apis(RequestHandlerSelectors.basePackage("com.ruoyi.project.tool.swagger"))
+//                 .apis(RequestHandlerSelectors.basePackage("com.ruoyi.project.tool.swagger"))
+//                 .apis(RequestHandlerSelectors.basePackage("com.mashang.controller"))
+                .apis(input->{
+                    Class<?> declaringClass = input.declaringClass();
+                    return declaringClass== ClassManageController.class||declaringClass== PerformanceAnalysisController.class
+                            ||declaringClass== PersonInfoController.class||declaringClass== TaskManageController.class
+                            ||declaringClass== TeacherHomeController.class||declaringClass== TestAnswerController.class
+                            ||declaringClass== VideoManageController.class||declaringClass==TestManageController.class
+                            ||declaringClass== UserManageController.class||declaringClass==MageTestController.class
+                            ||declaringClass== QuestionController.class;
+                })
                 // 扫描所有 .apis(RequestHandlerSelectors.any())
+                .paths(PathSelectors.any())
+                .build()
+                /* 设置安全模式，swagger可以设置访问token */
+                .securitySchemes(securitySchemes())
+                .securityContexts(securityContexts())
+                .pathMapping(pathMapping);
+    }
+
+    @Bean
+    public Docket manageApi()
+    {
+        return new Docket(DocumentationType.SWAGGER_2)
+                // 是否启用Swagger
+                .enable(enabled)
+                .groupName("管理端")
+                // 用来创建该API的基本信息，展示在文档的页面中（自定义展示的信息）
+                .apiInfo(apiInfo())
+                // 设置哪些接口暴露给Swagger展示
+                .select()
+                .apis(input->{
+                    Class<?> declaringClass = input.declaringClass();
+                    return declaringClass== AdminController.class||declaringClass== EChartController.class
+                            ||declaringClass== knowledgeController.class||declaringClass== MageTestController.class
+                            ||declaringClass== QuestionController.class||declaringClass== StudentController.class
+                            ||declaringClass== SubjectsController.class;
+                })
                 .paths(PathSelectors.any())
                 .build()
                 /* 设置安全模式，swagger可以设置访问token */
