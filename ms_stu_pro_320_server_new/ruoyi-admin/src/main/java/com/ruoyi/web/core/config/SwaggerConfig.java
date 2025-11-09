@@ -66,9 +66,8 @@ public class SwaggerConfig
                 .apis(input->{
                     Class<?> declaringClass = input.declaringClass();
                     return declaringClass== ClassManageController.class||declaringClass== PerformanceAnalysisController.class
-                            ||declaringClass== PersonInfoController.class||declaringClass== TaskManageController.class
-                            ||declaringClass== TeacherHomeController.class||declaringClass== TestAnswerController.class
-                            ||declaringClass== VideoManageController.class||declaringClass==TestManageController.class
+                            ||declaringClass== TeacherHomeController.class
+                            ||declaringClass==TestManageController.class
                             ||declaringClass== UserManageController.class||declaringClass==MageTestController.class
                             ||declaringClass== QuestionController.class;
                 })
@@ -97,7 +96,8 @@ public class SwaggerConfig
                     return declaringClass== AdminController.class||declaringClass== EChartController.class
                             ||declaringClass== knowledgeController.class||declaringClass== MageTestController.class
                             ||declaringClass== QuestionController.class||declaringClass== StudentController.class
-                            ||declaringClass== SubjectsController.class;
+                            ||declaringClass== SubjectsController.class||declaringClass== TaskManageController.class
+                            ||declaringClass== VideoManageController.class||declaringClass== TestAnswerController.class;
                 })
                 .paths(PathSelectors.any())
                 .build()
