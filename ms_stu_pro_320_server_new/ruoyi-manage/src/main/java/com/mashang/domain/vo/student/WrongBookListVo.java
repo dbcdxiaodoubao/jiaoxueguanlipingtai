@@ -7,6 +7,8 @@ import com.mashang.domain.model.Option;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class WrongBookListVo {
 
@@ -40,5 +42,5 @@ public class WrongBookListVo {
 
     @ApiModelProperty(value = "题目选项")
     @TableField(value = "`option`",typeHandler = JacksonTypeHandler.class)
-    private Option option;
+    private List<Option> option;
 }
