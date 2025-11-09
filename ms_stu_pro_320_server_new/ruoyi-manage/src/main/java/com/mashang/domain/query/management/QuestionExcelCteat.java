@@ -1,5 +1,6 @@
 package com.mashang.domain.query.management;
 
+import cn.hutool.core.lang.TypeReference;
 import com.alibaba.fastjson2.JSON;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
@@ -11,10 +12,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 
 @Data
@@ -68,29 +66,34 @@ public class QuestionExcelCteat {
     private String knowledgeIdStr;  // 新增：String接收Excel内容
 
 
-    public Option getOption() {
+
+    public List<Map<String, Object>> getOption() {
+        // 处理空字符串情况
         if (optionStr == null || optionStr.trim().isEmpty()) {
-            Option emptyOption = new Option();
-            emptyOption.setA("");
-            emptyOption.setB("");
-            emptyOption.setC("");
-            emptyOption.setD("");
-            return emptyOption;
+            return new ArrayList<>();
         }
+
         try {
-            Option option = JSON.parseObject(optionStr.trim(), Option.class);
-            if (option.getA() == null || option.getA().isEmpty()) option.setA("");
-            if (option.getB() == null || option.getB().isEmpty()) option.setB("");
-            if (option.getC() == null || option.getC().isEmpty()) option.setC("");
-            if (option.getD() == null || option.getD().isEmpty()) option.setD("");
-            return option;
+            // 将 JSON 字符串解析为 List<Map<String, Object>>
+            List<Map<String, Object>> optionList = JSON.parseObject(
+                    optionStr.trim(),
+                    new TypeReference<List<Map<String, Object>>>() {}
+            );
+
+            // 遍历处理每个 Map 中的空值
+            for (Map<String, Object> optionMap : optionList) {
+                // 确保 Map 中的值不为 null，空字符串保持不变
+                for (Map.Entry<String, Object> entry : optionMap.entrySet()) {
+                    if (entry.getValue() == null) {
+                        entry.setValue("");
+                    }
+                }
+            }
+
+            return optionList;
         } catch (Exception e) {
-            Option defaultOption = new Option();
-            defaultOption.setA("");
-            defaultOption.setB("");
-            defaultOption.setC("");
-            defaultOption.setD("");
-            return defaultOption;
+            // 解析失败时返回空列表
+            return new ArrayList<>();
         }
     }
 

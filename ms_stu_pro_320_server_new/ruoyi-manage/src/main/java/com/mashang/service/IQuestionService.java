@@ -73,4 +73,11 @@ public interface IQuestionService extends IService<Question> {
      * @return
      */
     List<MonthQuestion> monthQuestionList();
+
+    /**
+     * 保存问题
+     * @param questionCteat
+     * @return
+     */
+    Integer saveQuestion(QuestionCteat questionCteat);
 }

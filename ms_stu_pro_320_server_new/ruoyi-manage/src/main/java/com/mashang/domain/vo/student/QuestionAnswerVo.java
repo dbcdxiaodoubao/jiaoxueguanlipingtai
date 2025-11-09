@@ -10,6 +10,9 @@ import com.mashang.domain.model.Option;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.List;
+import java.util.Map;
+
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class QuestionAnswerVo {
@@ -21,7 +24,7 @@ public class QuestionAnswerVo {
 
     @TableField(value = "`option`",typeHandler = JacksonTypeHandler.class)
     @ApiModelProperty(value = "题目选项")
-    private Option option;
+    private List<Map<String, Object>> option;
 
     @ApiModelProperty(value = "题目类型(1填空题2简答题3单选4多选5判断)")
     private Integer questionType;

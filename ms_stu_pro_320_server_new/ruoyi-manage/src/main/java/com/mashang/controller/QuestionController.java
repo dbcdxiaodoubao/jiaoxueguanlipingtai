@@ -60,7 +60,7 @@ public class QuestionController extends BaseController {
     @PostMapping()
     @ApiOperation("新增题目")
     public R insert(@RequestBody @Validated QuestionCteat questionCteat){
-        if(iQuestionService.insert(questionCteat)){
+        if(iQuestionService.saveQuestion(questionCteat)==1){
             return R.ok();
         }
         return R.fail();

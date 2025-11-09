@@ -13,6 +13,7 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 
 
 @Data
@@ -57,7 +58,7 @@ public class QuestionUpdate {
     @ApiModelProperty(value = "题目选项")
     @TableField(value = "`option`",typeHandler = JacksonTypeHandler.class)
     @Excel(name = "题目选项(jason)")
-    private Option option;
+    private List<Map<String, Object>> option;
 
     @ApiModelProperty(value = "题目解析", required = true)
     @Excel(name = "题目解析")

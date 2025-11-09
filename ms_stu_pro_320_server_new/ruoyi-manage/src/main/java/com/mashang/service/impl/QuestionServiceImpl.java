@@ -1,6 +1,8 @@
 package com.mashang.service.impl;
 
+import cn.hutool.core.lang.TypeReference;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashang.comming.QuestionMapping;
 import com.mashang.domain.entity.Question;
 import com.mashang.domain.query.management.QuestionCteat;
@@ -10,13 +12,17 @@ import com.mashang.domain.vo.management.QuestionDtlVo;
 import com.mashang.domain.vo.management.QuestionListVo;
 import com.mashang.service.IQuestionService;
 import com.mashang.mapper.QuestionMapper;
+import com.ruoyi.common.exception.ServiceException;
 import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import javax.xml.ws.soap.Addressing;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
 * @author 20413
@@ -29,6 +35,10 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
 
     @Autowired
     QuestionMapper questionMapper;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
 
     @Override
     public Integer haveQuestion(Integer subjectId) {
@@ -81,6 +91,26 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
     @Override
     public List<MonthQuestion> monthQuestionList() {
         return questionMapper.monthQuestionList();
+    }
+
+    @Override
+    public Integer saveQuestion(QuestionCteat questionCteat) {
+
+        Integer type = questionCteat.getQuestionType();
+
+        List<Map<String, Object>> list = questionCteat.getOption();
+
+        if (type == 0 && list.size()!=4) {
+            throw new ServiceException("单选题的选项应为4个", 500);
+        }
+       if (type == 2 && list.size()!=2) {
+           throw new ServiceException("判断题选项应为2个", 500);
+       }
+       if(type == 3 || type == 4){
+           questionCteat.setOption(null);
+       }
+
+       return questionMapper.insert(QuestionMapping.INSTANCE.toCreat(questionCteat));
     }
 
 

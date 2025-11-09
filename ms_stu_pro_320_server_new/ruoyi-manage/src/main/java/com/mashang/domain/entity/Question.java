@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
@@ -57,7 +58,7 @@ public class Question extends BaseModel {
     @ApiModelProperty(value = "题目选项")
     @TableField(value = "`option`",typeHandler = JacksonTypeHandler.class)
     @ExcelProperty("题目选项")
-    private Option option;
+    private List<Map<String, Object>> option;
 
     @ApiModelProperty(value = "题目解析")
     @ExcelProperty("题目解析")
