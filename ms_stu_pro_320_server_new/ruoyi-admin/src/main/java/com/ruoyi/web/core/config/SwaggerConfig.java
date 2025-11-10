@@ -107,6 +107,31 @@ public class SwaggerConfig
                 .pathMapping(pathMapping);
     }
 
+    @Bean
+    public Docket studentApi()
+    {
+        return new Docket(DocumentationType.SWAGGER_2)
+                // 是否启用Swagger
+                .enable(enabled)
+                .groupName("学生端")
+                // 用来创建该API的基本信息，展示在文档的页面中（自定义展示的信息）
+                .apiInfo(apiInfo())
+                // 设置哪些接口暴露给Swagger展示
+                .select()
+                .apis(input->{
+                    Class<?> declaringClass = input.declaringClass();
+                    return declaringClass== TaskCenterController.class||declaringClass== TestCenterController.class
+                            || declaringClass== VideoLessonController.class||declaringClass== IntelligenceTrainingController.class
+                            ||declaringClass== TestRecordController.class||declaringClass== WrongBookController.class;
+                })
+                .paths(PathSelectors.any())
+                .build()
+                /* 设置安全模式，swagger可以设置访问token */
+                .securitySchemes(securitySchemes())
+                .securityContexts(securityContexts())
+                .pathMapping(pathMapping);
+    }
+
     /**
      * 安全模式，这里指定token通过Authorization头请求头传递
      */
