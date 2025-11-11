@@ -34,6 +34,7 @@
                  t3.user_id = #{userId}
         WHERE t1.grade = #{grade}
           AND t1.del_flag = 0
+        ORDER BY t1.create_time DESC
     </select>
 
 
