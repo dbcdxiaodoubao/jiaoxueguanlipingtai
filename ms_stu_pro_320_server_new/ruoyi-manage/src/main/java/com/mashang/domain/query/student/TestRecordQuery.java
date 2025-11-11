@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class TestRecordQuery {
     @ApiModelProperty(value = "学科id")
-    private Integer subjectId;
+    private Long subjectId;
 
     @ApiModelProperty(value = "答卷人id")
     private Long userId;

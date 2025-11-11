@@ -30,7 +30,7 @@ public class TestRecordController extends BaseController {
 
     @GetMapping("/page")
     @ApiOperation("根据提交时间倒叙分页查询该学生所有做过的试卷基本信息")
-    public TableDataInfo<List<TestRecordListVo>> pageTestRecord(@Validated PageQuery pageQuery, Integer subjectId){
+    public TableDataInfo<List<TestRecordListVo>> pageTestRecord(@Validated PageQuery pageQuery, Long subjectId){
         TestRecordQuery testRecordQuery = new TestRecordQuery();
         Long userId = SecurityUtils.getUserId();
         testRecordQuery.setUserId(userId);

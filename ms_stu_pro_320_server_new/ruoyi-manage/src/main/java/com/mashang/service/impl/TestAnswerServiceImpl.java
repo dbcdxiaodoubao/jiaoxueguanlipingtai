@@ -34,6 +34,7 @@ import com.mashang.mapper.*;
 import com.mashang.service.IQuestionAnswerService;
 import com.mashang.service.ITestAnswerService;
 import com.mashang.util.QuestionUtils;
+import com.mashang.util.SubjectUtils;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.exception.ServiceException;
@@ -71,6 +72,8 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
     private QuestionMapper questionMapper;
     @Autowired
     private SysUserMapper sysUserMapper;
+    @Autowired
+    private SubjectUtils subjectUtils;
 
     /**
      * 查询学生未做完的答卷列表
@@ -95,16 +98,31 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
         if (testAnswer == null) {
             throw new ServiceException(MessageConstant.ANSWER_SHEET_NOT_EXIST);
         }
+
         //组装考试信息
         TestAnswerInfo result = TestAnswerMapping.INSTANCE.toTestAnswerInfo(testAnswer);
         if (testAnswer.getTestId() != null) {
             //如果不是随机试卷
             Test test = testMapper.selectById(testAnswer.getTestId());
+            if (test == null) {
+                throw new ServiceException(MessageConstant.EXAM_NOT_EXIST);
+            }
+
+            if (test.getStartTime() != null && new Date().before(test.getStartTime())) {
+                throw new ServiceException(MessageConstant.EXAM_NOT_START);
+            }
+            if (test.getDeadline() != null && new Date().after(test.getDeadline())) {
+                throw new ServiceException(MessageConstant.EXAM_ALREADY_END);
+            }
+
             result.setSuggestDuration(test.getSuggestDuration());
             result.setQuestionNum(test.getQuestionNum());
         } else if (testAnswer.getRandomTestId() != null) {
             //随机试卷
             RandomTest randomTest = randomTestMapper.selectById(testAnswer.getRandomTestId());
+            if (randomTest == null) {
+                throw new ServiceException(MessageConstant.SHEET_NOT_EXIST);
+            }
             result.setQuestionNum(randomTest.getQuestionNum());
         } else {
             throw new ServiceException(MessageConstant.SHEET_NOT_EXIST);
@@ -144,6 +162,13 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Integer submitTest(TestSubmit testSubmit) {
+        TestAnswer testAnswer = baseMapper.selectById(testSubmit.getTestAnswerId());
+        if (testAnswer == null) {
+            throw new ServiceException(MessageConstant.ANSWER_SHEET_NOT_EXIST);
+        }
+        if (testAnswer.getStatus().equals(StatusConstant.EXAM_PAPER_STATUS_COMPLETED)) {
+            throw new ServiceException(MessageConstant.ANSWER_SHEET_ALREADY_SUBMIT);
+        }
         //先改题目
         List<QuestionSubmit> questionSubmits = testSubmit.getQuestionSubmits();
         Integer userScore = 0;
@@ -173,7 +198,7 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
         questionAnswerService.updateBatchById(questionAnswerList);
 
         //后改答卷
-        TestAnswer testAnswer = TestAnswerMapping.INSTANCE.toTestAnswer(testSubmit);
+        testAnswer = TestAnswerMapping.INSTANCE.toTestAnswer(testSubmit);
         if (flag) {
             testAnswer.setStatus(StatusConstant.EXAM_PAPER_STATUS_PENDING);
         } else {
@@ -205,16 +230,16 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
     @Transactional(rollbackFor = Exception.class)
     public Integer createRandomTest(Long randomTestId) {
         LambdaQueryWrapper<TestAnswer> testAnswerLambdaQueryWrapper = Wrappers.lambdaQuery(TestAnswer.class);
-        testAnswerLambdaQueryWrapper.eq(TestAnswer::getRandomTestId,randomTestId);
-        testAnswerLambdaQueryWrapper.eq(TestAnswer::getStatus,StatusConstant.EXAM_PAPER_STATUS_INCOMPLETE);
+        testAnswerLambdaQueryWrapper.eq(TestAnswer::getRandomTestId, randomTestId);
+        testAnswerLambdaQueryWrapper.eq(TestAnswer::getStatus, StatusConstant.EXAM_PAPER_STATUS_INCOMPLETE);
         TestAnswer testAnswerCheck = testAnswerMapper.selectOne(testAnswerLambdaQueryWrapper);
-        if(testAnswerCheck!=null){
-           throw new ServiceException("随机答卷"+testAnswerCheck.getRandomTestId()+MessageConstant.RANDOM_TEST_ANSWER_EXIST);
+        if (testAnswerCheck != null) {
+            throw new ServiceException("随机答卷" + testAnswerCheck.getRandomTestId() + MessageConstant.RANDOM_TEST_ANSWER_EXIST);
         }
         Long userId = SecurityUtils.getUserId();
         //创造答卷
         RandomTest randomTest = randomTestMapper.selectById(randomTestId);
-        if(randomTest==null){
+        if (randomTest == null) {
             throw new ServiceException(MessageConstant.SHEET_NOT_EXIST);
         }
         TestAnswer testAnswer = TestAnswerMapping.INSTANCE.toTestAnswer(randomTest);
@@ -251,12 +276,16 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
 
     /**
      * 根据提交时间倒叙分页查询该学生做过的试卷基本信息
-     * @param pageQuery 分页条件
+     *
+     * @param pageQuery       分页条件
      * @param testRecordQuery 查询条件
      * @return 学生做过的试卷基本信息
      */
     @Override
     public com.github.pagehelper.Page<TestRecordListVo> listTestRecord(PageQuery pageQuery, TestRecordQuery testRecordQuery) {
+        if (!subjectUtils.checkSubject(testRecordQuery.getSubjectId())) {
+            throw new ServiceException(MessageConstant.SUBJECT_NOT_CORRESPOND_TO_GRADE);
+        }
         com.github.pagehelper.Page<TestRecordListVo> page = PageHelper.startPage(pageQuery);
         baseMapper.listTestRecord(testRecordQuery);
         return page;
@@ -274,7 +303,7 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
         tlqw.eq(TestAnswer::getStatus, StatusConstant.EXAM_PAPER_STATUS_INCOMPLETE);
         TestAnswer testAnswer = baseMapper.selectOne(tlqw);
         if (testAnswer == null) {
-            throw new ServiceException(MessageConstant.ANSWER_SHEET_NOT_EXIST);
+            throw new ServiceException(MessageConstant.ANSWER_SHEET_NOT_EXIST + "，请先创建随机答卷");
         }
         return testAnswer;
     }
@@ -295,15 +324,17 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
         }
         return set.size() == length;
     }
+
     /**
      * 获取答卷列表
+     *
      * @param pageQuery 分页参数
      * @return 答卷列表
      */
     @Override
     public TableDataInfo testAnswerlist(TestAnswerPageQuery pageQuery, Integer status) {
         List<Long> userIds = null;
-        if (StringUtils.isNotNull(pageQuery.getClassId())){
+        if (StringUtils.isNotNull(pageQuery.getClassId())) {
             //查出班级学生id集合
             LambdaQueryWrapper<SysUser> UserQueryWrapper = new LambdaQueryWrapper<SysUser>()
                     .eq(StringUtils.isNotNull(pageQuery.getClassId()), SysUser::getClassId, pageQuery.getClassId())
@@ -320,6 +351,7 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
 
     /**
      * 获取答卷详情
+     *
      * @param testAnswerId 答卷id
      * @return
      */
@@ -330,6 +362,7 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
 
     /**
      * 自动批改
+     *
      * @param testAnswerId 答卷id
      */
     @Override
@@ -351,6 +384,7 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
 
     /**
      * 手动批改主观题
+     *
      * @param questionAnswerList 答题列表
      */
     @Override
@@ -363,16 +397,16 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
             QuestionAnswer one = questionAnswerService.lambdaQuery()
                     .eq(QuestionAnswer::getQuestionAnswerId, questionAnswer.getQuestionAnswerId()).one();
             //校验传来的答题打分是否合理
-            if (questionAnswer.getUserQuestionScore()<0||questionAnswer.getUserQuestionScore() > one.getQuestionScore()){
-                throw new RuntimeException(MessageConstant.SCORE_NOT_RIGHT+"题干："+one.getQuestionTitle()+"，分数："+questionAnswer.getUserQuestionScore());
+            if (questionAnswer.getUserQuestionScore() < 0 || questionAnswer.getUserQuestionScore() > one.getQuestionScore()) {
+                throw new RuntimeException(MessageConstant.SCORE_NOT_RIGHT + "题干：" + one.getQuestionTitle() + "，分数：" + questionAnswer.getUserQuestionScore());
             }
             //更新答题分数
             LambdaUpdateWrapper<QuestionAnswer> uqw = new LambdaUpdateWrapper<QuestionAnswer>()
                     .eq(QuestionAnswer::getQuestionAnswerId, questionAnswer.getQuestionAnswerId())
                     .set(QuestionAnswer::getStatus, questionAnswer.getStatus())
-                    .set(QuestionAnswer::getUserQuestionScore,questionAnswer.getUserQuestionScore());
+                    .set(QuestionAnswer::getUserQuestionScore, questionAnswer.getUserQuestionScore());
             questionAnswerService.update(uqw);
-            testAnswer.setUserTestScore(testAnswer.getUserTestScore()+questionAnswer.getUserQuestionScore());
+            testAnswer.setUserTestScore(testAnswer.getUserTestScore() + questionAnswer.getUserQuestionScore());
         }
         //更新答卷分数
         updateById(testAnswer);

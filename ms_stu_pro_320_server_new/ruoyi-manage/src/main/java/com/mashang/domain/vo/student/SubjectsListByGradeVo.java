@@ -9,7 +9,7 @@ import lombok.Data;
 public class SubjectsListByGradeVo {
 
     @ApiModelProperty("学科id")
-    private Integer subjectId;
+    private Long subjectId;
 
     @ApiModelProperty("学科名称")
     private String subjectName;

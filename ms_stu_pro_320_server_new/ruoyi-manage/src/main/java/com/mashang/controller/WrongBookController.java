@@ -27,7 +27,7 @@ public class WrongBookController extends BaseController {
 
     @GetMapping("/page")
     @ApiOperation("根据条件分页查询错题信息")
-    public TableDataInfo<List<WrongBookListVo>> pageWrongBook(@Validated PageQuery pageQuery, Integer subjectId){
+    public TableDataInfo<List<WrongBookListVo>> pageWrongBook(@Validated PageQuery pageQuery, Long subjectId){
         WrongBookQuery wrongBookQuery = new WrongBookQuery();
         Long userId = SecurityUtils.getUserId();
         wrongBookQuery.setUserId(userId);

@@ -10,6 +10,6 @@ public class TestPageQuery {
     private Integer testType;
 
     @ApiModelProperty(value = "学科id")
-    private Integer subjectId;
+    private Long subjectId;
 
 }

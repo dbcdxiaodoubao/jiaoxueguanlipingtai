@@ -80,5 +80,9 @@ public class MessageConstant {
 
     public static final String SCORE_NOT_RIGHT = "该答题批改分数不合理";
 
+    public static final String SUBJECT_NOT_CORRESPOND_TO_GRADE="该学科的年级与学生的年级不对应";
+
+    public static final String TEST_TIME_ERROR="试卷时段状态有误";
+
 
 }

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.mashang.comming.TestMapping;
+import com.mashang.constant.MessageConstant;
 import com.mashang.constant.TestType;
 import com.mashang.domain.entity.Test;
 import com.mashang.domain.entity.TestAnswer;
@@ -23,6 +24,7 @@ import com.mashang.domain.vo.student.VideoTestVo;
 import com.mashang.mapper.*;
 import com.mashang.service.IQuestionAnswerService;
 import com.mashang.service.ITestService;
+import com.mashang.util.SubjectUtils;
 import com.mashang.util.TestUtils;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.SecurityUtils;
@@ -53,6 +55,9 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test>
     @Autowired
     private TestMapping testMapping;
 
+    @Autowired
+    private SubjectUtils subjectUtils;
+
     /**
      * 查询学生所有的答卷列表
      *
@@ -61,12 +66,15 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test>
      * @return 学生所有的试卷列表
      */
     @Override
-    public Page<TestListVo> pageStudentTests(PageQuery pageQuery, TestPageQuery testPageQuery,Long userId) {
-        if(!TestUtils.isNeed(testPageQuery.getTestType())){
+    public Page<TestListVo> pageStudentTests(PageQuery pageQuery, TestPageQuery testPageQuery, Long userId) {
+        if (!subjectUtils.checkSubject(testPageQuery.getSubjectId())) {
+            throw new ServiceException(MessageConstant.SUBJECT_NOT_CORRESPOND_TO_GRADE);
+        }
+        if (!TestUtils.isNeed(testPageQuery.getTestType())) {
             throw new ServiceException("只能选择 1、固定试卷 2、时段试卷 5、班级试卷");
         }
         Page<TestListVo> testListVoPage = PageHelper.startPage(pageQuery);
-        baseMapper.pageStudentTests(testPageQuery,userId);
+        baseMapper.pageStudentTests(testPageQuery, userId);
         return testListVoPage;
     }
 
@@ -79,6 +87,9 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test>
      */
     @Override
     public Page<VideoTestVo> pageVideoTests(PageQuery pageQuery, VideoTestPageQuery videoTestPageQuery) {
+        if (!subjectUtils.checkSubject(videoTestPageQuery.getSubjectId())) {
+            throw new ServiceException(MessageConstant.SUBJECT_NOT_CORRESPOND_TO_GRADE);
+        }
         Page<VideoTestVo> videoTestVoPage = PageHelper.startPage(pageQuery);
         baseMapper.pageVideoTests(videoTestPageQuery);
         return videoTestVoPage;
@@ -116,17 +127,19 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test>
 
     /**
      * 教师端查询试卷列表
+     *
      * @param query
      * @return
      */
     @Override
     public List<com.mashang.domain.vo.teacher.TestListVo> pageQueryTeacher(com.mashang.domain.query.teacher.TestPageQuery query) {
-        return baseMapper.pageQueryTeacher(new Page<Test>(query.getPageNum(),query.getPageSize()),query,
+        return baseMapper.pageQueryTeacher(new Page<Test>(query.getPageNum(), query.getPageSize()), query,
                 SecurityUtils.getLoginUser().getUser().getGrade());
     }
 
     /**
      * 教师端修改试卷
+     *
      * @param test
      * @param classIds
      */
@@ -143,6 +156,7 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test>
 
     /**
      * 教师端查询试卷详情
+     *
      * @param testId
      * @return
      */
@@ -157,6 +171,7 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test>
 
     /**
      * 教师端添加试卷
+     *
      * @param test
      * @param classIds
      */

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Objects;
 import com.ruoyi.common.constant.HttpStatus;
 import com.ruoyi.common.utils.StringUtils;
+import io.swagger.annotations.ApiModel;
 
 /**
  * 操作消息提醒

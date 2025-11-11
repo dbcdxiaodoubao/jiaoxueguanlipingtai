@@ -14,12 +14,15 @@ import com.mashang.domain.entity.*;
 import com.mashang.domain.query.common.PageQuery;
 import com.mashang.domain.query.student.RandomTestQuery;
 import com.mashang.domain.vo.student.RandomTestVo;
+import com.mashang.domain.vo.student.SubjectsListByGradeVo;
 import com.mashang.mapper.QuestionMapper;
 import com.mashang.mapper.RandomTestQuestionMapper;
 import com.mashang.mapper.TestQuestionMapper;
 import com.mashang.service.IRandomTestQuestionService;
 import com.mashang.service.IRandomTestService;
 import com.mashang.mapper.RandomTestMapper;
+import com.mashang.service.ISubjectsService;
+import com.mashang.util.SubjectUtils;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +50,9 @@ public class RandomTestServiceImpl extends ServiceImpl<RandomTestMapper, RandomT
     @Autowired
     private QuestionMapper questionMapper;
 
+    @Autowired
+    private SubjectUtils subjectUtils;
+
     /**
      * 自动生成随机试卷
      *
@@ -56,6 +62,9 @@ public class RandomTestServiceImpl extends ServiceImpl<RandomTestMapper, RandomT
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Integer produceRandomTest(RandomTestQuery randomTestQuery) {
+        if (!subjectUtils.checkSubject(randomTestQuery.getSubjectId())) {
+            throw new ServiceException(MessageConstant.SUBJECT_NOT_CORRESPOND_TO_GRADE);
+        }
         //判断题
         Integer judgmentNum = randomTestQuery.getJudgmentNum();
         //多选题
