@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.mashang.comming.TestMapping;
+import com.mashang.constant.TestType;
 import com.mashang.domain.entity.Test;
 import com.mashang.domain.entity.TestAnswer;
 import com.mashang.domain.entity.TestClass;
@@ -22,6 +23,8 @@ import com.mashang.domain.vo.student.VideoTestVo;
 import com.mashang.mapper.*;
 import com.mashang.service.IQuestionAnswerService;
 import com.mashang.service.ITestService;
+import com.mashang.util.TestUtils;
+import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -59,6 +62,9 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test>
      */
     @Override
     public Page<TestListVo> pageStudentTests(PageQuery pageQuery, TestPageQuery testPageQuery,Long userId) {
+        if(!TestUtils.isNeed(testPageQuery.getTestType())){
+            throw new ServiceException("只能选择 1、固定试卷 2、时段试卷 5、班级试卷");
+        }
         Page<TestListVo> testListVoPage = PageHelper.startPage(pageQuery);
         baseMapper.pageStudentTests(testPageQuery,userId);
         return testListVoPage;

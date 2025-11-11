@@ -30,7 +30,7 @@ public class VideoLessonController extends BaseController {
     private ITestAnswerService testAnswerService;
 
     @GetMapping("/student/test")
-    @ApiOperation("查询未完成的视频试卷信息列表")
+    @ApiOperation("查询未完成的视频答卷信息列表")
     public R<List<VideoTestVo>> getVideoTests(){
         Long userId = SecurityUtils.getUserId();
         List<VideoTestVo> videoTests = testAnswerService.getVideoTests(userId);
@@ -38,7 +38,7 @@ public class VideoLessonController extends BaseController {
     }
 
     @GetMapping("/student/page")
-    @ApiOperation("根据条件分页查询对应的视频和关联的试卷信息")
+    @ApiOperation("根据条件分页查询对应的视频和关联的答卷信息")
     public TableDataInfo<List<VideoTestVo>> pageVideoTests(@Validated PageQuery pageQuery,Long subjectId){
         VideoTestPageQuery videoTestPageQuery = new VideoTestPageQuery();
         Long userId = SecurityUtils.getUserId();

@@ -11,6 +11,7 @@ import com.ruoyi.common.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +27,7 @@ public class WrongBookController extends BaseController {
 
     @GetMapping("/page")
     @ApiOperation("根据条件分页查询错题信息")
-    public TableDataInfo<List<WrongBookListVo>> pageWrongBook(PageQuery pageQuery, Integer subjectId){
+    public TableDataInfo<List<WrongBookListVo>> pageWrongBook(@Validated PageQuery pageQuery, Integer subjectId){
         WrongBookQuery wrongBookQuery = new WrongBookQuery();
         Long userId = SecurityUtils.getUserId();
         wrongBookQuery.setUserId(userId);

@@ -66,7 +66,7 @@ public class TestCenterController extends BaseController {
     }
 
     @GetMapping("/student/page")
-    @ApiOperation("根据条件分页查询试卷列表")
+    @ApiOperation("根据条件分页查询答卷列表")
     public TableDataInfo<List<TestListVo>> pageStudentTests(@Validated PageQuery pageQuery,@Validated TestPageQuery testPageQuery){
 
         Long userId = SecurityUtils.getUserId();
