@@ -44,7 +44,7 @@ public class TestCenterController extends BaseController {
     private ITestAnswerService testAnswerService;
 
     @GetMapping("/student/list")
-    @ApiOperation("查询属于当前学生的所有未完成的答卷")
+    @ApiOperation("查询属于当前学生的未完成的答卷（固定，时段，班级答卷）")
     public R<List<TestListVo>> getStudentTests(){
         Long userId = SecurityUtils.getUserId();
         List<TestListVo> studentTests = testAnswerService.getStudentTests(userId);
@@ -66,7 +66,7 @@ public class TestCenterController extends BaseController {
     }
 
     @GetMapping("/student/page")
-    @ApiOperation("根据条件分页查询答卷列表")
+    @ApiOperation("根据条件分页查询答卷列表（固定，时段，班级答卷）")
     public TableDataInfo<List<TestListVo>> pageStudentTests(@Validated PageQuery pageQuery,@Validated TestPageQuery testPageQuery){
 
         Long userId = SecurityUtils.getUserId();

@@ -29,7 +29,7 @@ public class TestRecordController extends BaseController {
     private ITestAnswerService testAnswerService;
 
     @GetMapping("/page")
-    @ApiOperation("根据提交时间倒叙分页查询该学生做过的试卷基本信息")
+    @ApiOperation("根据提交时间倒叙分页查询该学生所有做过的试卷基本信息")
     public TableDataInfo<List<TestRecordListVo>> pageTestRecord(@Validated PageQuery pageQuery, Integer subjectId){
         TestRecordQuery testRecordQuery = new TestRecordQuery();
         Long userId = SecurityUtils.getUserId();

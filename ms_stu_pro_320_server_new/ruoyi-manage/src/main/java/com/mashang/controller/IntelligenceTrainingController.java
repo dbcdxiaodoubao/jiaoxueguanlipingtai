@@ -51,7 +51,7 @@ public class IntelligenceTrainingController extends BaseController {
     }
 
     @GetMapping("/info/{randomTestId}")
-    @ApiOperation("开始答题（随机试卷）")
+    @ApiOperation("开始答题（查看随机答卷详情）")
     public R<TestAnswerInfo> getRandomInfo(@PathVariable Long randomTestId){
         TestAnswerInfo randomInfo = testAnswerService.getRandomInfo(randomTestId);
         return R.ok(randomInfo);
