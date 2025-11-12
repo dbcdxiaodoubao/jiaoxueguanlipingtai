@@ -7,7 +7,6 @@
         <version>3.9.0</version>
     </parent>
     <artifactId>ruoyi-manage</artifactId>
-    <packaging>war</packaging>
     <name>ruoyi-manage Maven Webapp</name>
     <url>http://maven.apache.org</url>
     <dependencies>
@@ -67,7 +66,4 @@
         </dependency>
 
     </dependencies>
-    <build>
-        <finalName>ruoyi-manage</finalName>
-    </build>
 </project>

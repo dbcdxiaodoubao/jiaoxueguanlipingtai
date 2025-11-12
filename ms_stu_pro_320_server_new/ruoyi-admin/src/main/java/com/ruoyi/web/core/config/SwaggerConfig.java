@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mashang.controller.*;
+import com.ruoyi.web.controller.system.SysLoginController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -69,7 +70,7 @@ public class SwaggerConfig
                             ||declaringClass== TeacherHomeController.class
                             ||declaringClass==TestManageController.class
                             ||declaringClass== UserManageController.class||declaringClass==MageTestController.class
-                            ||declaringClass== QuestionController.class;
+                            ||declaringClass== QuestionController.class|| declaringClass==SysLoginController.class;
                 })
                 // 扫描所有 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
@@ -97,7 +98,8 @@ public class SwaggerConfig
                             ||declaringClass== knowledgeController.class||declaringClass== MageTestController.class
                             ||declaringClass== QuestionController.class||declaringClass== StudentController.class
                             ||declaringClass== SubjectsController.class||declaringClass== TaskManageController.class
-                            ||declaringClass== VideoManageController.class||declaringClass== TestAnswerController.class;
+                            ||declaringClass== VideoManageController.class||declaringClass== TestAnswerController.class
+                            || declaringClass==SysLoginController.class;
                 })
                 .paths(PathSelectors.any())
                 .build()
@@ -122,7 +124,8 @@ public class SwaggerConfig
                     Class<?> declaringClass = input.declaringClass();
                     return declaringClass== TaskCenterController.class||declaringClass== TestCenterController.class
                             || declaringClass== VideoLessonController.class||declaringClass== IntelligenceTrainingController.class
-                            ||declaringClass== TestRecordController.class||declaringClass== WrongBookController.class;
+                            ||declaringClass== TestRecordController.class||declaringClass== WrongBookController.class
+                            || declaringClass==SysLoginController.class;
                 })
                 .paths(PathSelectors.any())
                 .build()
