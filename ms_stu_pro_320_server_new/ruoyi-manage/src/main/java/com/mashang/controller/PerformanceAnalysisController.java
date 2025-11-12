@@ -5,12 +5,15 @@ import com.mashang.domain.vo.teacher.StudentAverageVo;
 import com.mashang.domain.vo.teacher.TestAverageVo;
 import com.mashang.service.IClassService;
 import com.mashang.service.ITeacherServicee;
+import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.domain.R;
+import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,12 +33,14 @@ public class PerformanceAnalysisController {
 
     @GetMapping("/class-average")
     @ApiOperation("查询班级平均分")
+    @PreAuthorize("@ss.hasPermi('teacher:analysis:list')")
     public R<List<TestAverageVo>> testAverage(){
         return R.ok(teacherService.testAverage());
     }
 
     @GetMapping("/student-average/{classId}")
     @ApiOperation("查询班级下学生的成绩")
+    @PreAuthorize("@ss.hasPermi('teacher:analysis:list')")
     public R<List<StudentAverageVo>> studentAverage(@PathVariable @NotNull(message = "班级id不能为空")
                                                     @ApiParam("班级id") Integer classId){
         Long teacherId = classService.lambdaQuery().eq(Class::getClassId, classId).one().getTeacherId();

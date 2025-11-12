@@ -69,7 +69,7 @@ public class SwaggerConfig
                     return declaringClass== ClassManageController.class||declaringClass== PerformanceAnalysisController.class
                             ||declaringClass== TeacherHomeController.class
                             ||declaringClass==TestManageController.class
-                            ||declaringClass== UserManageController.class||declaringClass==MageTestController.class
+                            ||declaringClass== UserManageController.class
                             ||declaringClass== QuestionController.class|| declaringClass==SysLoginController.class;
                 })
                 // 扫描所有 .apis(RequestHandlerSelectors.any())

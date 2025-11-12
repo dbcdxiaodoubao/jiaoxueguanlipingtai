@@ -41,6 +41,7 @@ public class QuestionController extends BaseController {
 
     @GetMapping("/list")
     @ApiOperation("查询题目信息列表")
+    @PreAuthorize("@ss.hasPermi('manage:question:list')")
     public TableDataInfo<List<QuestionListVo>> list(@Validated PageQuery pageQuery
             , QuestionListQuery questionListQuery){
         Page<QuestionListVo> page = PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize());
@@ -52,6 +53,7 @@ public class QuestionController extends BaseController {
 
 
     @GetMapping("/dtl/{questionId}")
+    @PreAuthorize("@ss.hasPermi('manage:question:query')")
     @ApiOperation("查询问题详情")
     public R<QuestionDtlVo> dtl(@PathVariable @Validated Integer questionId){
         return R.ok(iQuestionService.dtl(questionId));
@@ -59,6 +61,8 @@ public class QuestionController extends BaseController {
 
     @PostMapping()
     @ApiOperation("新增题目")
+    @PreAuthorize("@ss.hasPermi('manage:question:add')")
+    @Log(title = "新增题目", businessType = BusinessType.INSERT)
     public R insert(@RequestBody @Validated QuestionCteat questionCteat){
         if(iQuestionService.saveQuestion(questionCteat)==1){
             return R.ok();
@@ -68,6 +72,8 @@ public class QuestionController extends BaseController {
 
     @PostMapping("/importTemplate")
     @ApiOperation("下载导入模版")
+    @PreAuthorize("@ss.hasPermi('manage:question:import')")
+    @Log(title = "下载导入模版", businessType = BusinessType.IMPORT)
     public void importTemplate(HttpServletResponse response){
         ExcelUtil<QuestionExcelCteat> util = new ExcelUtil<QuestionExcelCteat>(QuestionExcelCteat.class);
         util.importTemplateExcel(response, "题目数据");
@@ -79,6 +85,8 @@ public class QuestionController extends BaseController {
             @ApiImplicitParam(name = "file", value = "Excel文件（支持.xlsx/.xls）", required = true,
                     dataType = "MultipartFile", dataTypeClass = MultipartFile.class, paramType = "form")
     })
+    @PreAuthorize("@ss.hasPermi('manage:question:import')")
+    @Log(title = "通过excel导入题目", businessType = BusinessType.IMPORT)
     public R importData(@RequestPart("file")MultipartFile file) throws Exception
     {
         ExcelUtil<QuestionExcelCteat> util = new ExcelUtil<QuestionExcelCteat>(QuestionExcelCteat.class);
@@ -100,6 +108,8 @@ public class QuestionController extends BaseController {
 
     @PutMapping
     @ApiOperation("修改题目")
+    @PreAuthorize("@ss.hasPermi('manage:question:update')")
+    @Log(title = "修改题目", businessType = BusinessType.UPDATE)
     public R update(@RequestBody @Validated QuestionUpdate questionUpdate){
         if (iQuestionService.updateById(QuestionMapping.INSTANCE.toUpdate(questionUpdate))){
             return R.ok();
@@ -109,6 +119,8 @@ public class QuestionController extends BaseController {
 
     @ApiOperation("删除题目")
     @DeleteMapping("/{questionId}")
+    @PreAuthorize("@ss.hasPermi('manage:question:delete')")
+    @Log(title = "删除题目", businessType = BusinessType.DELETE)
     public R delete(@PathVariable @Validated Integer questionId){
 
         if (iQuestionService.haveOnTest(questionId)!=0){

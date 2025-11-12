@@ -11,12 +11,15 @@ import com.mashang.domain.vo.teacher.TestListVo;
 import com.mashang.service.IClassService;
 import com.mashang.service.ISubjectsService;
 import com.mashang.service.ITestService;
+import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.domain.R;
+import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,12 +39,15 @@ public class TestManageController {
 
     @GetMapping("/list")
     @ApiOperation("分页查询试卷列表")
+    @PreAuthorize("@ss.hasPermi('teacher:test:list')")
     public R<List<TestListVo>> list(@Validated TestPageQuery query) {
         return R.ok(testService.pageQueryTeacher(query));
     }
 
     @PutMapping
     @ApiOperation("修改试卷信息")
+    @PreAuthorize("@ss.hasPermi('teacher:test:update')")
+    @Log(title = "修改试卷信息", businessType = BusinessType.UPDATE)
     public R<Void> update(@ApiParam("修改试卷信息") @RequestBody Test test, @ApiParam("绑定班级id集合") List<Integer> classIds) {
         testService.update(test, classIds);
         return R.ok();
@@ -49,6 +55,7 @@ public class TestManageController {
 
     @GetMapping("/{testId}")
     @ApiOperation("查询试卷详情")
+    @PreAuthorize("@ss.hasPermi('teacher:test:query')")
     public R<TestDtlVo> getById(@NotNull(message = "试卷id不能为空")
                                      @PathVariable @ApiParam("试卷id") Integer testId) {
         return R.ok(testService.getById(testId));
@@ -56,6 +63,8 @@ public class TestManageController {
 
     @DeleteMapping("/{testId}")
     @ApiOperation("删除试卷")
+    @PreAuthorize("@ss.hasPermi('teacher:test:delete')")
+    @Log(title = "删除试卷", businessType = BusinessType.DELETE)
     public R<Void> delete(@NotNull(message = "试卷id不能为空")
                                @PathVariable @ApiParam("试卷id") Integer testId) {
         if (testService.haveTestAnswer(testId) > 0) {
@@ -74,6 +83,7 @@ public class TestManageController {
 
     @GetMapping("/subjects")
     @ApiOperation("查询学科列表")
+    @PreAuthorize("@ss.hasPermi('teacher:test:list')")
     public R<List<Subjects>> listSubjects() {
         return R.ok(subjectsService.lambdaQuery().eq(Subjects::getGrade,SecurityUtils.getLoginUser().getUser().getGrade())
                 .list());
@@ -81,6 +91,7 @@ public class TestManageController {
 
     @GetMapping("/classes")
     @ApiOperation("查询班级列表")
+    @PreAuthorize("@ss.hasPermi('teacher:test:list')")
     public R<List<TestClassListVo>> listClasses() {
         return R.ok(classMapping.toTestClassListVo(classService.lambdaQuery()
                 .eq(Class::getTeacherId,SecurityUtils.getUserId()).list()));
