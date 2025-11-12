@@ -14,16 +14,11 @@ import com.mashang.domain.vo.management.QuestionListVo;
 import com.mashang.service.IQuestionService;
 import com.mashang.mapper.QuestionMapper;
 import com.ruoyi.common.exception.ServiceException;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-import javax.xml.ws.soap.Addressing;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 /**
 * @author 20413

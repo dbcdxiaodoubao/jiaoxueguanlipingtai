@@ -22,6 +22,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -62,6 +63,7 @@ public class SubjectsController extends BaseController {
 
     @GetMapping("/student/list")
     @ApiOperation("根据学生的年级查询学科列表")
+    @PreAuthorize("@ss.hasPermi('student:subject:list')")
     public R<List<SubjectsListByGradeVo>> listByGrade(){
         List<SubjectsListByGradeVo> subjectsListByGradeVos = subjectsService.listByGrade();
         return R.ok(subjectsListByGradeVos);

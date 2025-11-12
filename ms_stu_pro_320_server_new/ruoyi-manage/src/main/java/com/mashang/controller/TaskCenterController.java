@@ -8,6 +8,7 @@ import com.ruoyi.common.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,6 +31,7 @@ public class TaskCenterController extends BaseController {
 
     @GetMapping("/student/list")
     @ApiOperation("查询当前学生所有学习任务列表")
+    @PreAuthorize("@ss.hasPermi('student:task:list')")
     public R<List<TaskListVo>> listStudentTasks(){
         Long userId = SecurityUtils.getUserId();
         List<TaskListVo> taskVos = taskService.listStudentTasks(userId);

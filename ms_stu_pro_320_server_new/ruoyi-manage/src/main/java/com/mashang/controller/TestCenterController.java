@@ -29,6 +29,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,6 +46,7 @@ public class TestCenterController extends BaseController {
 
     @GetMapping("/student/list")
     @ApiOperation("查询属于当前学生的未完成的答卷（固定，时段，班级答卷）")
+    @PreAuthorize("@ss.hasPermi('student:test:list')")
     public R<List<TestListVo>> getStudentTests(){
         Long userId = SecurityUtils.getUserId();
         List<TestListVo> studentTests = testAnswerService.getStudentTests(userId);
@@ -53,6 +55,7 @@ public class TestCenterController extends BaseController {
 
     @GetMapping("/student/info/{testAnswerId}")
     @ApiOperation("查询答卷查询详情信息")
+    @PreAuthorize("@ss.hasPermi('student:test:info')")
     public R<TestAnswerInfo> getStudentTestInfo( @PathVariable Long testAnswerId){
         TestAnswerInfo studentTestInfo = testAnswerService.getStudentTestInfo(testAnswerId);
         return R.ok(studentTestInfo);
@@ -60,6 +63,7 @@ public class TestCenterController extends BaseController {
 
     @PutMapping("/student/submit")
     @ApiOperation("提交试卷")
+    @PreAuthorize("@ss.hasPermi('student:test:submit')")
     public AjaxResult submitTest(@RequestBody TestSubmitQuery testSubmitQuery){
         TestSubmit testSubmit = TestAnswerMapping.INSTANCE.toTestSubmit(testSubmitQuery);
         return toAjax(testAnswerService.submitTest(testSubmit));
@@ -67,6 +71,7 @@ public class TestCenterController extends BaseController {
 
     @GetMapping("/student/page")
     @ApiOperation("根据条件分页查询答卷列表（固定，时段，班级答卷）")
+    @PreAuthorize("@ss.hasPermi('student:test:list')")
     public TableDataInfo<List<TestListVo>> pageStudentTests(@Validated PageQuery pageQuery,@Validated TestPageQuery testPageQuery){
 
         Long userId = SecurityUtils.getUserId();
