@@ -12,6 +12,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,12 +29,14 @@ public class TestAnswerController {
 
     @GetMapping("/correctList")
     @ApiOperation("批改试卷列表查询")
+    @PreAuthorize("@ss.hasPermi('teacher:tsetanswer:correctlist')")
     public TableDataInfo correctList(@Validated TestAnswerPageQuery pageQuery) {
         return testAnswerService.testAnswerlist(pageQuery, StatusConstant.ANSWER_STATUS_PENDING);
     }
 
     @GetMapping("/{testAnswerId}")
     @ApiOperation("查询试卷详情")
+    @PreAuthorize("@ss.hasPermi('teacher:tsetanswer:dtl')")
     public R<TestAnswerDtlVo> getTestAnswerInfo(@NotNull(message = "答卷id为空") @PathVariable Long testAnswerId) {
         return R.ok(testAnswerService.getTestAnswerInfo(testAnswerId));
     }
@@ -47,6 +50,7 @@ public class TestAnswerController {
 
     @PutMapping("/correct")
     @ApiOperation("主观题批改")
+    @PreAuthorize("@ss.hasPermi('teacher:tsetanswer:correct')")
     public R<Void> correct(@NotNull(message = "主观题列表为空") @RequestBody List<QuestionAnswer> questionAnswerList) {
         testAnswerService.correct(questionAnswerList);
         return R.ok();
@@ -54,6 +58,7 @@ public class TestAnswerController {
 
     @GetMapping("/list")
     @ApiOperation("分页查询答卷列表")
+    @PreAuthorize("@ss.hasPermi('teacher:tsetanswer:list')")
     public TableDataInfo list(@Validated TestAnswerPageQuery pageQuery) {
         return testAnswerService.testAnswerlist(pageQuery,null);
     }

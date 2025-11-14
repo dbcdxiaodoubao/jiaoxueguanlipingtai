@@ -17,6 +17,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +33,7 @@ public class knowledgeController extends BaseController {
 
     @GetMapping("/list")
     @ApiOperation("查询知识点信息列表")
+    @PreAuthorize("@ss.hasPermi('manage:knowledge:list')")
     public TableDataInfo<List<KnowledgeListVo>> list(@Validated PageQuery pageQuery , Integer grade){
         Page<Object> page = PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize());
 
@@ -42,18 +44,21 @@ public class knowledgeController extends BaseController {
 
     @GetMapping("/tree/{subjectId}")
     @ApiOperation("查询知识点树")
+    @PreAuthorize("@ss.hasPermi('manage:knowledge:tree')")
     public R<List<KnowledgeTreeVo>> tree(@Validated @PathVariable Long subjectId){
         return R.ok(knowledgeService.selectBySubjectId(subjectId));
     }
 
     @GetMapping("/dtl")
     @ApiOperation("查询知识点详情")
+    @PreAuthorize("@ss.hasPermi('manage:knowledge:dtl')")
     public R<KnowledgeDtlVo> dtl(Integer knowledgeId){
         return R.ok(knowledgeService.selectDtl(knowledgeId));
     }
 
     @PostMapping
     @ApiOperation("新增知识点")
+    @PreAuthorize("@ss.hasPermi('manage:knowledge:insert')")
     public R insert(@RequestBody @Validated KnowledgeCreat knowledgeCreat){
 
         if(knowledgeService.selectOneByKnowledgeName(knowledgeCreat.getKnowledgeName(),
@@ -78,6 +83,7 @@ public class knowledgeController extends BaseController {
 
     @PutMapping
     @ApiOperation("修改知识点")
+    @PreAuthorize("@ss.hasPermi('manage:knowledge:update')")
     public R update(@RequestBody @Validated KnowledgeUpdate knowledgeUpdate){
 
         if(knowledgeService.selectOneByKnowledgeName(knowledgeUpdate.getKnowledgeName(),
@@ -102,6 +108,7 @@ public class knowledgeController extends BaseController {
 
     @DeleteMapping("/{knowledgeId}")
     @ApiOperation("删除知识点")
+    @PreAuthorize("@ss.hasPermi('manage:knowledge:delete')")
     public R delete(@Validated @PathVariable Integer knowledgeId){
 
         if(knowledgeService.selectCountById(knowledgeId)!=0){

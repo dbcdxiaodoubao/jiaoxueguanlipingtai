@@ -13,6 +13,7 @@ import com.ruoyi.common.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,7 @@ public class VideoLessonController extends BaseController {
 
     @GetMapping("/student/test")
     @ApiOperation("查询未完成的视频答卷信息列表")
+    @PreAuthorize("@ss.hasPermi('student:video:test')")
     public R<List<VideoTestVo>> getVideoTests(){
         Long userId = SecurityUtils.getUserId();
         List<VideoTestVo> videoTests = testAnswerService.getVideoTests(userId);
@@ -38,7 +40,8 @@ public class VideoLessonController extends BaseController {
     }
 
     @GetMapping("/student/page")
-    @ApiOperation("根据条件分页查询对应的视频和关联的答卷信息")
+    @PreAuthorize("@ss.hasPermi('student:video:page')")
+        @ApiOperation("根据条件分页查询对应的视频和关联的答卷信息")
     public TableDataInfo<List<VideoTestVo>> pageVideoTests(@Validated PageQuery pageQuery,Long subjectId){
         VideoTestPageQuery videoTestPageQuery = new VideoTestPageQuery();
         Long userId = SecurityUtils.getUserId();

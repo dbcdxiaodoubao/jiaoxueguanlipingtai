@@ -10,6 +10,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,12 +26,14 @@ public class VideoManageController {
 
     @GetMapping("/list")
     @ApiOperation("视频列表")
+    @PreAuthorize("@ss.hasPermi('teacher:video:list')")
     public TableDataInfo list(@Validated VideoPageQuery query) {
         return videoService.pageQuery(query);
     }
 
     @GetMapping("/{videoId}")
     @ApiOperation("查询视频详情")
+    @PreAuthorize("@ss.hasPermi('teacher:video:dtl')")
     public R<VideoVo> query(@ApiParam("视频id")
                            @NotNull(message = "视频id为空")
                            @PathVariable Integer videoId){
@@ -39,18 +42,21 @@ public class VideoManageController {
 
     @PostMapping
     @ApiOperation("添加视频")
+    @PreAuthorize("@ss.hasPermi('teacher:video:insert')")
     public R<Void> add(@RequestBody Video video){
         return R.result(videoService.save(video));
     }
 
     @PutMapping
     @ApiOperation("修改视频")
+    @PreAuthorize("@ss.hasPermi('teacher:video:update')")
     public R<Void> update(@RequestBody Video video){
         return R.result(videoService.updateById(video));
     }
 
     @DeleteMapping("/{videoId}")
     @ApiOperation("删除视频")
+    @PreAuthorize("@ss.hasPermi('teacher:video:delete')")
     public R<Void> delete(@ApiParam("视频id")
                          @NotNull(message = "视频id为空")
                          @PathVariable Integer videoId){

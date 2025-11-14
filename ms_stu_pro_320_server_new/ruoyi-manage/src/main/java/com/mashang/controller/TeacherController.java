@@ -18,6 +18,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,6 +42,7 @@ public class TeacherController extends BaseController {
 
     @GetMapping("/list")
     @ApiOperation("查询教师信息列表")
+    @PreAuthorize("@ss.hasPermi('manage:teacher:list')")
     public TableDataInfo<List<TeacherListVo>> list(@Validated PageQuery pageQuery , String nickName){
         Page<Object> page = PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize());
 
@@ -51,42 +53,43 @@ public class TeacherController extends BaseController {
 
     @GetMapping("/dtl/{userId}")
     @ApiOperation("查询教师详情")
+    @PreAuthorize("@ss.hasPermi('manage:teacher:dtl')")
     public R<TeacherDtlVo> selectById(@PathVariable @Validated Long userId){
         return R.ok(iTeacherServicee.selectByid(userId));
     }
 
-    @GetMapping("/home/total")
-    @ApiOperation("查询班级总数，班级总人数，试卷总数，题目总数")
-    public R<TotalVo> total(){
-        return R.ok(iTeacherServicee.total());
-    }
-
-    @GetMapping("/home/class-size-distribution")
-    @ApiOperation("查询班级人数分布")
-    public R<List<ClassSizeDistributionVo>> classSizeDistribution(){
-        return R.ok(iTeacherServicee.classSizeDistribution());
-    }
-
-    @GetMapping("/home/class-test-distribution")
-    @ApiOperation("查询班级试卷分布")
-    public R<List<ClassTestDistributionVo>> classTestDistribution(){
-        return R.ok(iTeacherServicee.classTestDistribution());
-    }
-
-    @GetMapping("/class-average")
-    @ApiOperation("查询班级平均分")
-    public R<List<TestAverageVo>> testAverage(){
-        return R.ok(iTeacherServicee.testAverage());
-    }
-
-    @GetMapping("/student-average/{classId}")
-    @ApiOperation("查询班级下学生的成绩")
-    public R<List<StudentAverageVo>> studentAverage(@PathVariable @NotNull(message = "班级id不能为空")
-                                                        @ApiParam("班级id") Integer classId){
-        Long teacherId = classService.lambdaQuery().eq(Class::getClassId, classId).one().getTeacherId();
-        if (!teacherId.equals(SecurityUtils.getUserId())){
-            return R.fail("查询班级不属于当前教师");
-        }
-        return R.ok(iTeacherServicee.studentAverage(classId));
-    }
+//    @GetMapping("/home/total")
+//    @ApiOperation("查询班级总数，班级总人数，试卷总数，题目总数")
+//    public R<TotalVo> total(){
+//        return R.ok(iTeacherServicee.total());
+//    }
+//
+//    @GetMapping("/home/class-size-distribution")
+//    @ApiOperation("查询班级人数分布")
+//    public R<List<ClassSizeDistributionVo>> classSizeDistribution(){
+//        return R.ok(iTeacherServicee.classSizeDistribution());
+//    }
+//
+//    @GetMapping("/home/class-test-distribution")
+//    @ApiOperation("查询班级试卷分布")
+//    public R<List<ClassTestDistributionVo>> classTestDistribution(){
+//        return R.ok(iTeacherServicee.classTestDistribution());
+//    }
+//
+//    @GetMapping("/class-average")
+//    @ApiOperation("查询班级平均分")
+//    public R<List<TestAverageVo>> testAverage(){
+//        return R.ok(iTeacherServicee.testAverage());
+//    }
+//
+//    @GetMapping("/student-average/{classId}")
+//    @ApiOperation("查询班级下学生的成绩")
+//    public R<List<StudentAverageVo>> studentAverage(@PathVariable @NotNull(message = "班级id不能为空")
+//                                                        @ApiParam("班级id") Integer classId){
+//        Long teacherId = classService.lambdaQuery().eq(Class::getClassId, classId).one().getTeacherId();
+//        if (!teacherId.equals(SecurityUtils.getUserId())){
+//            return R.fail("查询班级不属于当前教师");
+//        }
+//        return R.ok(iTeacherServicee.studentAverage(classId));
+//    }
 }

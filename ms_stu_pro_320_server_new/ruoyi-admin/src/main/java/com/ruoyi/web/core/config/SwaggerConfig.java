@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.mashang.controller.*;
 import com.ruoyi.web.controller.system.SysLoginController;
+import com.ruoyi.web.controller.system.SysUserController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -94,12 +95,22 @@ public class SwaggerConfig
                 .select()
                 .apis(input->{
                     Class<?> declaringClass = input.declaringClass();
-                    return declaringClass== AdminController.class||declaringClass== EChartController.class
-                            ||declaringClass== knowledgeController.class||declaringClass== MageTestController.class
-                            ||declaringClass== QuestionController.class||declaringClass== StudentController.class
-                            ||declaringClass== SubjectsController.class||declaringClass== TaskManageController.class
-                            ||declaringClass== VideoManageController.class||declaringClass== TestAnswerController.class
-                            || declaringClass==SysLoginController.class;
+                    boolean isIncludedClass = declaringClass == AdminController.class ||
+                            declaringClass == EChartController.class ||
+                            declaringClass == knowledgeController.class ||
+                            declaringClass == MageTestController.class ||
+                            declaringClass == QuestionController.class ||
+                            declaringClass == StudentController.class ||
+                            declaringClass == SubjectsController.class ||
+                            declaringClass == TaskManageController.class ||
+                            declaringClass == VideoManageController.class ||
+                            declaringClass == TestAnswerController.class ||
+                            declaringClass == SysLoginController.class ||
+                            declaringClass == SysUserController.class;
+
+                    boolean hasApiOperation = input.isAnnotatedWith(ApiOperation.class);
+
+                    return isIncludedClass && hasApiOperation;
                 })
                 .paths(PathSelectors.any())
                 .build()

@@ -17,6 +17,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +37,7 @@ public class TaskManageController {
 
     @GetMapping("/list")
     @ApiOperation("任务列表")
+    @PreAuthorize("@ss.hasPermi('teacher:task:list')")
     public TableDataInfo list(@Validated TaskPageQuery query) {
         Page<Task> page=new Page<>(query.getPageNum(),query.getPageSize());
         taskService.page(page,new LambdaQueryWrapper<Task>()
@@ -45,6 +47,7 @@ public class TaskManageController {
 
     @PostMapping
     @ApiOperation("创建任务")
+    @PreAuthorize("@ss.hasPermi('teacher:task:insert')")
     public R<Void> add(@RequestBody Task task,@ApiParam("任务关联的试卷id") @RequestParam ArrayList<Integer> testIds) {
         // 判断任务名称是否存在
         if(taskService.lambdaQuery()
@@ -57,6 +60,7 @@ public class TaskManageController {
 
     @PutMapping
     @ApiOperation("修改任务")
+    @PreAuthorize("@ss.hasPermi('teacher:task:update')")
     public R<Void> update(@RequestBody Task task,
                           @ApiParam("任务关联的试卷id")
                           @RequestParam ArrayList<Integer> testIds) {
@@ -72,6 +76,7 @@ public class TaskManageController {
 
     @DeleteMapping("/{taskId}")
     @ApiOperation("删除任务")
+    @PreAuthorize("@ss.hasPermi('teacher:task:delete')")
     public R<Void> delete(@ApiParam("任务id")
                               @NotNull(message = "任务id为空")
                               @PathVariable Integer taskId) {
@@ -84,6 +89,7 @@ public class TaskManageController {
 
     @GetMapping("/{taskId}")
     @ApiOperation("查询任务详情")
+    @PreAuthorize("@ss.hasPermi('teacher:task:dtl')")
     public R<TaskDtlVo> detail(@ApiParam("任务id")
                                    @NotNull(message = "任务id为空")
                                    @PathVariable Integer taskId){

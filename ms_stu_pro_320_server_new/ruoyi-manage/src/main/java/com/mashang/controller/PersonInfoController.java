@@ -14,6 +14,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
@@ -32,12 +33,14 @@ public class PersonInfoController extends BaseController {
 
     @GetMapping("/info")
     @ApiOperation("查询个人信息")
+    @PreAuthorize("@ss.hasPermi('student:personinfo:info')")
     public R<StudentInfoVo> info(){
         return R.ok(studentService.info(SecurityUtils.getUserId()));
     }
 
     @PutMapping("joinClass/{classPassword}")
     @ApiOperation("输入口令加入班级")
+    @PreAuthorize("@ss.hasPermi('student:personinfo:joinclass')")
     public R<Void> joinClass(@ApiParam("班级口令") @PathVariable @NotNull(message = "班级口令不能为空") String classPassword){
         SysUser student = studentService.getById(SecurityUtils.getUserId());
         Class aClass = classService.lambdaQuery().eq(Class::getClassPassword, classPassword).one();
@@ -53,6 +56,7 @@ public class PersonInfoController extends BaseController {
 
     @GetMapping("/loginInfo")
     @ApiOperation("获取用户登录日志")
+    @PreAuthorize("@ss.hasPermi('student:personinfo:logininfo')")
     private R<LoginInfoVo> loginInfo(){
         return R.ok(studentService.loginInfo());
     }

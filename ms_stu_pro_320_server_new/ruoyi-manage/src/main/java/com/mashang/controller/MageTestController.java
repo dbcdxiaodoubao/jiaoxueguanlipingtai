@@ -20,6 +20,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +38,7 @@ public class MageTestController extends BaseController {
 
     @GetMapping
     @ApiOperation("管理端查询试卷列表")
+    @PreAuthorize("@ss.hasPermi('manage:test:list')")
     public TableDataInfo<List<ManageTestListVo>> list(@Validated PageQuery pageQuery
             , TestListQuery testListQuery){
         Page<Object> page = PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize());
@@ -49,12 +51,14 @@ public class MageTestController extends BaseController {
 
     @GetMapping("/dtl/{testId}")
     @ApiOperation("查询试卷详情")
+    @PreAuthorize("@ss.hasPermi('manage:test:dtl')")
     public R<TestDtlVo> dtl(@PathVariable @Validated Integer testId){
         return R.ok(testService.dtl(testId));
     }
 
     @PostMapping
     @ApiOperation("新增试卷")
+    @PreAuthorize("@ss.hasPermi('manage:test:insert')")
     public R insert(@RequestBody @Validated TestCreat testCreat){
         if(testCreat.getTestType()<0||testCreat.getTestType()>5){
             return R.fail("试卷类型非法，应为0-5");
@@ -69,6 +73,7 @@ public class MageTestController extends BaseController {
 
     @PutMapping
     @ApiOperation("修改试卷")
+    @PreAuthorize("@ss.hasPermi('manage:test:update')")
     public R update(TestUpdate testUpdate){
         testService.updateById(TestMapping.INSTANCE.toUpdate(testUpdate));
         testService.breakTestQuestion(testUpdate.getTestId());
@@ -80,6 +85,7 @@ public class MageTestController extends BaseController {
 
     @DeleteMapping
     @ApiOperation("删除试卷")
+    @PreAuthorize("@ss.hasPermi('manage:test:delete')")
     public R delete(Integer testId){
         if (testService.haveTestAnswer(testId) != 0){
             return R.fail("该试卷下存在答案请删除答案再删除试卷");

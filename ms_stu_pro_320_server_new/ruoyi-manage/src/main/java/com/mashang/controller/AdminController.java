@@ -13,6 +13,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +29,7 @@ public class AdminController extends BaseController {
 
     @GetMapping("/list")
     @ApiOperation("查询管理员信息列表")
+    @PreAuthorize("@ss.hasPermi('manage:admin:list')")
     public TableDataInfo<List<AdminListVo>> list(@Validated PageQuery pageQuery, String nickName) {
         Page<Object> page = PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize());
 
@@ -38,6 +40,7 @@ public class AdminController extends BaseController {
 
     @GetMapping("/dtl/{userId}")
     @ApiOperation("查询管理员详情")
+    @PreAuthorize("@ss.hasPermi('manage:admin:dtl')")
     public R<AdminDtlVo> selectById(@PathVariable @Validated Long userId) {
         return R.ok(adminService.selectById(userId));
     }

@@ -47,6 +47,7 @@ public class SubjectsController extends BaseController {
 
     @GetMapping("/list")
     @ApiOperation("查询学科信息列表")
+    @PreAuthorize("@ss.hasPermi('manage:subject:list')")
     public TableDataInfo<List<SubjectsListVo>> list(@Validated PageQuery pageQuery, Long grade){
         Page<Object> page = PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize());
 
@@ -57,6 +58,7 @@ public class SubjectsController extends BaseController {
 
     @GetMapping("/dtl/{subjectsId}")
     @ApiOperation("查询学科详情")
+    @PreAuthorize("@ss.hasPermi('manage:subject:dtl')")
     public R<SubjectsDtlVo> selectById(@PathVariable @Validated Long subjectsId){
         return R.ok(SubjectsMapping.INSTANCE.toDtlVo(subjectsService.getById(subjectsId)));
     }
@@ -71,6 +73,7 @@ public class SubjectsController extends BaseController {
 
     @PostMapping
     @ApiOperation("新增学科信息")
+    @PreAuthorize("@ss.hasPermi('manage:subject:insert')")
     public R insert(@RequestBody @Validated SubjectsCreat subjectsCreat){
 
         if(subjectsService.selectBySubjectNameGrade(subjectsCreat.getSubjectName()
@@ -85,6 +88,7 @@ public class SubjectsController extends BaseController {
 
     @PutMapping
     @ApiOperation("修改学科信息")
+    @PreAuthorize("@ss.hasPermi('manage:subject:update')")
     public R update(@Validated @RequestBody SubjectsUpdate subjectsUpdate){
 
         if(subjectsService.selectBySubjectNameGrade(subjectsUpdate.getSubjectName()
@@ -98,6 +102,7 @@ public class SubjectsController extends BaseController {
 
     @DeleteMapping("/{subjectId}")
     @ApiOperation("删除学科信息")
+    @PreAuthorize("@ss.hasPermi('manage:subject:delete')")
     public R delete(@PathVariable @Validated Integer subjectId){
         if (knowledgeService.haveKnowledege(subjectId)!=0){
             return R.fail("该学科下存在知识点，请先删除知识点再删除学科");

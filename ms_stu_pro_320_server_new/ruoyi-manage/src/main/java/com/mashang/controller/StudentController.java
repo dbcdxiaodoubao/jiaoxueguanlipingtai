@@ -24,6 +24,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,6 +47,7 @@ public class StudentController extends BaseController {
 
     @GetMapping("/list")
     @ApiOperation("查询学生信息列表")
+    @PreAuthorize("@ss.hasPermi('manage:student:list')")
     public TableDataInfo<List<StudentListVo>> list(@Validated PageQuery pageQuery, String nickName){
         Page<Object> page = PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize());
 
@@ -56,45 +58,50 @@ public class StudentController extends BaseController {
 
     @GetMapping("/dtl/{userId}")
     @ApiOperation("根据id查询学生详情")
+    @PreAuthorize("@ss.hasPermi('manage:student:dtl')")
     public R<StudentDtlVo> selectById(@PathVariable @Validated Long userId){
         return R.ok(studentService.selectByid(userId));
     }
 
-    @GetMapping("/logininfo")
-    @ApiOperation("查询学生登录日志列表")
-    public R<PageInfo<StuLoginInfoVo>> stuLoginInfoList(@Validated PageQuery pageQuery, String userName){
-        PageHelper.startPage(pageQuery.getPageNum(),pageQuery.getPageSize());
-
-        List<StuLoginInfoVo> list = stuLogininfoService.list(userName);
-
-        return R.ok(new PageInfo<StuLoginInfoVo>(list));
-    }
-
-    @GetMapping("/info")
-    @ApiOperation("查询个人信息")
-    public R<StudentInfoVo> info(){
-        return R.ok(studentService.info(SecurityUtils.getUserId()));
-    }
-
-    @PutMapping("joinClass/{classPassword}")
-    @ApiOperation("输入口令加入班级")
-    public R<Void> joinClass(@ApiParam("班级口令") @PathVariable @NotNull(message = "班级口令不能为空") String classPassword){
-        SysUser student = studentService.getById(SecurityUtils.getUserId());
-        Class aClass = classService.lambdaQuery().eq(Class::getClassPassword, classPassword).one();
-        if (aClass == null){
-            return R.fail("口令不存在");
-        }
-        if (!aClass.getGrade().equals(student.getGrade().intValue())){
-            return R.fail("学生年级与加入班级年级不一致");
-        }
-        studentService.joinClass(aClass.getClassId());
-        return R.ok();
-    }
-
-    @GetMapping("/loginInfo")
-    @ApiOperation("获取用户登录日志")
-    private R<LoginInfoVo> loginInfo(){
-        return R.ok(studentService.loginInfo());
-    }
+//    @GetMapping("/logininfo")
+//    @ApiOperation("查询学生登录日志列表")
+//    @PreAuthorize("@ss.hasPermi('manage:student:logininfo')")
+//    public TableDataInfo<List<StuLoginInfoVo>> stuLoginInfoList(@Validated PageQuery pageQuery, String userName){
+//        Page<Object> page = PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize());
+//
+//        List<StuLoginInfoVo> list = stuLogininfoService.list(userName);
+//
+//        return getDataTable(page.getResult(),page.getTotal());
+//    }
+//
+//    @GetMapping("/info")
+//    @ApiOperation("查询个人信息")
+//    @PreAuthorize("@ss.hasPermi('student:user:info')")
+//    public R<StudentInfoVo> info(){
+//        return R.ok(studentService.info(SecurityUtils.getUserId()));
+//    }
+//
+//    @PutMapping("joinClass/{classPassword}")
+//    @ApiOperation("输入口令加入班级")
+//    @PreAuthorize("@ss.hasPermi('student:user:joinclass')")
+//    public R<Void> joinClass(@ApiParam("班级口令") @PathVariable @NotNull(message = "班级口令不能为空") String classPassword){
+//        SysUser student = studentService.getById(SecurityUtils.getUserId());
+//        Class aClass = classService.lambdaQuery().eq(Class::getClassPassword, classPassword).one();
+//        if (aClass == null){
+//            return R.fail("口令不存在");
+//        }
+//        if (!aClass.getGrade().equals(student.getGrade().intValue())){
+//            return R.fail("学生年级与加入班级年级不一致");
+//        }
+//        studentService.joinClass(aClass.getClassId());
+//        return R.ok();
+//    }
+//
+//    @GetMapping("/loginInfo")
+//    @ApiOperation("获取用户登录日志")
+//    @PreAuthorize("@ss.hasPermi('student:user:loginInfo')")
+//    private R<LoginInfoVo> loginInfo(){
+//        return R.ok(studentService.loginInfo());
+//    }
 
 }
