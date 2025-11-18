@@ -11,6 +11,7 @@ import com.mashang.domain.vo.management.KnowledgeDtlVo;
 import com.mashang.domain.vo.management.KnowledgeListVo;
 import com.mashang.domain.vo.management.KnowledgeTreeVo;
 import com.mashang.service.IKnowledgeService;
+import com.mashang.service.ISubjectsService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.page.TableDataInfo;
@@ -61,18 +62,21 @@ public class knowledgeController extends BaseController {
     @PreAuthorize("@ss.hasPermi('manage:knowledge:insert')")
     public R insert(@RequestBody @Validated KnowledgeCreat knowledgeCreat){
 
-        if(knowledgeService.selectOneByKnowledgeName(knowledgeCreat.getKnowledgeName(),
-                knowledgeCreat.getParentId())!=0){
-            return R.fail("该父节点下已经存在该知识点");
-        }
+        //子节点校验
+        if(knowledgeCreat.getParentId()!=0) {
+            if (knowledgeService.selectOneByKnowledgeName(knowledgeCreat.getKnowledgeName(),
+                    knowledgeCreat.getParentId()) != 0) {
+                return R.fail("该父节点下已经存在该知识点");
+            }
 
-        if(knowledgeService.selectGradeByKnowledgeId(knowledgeCreat.getParentId())!=knowledgeCreat.getGrade()){
-            return R.fail("子节点的年级应和父节点的年级相同");
-        }
+            if (knowledgeService.selectGradeByKnowledgeId(knowledgeCreat.getParentId()) != knowledgeCreat.getGrade()) {
+                return R.fail("子节点的年级应和父节点的年级相同");
+            }
 
-        if(knowledgeService.selectSubjectIdByKnowledgeId(knowledgeCreat.getParentId())
-                !=knowledgeCreat.getSubjectId()){
-            return R.fail("子节点的学科id应和父节点的学科id相同");
+            if (knowledgeService.selectSubjectIdByKnowledgeId(knowledgeCreat.getParentId())
+                    != knowledgeCreat.getSubjectId()) {
+                return R.fail("子节点的学科id应和父节点的学科id相同");
+            }
         }
 
         if(knowledgeService.save(KnowledgeMapping.INSTANCE.toCreat(knowledgeCreat))){
@@ -86,18 +90,21 @@ public class knowledgeController extends BaseController {
     @PreAuthorize("@ss.hasPermi('manage:knowledge:update')")
     public R update(@RequestBody @Validated KnowledgeUpdate knowledgeUpdate){
 
-        if(knowledgeService.selectOneByKnowledgeName(knowledgeUpdate.getKnowledgeName(),
-                knowledgeUpdate.getParentId())!=0){
-            return R.fail("该父节点下已经存在该知识点");
-        }
+        //子节点校验
+        if(knowledgeUpdate.getParentId()!=0) {
+            if (knowledgeService.selectOneByKnowledgeName(knowledgeUpdate.getKnowledgeName(),
+                    knowledgeUpdate.getParentId()) != 0) {
+                return R.fail("该父节点下已经存在该知识点");
+            }
 
-        if(knowledgeService.selectGradeByKnowledgeId(knowledgeUpdate.getParentId())!=knowledgeUpdate.getGrade()){
-            return R.fail("子节点的年级应和父节点的年级相同");
-        }
+            if (knowledgeService.selectGradeByKnowledgeId(knowledgeUpdate.getParentId()) != knowledgeUpdate.getGrade()) {
+                return R.fail("子节点的年级应和父节点的年级相同");
+            }
 
-        if(knowledgeService.selectSubjectIdByKnowledgeId(knowledgeUpdate.getParentId())
-                !=knowledgeUpdate.getSubjectId()){
-            return R.fail("子节点的学科id应和父节点的学科id相同");
+            if (knowledgeService.selectSubjectIdByKnowledgeId(knowledgeUpdate.getParentId())
+                    != knowledgeUpdate.getSubjectId()) {
+                return R.fail("子节点的学科id应和父节点的学科id相同");
+            }
         }
 
         if(knowledgeService.updateById(KnowledgeMapping.INSTANCE.toUpdate(knowledgeUpdate))){

@@ -63,12 +63,25 @@ public class SubjectsController extends BaseController {
         return R.ok(SubjectsMapping.INSTANCE.toDtlVo(subjectsService.getById(subjectsId)));
     }
 
-    @GetMapping("/student/list")
-    @ApiOperation("根据学生的年级查询学科列表")
-    @PreAuthorize("@ss.hasPermi('student:subject:list')")
-    public R<List<SubjectsListByGradeVo>> listByGrade(){
-        List<SubjectsListByGradeVo> subjectsListByGradeVos = subjectsService.listByGrade();
-        return R.ok(subjectsListByGradeVos);
+//    @GetMapping("/student/list")
+//    @ApiOperation("根据学生的年级查询学科列表")
+//    @PreAuthorize("@ss.hasPermi('student:subject:list')")
+//    public R<List<SubjectsListByGradeVo>> listByGrade(){
+//        List<SubjectsListByGradeVo> subjectsListByGradeVos = subjectsService.listByGrade();
+//        return R.ok(subjectsListByGradeVos);
+//    }
+
+    @GetMapping("/list/{grade}")
+    @ApiOperation("根据年级查询学科列表")
+    @PreAuthorize("@ss.hasPermi('manage:subject:list')")
+    public R<List<SubjectsListVo>> listByGrade(@Validated @PathVariable Long grade){
+        if(grade==null || grade <=0){
+            return R.fail("请输入有效年级");
+        }
+
+        List<SubjectsListVo> list = subjectsService.list(grade);
+
+        return R.ok(list);
     }
 
     @PostMapping

@@ -63,16 +63,16 @@ public class StudentController extends BaseController {
         return R.ok(studentService.selectByid(userId));
     }
 
-//    @GetMapping("/logininfo")
-//    @ApiOperation("查询学生登录日志列表")
-//    @PreAuthorize("@ss.hasPermi('manage:student:logininfo')")
-//    public TableDataInfo<List<StuLoginInfoVo>> stuLoginInfoList(@Validated PageQuery pageQuery, String userName){
-//        Page<Object> page = PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize());
-//
-//        List<StuLoginInfoVo> list = stuLogininfoService.list(userName);
-//
-//        return getDataTable(page.getResult(),page.getTotal());
-//    }
+    @GetMapping("/logininfo")
+    @ApiOperation("查询学生登录日志列表")
+    @PreAuthorize("@ss.hasPermi('manage:student:logininfo')")
+    public TableDataInfo<List<StuLoginInfoVo>> stuLoginInfoList(@Validated PageQuery pageQuery, String userName){
+        Page<Object> page = PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize());
+
+        List<StuLoginInfoVo> list = stuLogininfoService.list(userName);
+
+        return getDataTable(page.getResult(),page.getTotal());
+    }
 //
 //    @GetMapping("/info")
 //    @ApiOperation("查询个人信息")

@@ -6,6 +6,7 @@ import com.mashang.domain.query.management.SubjectsUpdate;
 import com.mashang.domain.vo.management.SubjectsDtlVo;
 import com.mashang.domain.vo.student.SubjectsListByGradeVo;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
@@ -16,6 +17,7 @@ public interface SubjectsMapping {
 
     SubjectsMapping INSTANCE = Mappers.getMapper(SubjectsMapping.class);
 
+    @Mapping(source = "subjectId", target = "subjectId")
     SubjectsDtlVo toDtlVo(Subjects subjects);
 
     Subjects toCreate(SubjectsCreat subjectsCreat);

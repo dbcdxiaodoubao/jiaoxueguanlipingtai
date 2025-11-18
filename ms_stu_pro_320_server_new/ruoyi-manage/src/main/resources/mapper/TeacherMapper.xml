@@ -18,10 +18,12 @@
         <if test="nickName != null and nickName != ''">
             AND t1.nick_name LIKE CONCAT('%', #{nickName}, '%')
         </if>
+        ORDER BY t1.create_time DESC
     </select>
 
     <select id="selectByid" resultType="teacherDtlVo">
         SELECT
+            t1.user_id,
             t1.user_name,
             t1.password,
             t1.nick_name,

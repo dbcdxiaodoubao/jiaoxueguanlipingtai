@@ -18,6 +18,7 @@
         <if test="nickName != null and nickName != ''">
             AND t1.nick_name LIKE CONCAT('%', #{nickName}, '%')
         </if>
+        ORDER BY t1.create_time DESC
     </select>
 
     <select id="selectById" resultType="adminDtlVo">

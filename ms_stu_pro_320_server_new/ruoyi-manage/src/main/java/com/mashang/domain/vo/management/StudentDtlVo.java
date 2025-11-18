@@ -13,6 +13,11 @@ import java.util.Date;
 @ApiModel("学生详情")
 public class StudentDtlVo {
 
+    /** 用户ID */
+    @ApiModelProperty(value = "用户id")
+    @Excel(name = "用户序号", type = Excel.Type.EXPORT, cellType = Excel.ColumnType.NUMERIC, prompt = "用户编号")
+    private Long userId;
+
     /** 用户账号 */
     @ApiModelProperty(value = "用户名称",required = true)
     @Excel(name = "用户名称")

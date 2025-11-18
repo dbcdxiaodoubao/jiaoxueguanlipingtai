@@ -9,6 +9,9 @@ import lombok.Data;
 @ApiModel("学科详情")
 public class SubjectsDtlVo {
 
+  @ApiModelProperty("学科id")
+  private Integer subjectId;
+
   @ApiModelProperty("学科名称")
   private String subjectName;
 

@@ -55,6 +55,7 @@
 
     <select id="selectDtl" resultType="KnowledgeDtlVo">
         SELECT
+            t1.knowledge_id,
             t1.knowledge_name,
             t1.grade,
             t1.subject_id,

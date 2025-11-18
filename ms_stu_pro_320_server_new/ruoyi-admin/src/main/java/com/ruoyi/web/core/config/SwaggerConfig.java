@@ -106,6 +106,7 @@ public class SwaggerConfig
                             declaringClass == VideoManageController.class ||
                             declaringClass == TestAnswerController.class ||
                             declaringClass == SysLoginController.class ||
+                            declaringClass == TeacherController.class ||
                             declaringClass == SysUserController.class;
 
                     boolean hasApiOperation = input.isAnnotatedWith(ApiOperation.class);
