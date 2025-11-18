@@ -75,12 +75,12 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
     }
 
     @Override
-    public Integer deleteLink(Integer questionId) {
+    public Integer deleteLink(Long questionId) {
         return questionMapper.deleteLink(questionId);
     }
 
     @Override
-    public Integer haveOnTest(Integer questionId) {
+    public Integer haveOnTest(Long questionId) {
         return questionMapper.haveOnTest(questionId);
     }
 

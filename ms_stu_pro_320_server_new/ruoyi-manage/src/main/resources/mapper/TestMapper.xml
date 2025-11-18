@@ -99,7 +99,7 @@
             ms_subjects t2
         ON
             t1.subject_id = t2.subject_id
-        <where>
+        WHERE t1.del_flag = 0
             <if test="testId!=null and testId != 0 ">
                 t1.test_id = #{testId}
             </if>
@@ -109,7 +109,6 @@
             <if test="subjectId!=null and subjectId != 0 ">
                 t2.subject_id = #{subjectId}
             </if>
-        </where>
     </select>
 
     <resultMap id="selectDtl" type="testDtlVo">
@@ -154,7 +153,7 @@
             ON
                 ms_test_question.question_id = ms_question.question_id AND
                 ms_subjects.subject_id = ms_question.subject_id
-        WHERE  ms_test.test_id = #{testId}
+        WHERE  ms_test.test_id = #{testId} t1.del_flag = 0
     </select>
 
     <insert id="linkTestQuestion">

@@ -121,7 +121,7 @@ public class QuestionController extends BaseController {
     @DeleteMapping("/{questionId}")
     @PreAuthorize("@ss.hasPermi('manage:question:delete')")
     @Log(title = "删除题目", businessType = BusinessType.DELETE)
-    public R delete(@PathVariable @Validated Integer questionId){
+    public R delete(@PathVariable @Validated Long questionId){
 
         if (iQuestionService.haveOnTest(questionId)!=0){
             return R.fail("该题目与试卷关联，请先删除相关试卷再删除题目");

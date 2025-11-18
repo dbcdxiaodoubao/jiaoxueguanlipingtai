@@ -14,7 +14,7 @@
         FROM `sys_user` AS t1
         LEFT JOIN sys_user_role AS t3
         ON t1.user_id = t3.user_id
-        WHERE t3.role_id = 4
+        WHERE t3.role_id = 4 AND t1.del_flag = 0
         <if test="nickName != null and nickName != ''">
             AND t1.nick_name LIKE CONCAT('%', #{nickName}, '%')
         </if>
@@ -34,7 +34,7 @@
             t1.grade,
             t1.`status`
         FROM `sys_user` AS t1
-        WHERE  user_id =  #{userId}
+        WHERE  user_id =  #{userId} AND t1.del_flag = 0
     </select>
     <select id="classSizeDistribution" resultType="com.mashang.domain.vo.teacher.ClassSizeDistributionVo">
         select c.class_name, count(u.user_id) classUserCount from sys_user u,ms_class c where u.class_id=c.class_id and u.del_flag='0'

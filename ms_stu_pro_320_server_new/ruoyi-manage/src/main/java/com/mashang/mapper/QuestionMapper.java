@@ -59,14 +59,14 @@ public interface QuestionMapper extends BaseMapper<Question> {
      * @param questionId
      * @return
      */
-    Integer deleteLink(Integer questionId);
+    Integer deleteLink(Long questionId);
 
     /**
      * 根据问题id查询是否与试卷关联
      * @param questionId
      * @return
      */
-    Integer haveOnTest(Integer questionId);
+    Integer haveOnTest(Long questionId);
 
     /**
      * 查询题目月数量

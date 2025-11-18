@@ -85,7 +85,7 @@ public class MageTestController extends BaseController {
 
     @DeleteMapping
     @ApiOperation("删除试卷")
-    @PreAuthorize("@ss.hasPermi('manage:test:delete')")
+    @PreAuthorize("@ss.hasPermi('manage:test:list')")
     public R delete(Integer testId){
         if (testService.haveTestAnswer(testId) != 0){
             return R.fail("该试卷下存在答案请删除答案再删除试卷");
