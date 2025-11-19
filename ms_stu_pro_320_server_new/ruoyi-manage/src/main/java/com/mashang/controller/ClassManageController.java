@@ -46,7 +46,8 @@ public class ClassManageController {
         Page<Class> page =new Page<>(query.getPageNum(),query.getPageSize());
         classService.page(page,new LambdaQueryWrapper<Class>()
                         .eq(Class::getTeacherId,SecurityUtils.getUserId())
-                .like(StringUtils.isNotEmpty(query.getClassName()),Class::getClassName,query.getClassName()));
+                .like(StringUtils.isNotEmpty(query.getClassName()),Class::getClassName,query.getClassName())
+                .orderByDesc(Class::getCreateTime));
         return new TableDataInfo(classMapping.toClassListVo(page.getRecords()),page.getTotal());
     }
 
@@ -94,6 +95,7 @@ public class ClassManageController {
         if(ObjectUtil.isNotNull(aClass))return R.fail("班级名称已存在");
         return R.result(classService.save(new Class().setClassName(className)
                 .setTeacherId(SecurityUtils.getUserId())
-                .setClassPassword(UUID.randomUUID().toString())));
+                .setClassPassword(UUID.randomUUID().toString())
+                .setGrade(SecurityUtils.getLoginUser().getUser().getGrade().intValue())));
     }
 }

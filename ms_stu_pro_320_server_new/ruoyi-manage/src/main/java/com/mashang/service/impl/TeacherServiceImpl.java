@@ -127,8 +127,18 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, SysUser>
         for (Integer classId : classIds) {
             //根据班级id查询学生id集合
             List<Integer> userIds = studentMapper.selectUserIds(classId);
+            //判断班级学生是否为空
+            if (ObjectUtil.isEmpty(userIds)) {
+                result.add(new TestAverageVo(classMapper.selectById(classId).getClassName(), 0.00));
+                continue;
+            }
             //根据学生id集合查询答卷id集合
             List<Integer> testAnswerIds =testAnswerMapper.selectIdsByUserIds(userIds);
+            //判断学生答卷是否为空
+            if (ObjectUtil.isEmpty(testAnswerIds)) {
+                result.add(new TestAverageVo(classMapper.selectById(classId).getClassName(), 0.00));
+                continue;
+            }
             //根据答卷id集合查询答题总分
             Integer scoreSum =testAnswerMapper.getSumScore(testAnswerIds);
             result.add(new TestAverageVo(classMapper.selectById(classId).getClassName(),
@@ -148,7 +158,6 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, SysUser>
         List<StudentAverageVo> result = new ArrayList<>();
         //根据班级id查询学生id集合
         List<Integer> userIds = studentMapper.selectUserIds(classId);
-        int index=0;
         for (Integer userId : userIds) {
           //根据学生id查询答卷集合
           List<Integer> testAnswerIds = testAnswerMapper.selectIdsByUserId(userId);
@@ -158,7 +167,6 @@ public class TeacherServiceImpl extends ServiceImpl<TeacherMapper, SysUser>
           }
           //根据答卷id集合查询答题总分
             Integer scoreSum = testAnswerMapper.getSumScore(testAnswerIds);
-            System.out.println(index++);
             result.add(new StudentAverageVo(studentMapper.selectNickNameById(userId),
                     ((int)(scoreSum*100.0/testAnswerIds.size()))/100.0));
         }
