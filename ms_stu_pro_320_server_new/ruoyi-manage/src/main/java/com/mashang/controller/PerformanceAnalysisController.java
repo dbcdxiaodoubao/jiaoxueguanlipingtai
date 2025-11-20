@@ -1,5 +1,6 @@
 package com.mashang.controller;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.mashang.domain.entity.Class;
 import com.mashang.domain.vo.teacher.StudentAverageVo;
 import com.mashang.domain.vo.teacher.TestAverageVo;
@@ -43,7 +44,9 @@ public class PerformanceAnalysisController {
     @PreAuthorize("@ss.hasPermi('teacher:analysis:list')")
     public R<List<StudentAverageVo>> studentAverage(@PathVariable @NotNull(message = "班级id不能为空")
                                                     @ApiParam("班级id") Integer classId){
-        Long teacherId = classService.lambdaQuery().eq(Class::getClassId, classId).one().getTeacherId();
+        Class aClass = classService.lambdaQuery().eq(Class::getClassId, classId).one();
+        if(ObjectUtil.isNull(aClass))return R.fail("查找班级不存在");
+        Long teacherId = aClass.getTeacherId();
         if (!teacherId.equals(SecurityUtils.getUserId())){
             return R.fail("查询班级不属于当前教师");
         }

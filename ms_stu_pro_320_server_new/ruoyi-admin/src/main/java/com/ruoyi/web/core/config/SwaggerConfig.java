@@ -68,7 +68,7 @@ public class SwaggerConfig
                 .apis(input->{
                     Class<?> declaringClass = input.declaringClass();
                     return declaringClass== ClassManageController.class||declaringClass== PerformanceAnalysisController.class
-                            ||declaringClass== TeacherHomeController.class
+                            ||declaringClass== TeacherHomeController.class||declaringClass==TestAnswerController.class
                             ||declaringClass==TestManageController.class
                             ||declaringClass== UserManageController.class
                             ||declaringClass== QuestionController.class|| declaringClass==SysLoginController.class;

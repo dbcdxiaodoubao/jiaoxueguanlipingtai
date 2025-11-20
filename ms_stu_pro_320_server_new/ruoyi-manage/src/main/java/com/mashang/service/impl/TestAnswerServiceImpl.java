@@ -74,6 +74,8 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
     private SysUserMapper sysUserMapper;
     @Autowired
     private SubjectUtils subjectUtils;
+    @Autowired
+    private ClassMapper classMapper;
 
     /**
      * 查询学生未做完的答卷列表
@@ -334,13 +336,20 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
      */
     @Override
     public TableDataInfo testAnswerlist(TestAnswerPageQuery pageQuery, Integer status) {
-        List<Long> userIds = null;
+        List<Long> userIds;
         if (StringUtils.isNotNull(pageQuery.getClassId())) {
             //查出班级学生id集合
             LambdaQueryWrapper<SysUser> UserQueryWrapper = new LambdaQueryWrapper<SysUser>()
                     .eq(StringUtils.isNotNull(pageQuery.getClassId()), SysUser::getClassId, pageQuery.getClassId())
                     .select(SysUser::getUserId);
             userIds = sysUserMapper.selectObjs(UserQueryWrapper).stream()
+                    .map(obj -> (Long) obj)
+                    .collect(Collectors.toList());
+        }else {
+            List<Integer> classIds = classMapper.selectClassIds(SecurityUtils.getUserId());
+            userIds = sysUserMapper.selectObjs(new LambdaQueryWrapper<SysUser>()
+                            .select(SysUser::getUserId)
+                            .in(SysUser::getClassId,classIds)).stream()
                     .map(obj -> (Long) obj)
                     .collect(Collectors.toList());
         }
@@ -401,7 +410,7 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
             if (questionAnswer.getUserQuestionScore() < 0 || questionAnswer.getUserQuestionScore() > one.getQuestionScore()) {
                 throw new RuntimeException(MessageConstant.SCORE_NOT_RIGHT + "题干：" + one.getQuestionTitle() + "，分数：" + questionAnswer.getUserQuestionScore());
             }
-            //更新答题分数
+            //更新答题分数和答题状态
             LambdaUpdateWrapper<QuestionAnswer> uqw = new LambdaUpdateWrapper<QuestionAnswer>()
                     .eq(QuestionAnswer::getQuestionAnswerId, questionAnswer.getQuestionAnswerId())
                     .set(QuestionAnswer::getStatus, questionAnswer.getStatus())
