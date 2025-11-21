@@ -172,27 +172,46 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
         if (testAnswer.getStatus().equals(StatusConstant.EXAM_PAPER_STATUS_COMPLETED)) {
             throw new ServiceException(MessageConstant.ANSWER_SHEET_ALREADY_SUBMIT);
         }
+        if (!testAnswer.getUserId().equals(SecurityUtils.getUserId())) {
+            throw new ServiceException(MessageConstant.TEST_USER_ERROR);
+        }
+        Integer testId = testAnswer.getTestId();
+        if (testId != null) {
+            Test test = testMapper.selectById(testId);
+            if (test == null) {
+                throw new ServiceException(MessageConstant.TEST_NOT_FOUND);
+            }
+            if (test.getSuggestDuration() != null && test.getSuggestDuration() < testSubmit.getDuration()) {
+                throw new ServiceException(MessageConstant.ANSWER_SHEET_TIMEOUT);
+            }
+        }
         //先改题目
         List<QuestionSubmit> questionSubmits = testSubmit.getQuestionSubmits();
         Integer userScore = 0;
         boolean flag = false;
         for (QuestionSubmit questionSubmit : questionSubmits) {
-            if (!QuestionUtils.isObjective(questionSubmit.getQuestionType())) {
+            Integer questionType = questionSubmit.getQuestionType();
+            if (QuestionUtils.isSubjective(questionType)) {
                 questionSubmit.setStatus(StatusConstant.ANSWER_STATUS_PENDING);
                 flag = true;
-                continue;
-            }
-            String userAnswer = questionSubmit.getUserAnswer();
-            QuestionAnswer questionAnswer = questionAnswerMapper.selectById(questionSubmit.getQuestionAnswerId());
-            //获取正确答案 可待优化
-            String rightAnswer = questionAnswer.getRightAnswer();
-            if (checkRightOrError(userAnswer, rightAnswer)) {
-                questionSubmit.setStatus(StatusConstant.ANSWER_STATUS_CORRECT);
-                questionSubmit.setUserQuestionScore(questionAnswer.getQuestionScore());
-                userScore += questionAnswer.getQuestionScore();
-            } else {
-                questionSubmit.setStatus(StatusConstant.ANSWER_STATUS_WRONG);
-                questionSubmit.setUserQuestionScore(0);
+            } else if (QuestionUtils.isObjective(questionType)) {
+                String userAnswer = questionSubmit.getUserAnswer();
+                QuestionAnswer questionAnswer = questionAnswerMapper.selectById(questionSubmit.getQuestionAnswerId());
+                if (questionAnswer == null ||!questionAnswer.getTestAnswerId().equals(testSubmit.getTestAnswerId())) {
+                    throw new ServiceException(MessageConstant.TEST_QUESTION_ERROR);
+                }
+                //获取正确答案 可待优化
+                String rightAnswer = questionAnswer.getRightAnswer();
+                if (checkRightOrError(userAnswer, rightAnswer)) {
+                    questionSubmit.setStatus(StatusConstant.ANSWER_STATUS_CORRECT);
+                    questionSubmit.setUserQuestionScore(questionAnswer.getQuestionScore());
+                    userScore += questionAnswer.getQuestionScore();
+                } else {
+                    questionSubmit.setStatus(StatusConstant.ANSWER_STATUS_WRONG);
+                    questionSubmit.setUserQuestionScore(0);
+                }
+            }else {
+                throw new ServiceException(MessageConstant.QUESTION_TYPE_ERROR);
             }
         }
 
@@ -245,6 +264,9 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
         if (randomTest == null) {
             throw new ServiceException(MessageConstant.SHEET_NOT_EXIST);
         }
+        if (!randomTest.getUserId().equals(userId)) {
+            throw new ServiceException(MessageConstant.TEST_USER_ERROR);
+        }
         TestAnswer testAnswer = TestAnswerMapping.INSTANCE.toTestAnswer(randomTest);
         testAnswer.setStatus(StatusConstant.EXAM_PAPER_STATUS_INCOMPLETE);
         int result = baseMapper.insert(testAnswer);
@@ -273,6 +295,9 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
     @Override
     public TestAnswerInfo getRandomInfo(Long randomTestId) {
         TestAnswer testAnswer = getTestAnswerByRandomTestId(randomTestId);
+        if (!testAnswer.getUserId().equals(SecurityUtils.getUserId())) {
+            throw new ServiceException(MessageConstant.TEST_USER_ERROR);
+        }
         return getStudentTestInfo(testAnswer.getTestAnswerId());
     }
 
@@ -345,11 +370,11 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
             userIds = sysUserMapper.selectObjs(UserQueryWrapper).stream()
                     .map(obj -> (Long) obj)
                     .collect(Collectors.toList());
-        }else {
+        } else {
             List<Integer> classIds = classMapper.selectClassIds(SecurityUtils.getUserId());
             userIds = sysUserMapper.selectObjs(new LambdaQueryWrapper<SysUser>()
                             .select(SysUser::getUserId)
-                            .in(SysUser::getClassId,classIds)).stream()
+                            .in(SysUser::getClassId, classIds)).stream()
                     .map(obj -> (Long) obj)
                     .collect(Collectors.toList());
         }

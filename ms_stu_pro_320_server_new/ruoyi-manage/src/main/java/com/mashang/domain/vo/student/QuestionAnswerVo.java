@@ -26,7 +26,7 @@ public class QuestionAnswerVo {
     @ApiModelProperty(value = "题目选项")
     private List<Option> option;
 
-    @ApiModelProperty(value = "题目类型(1填空题2简答题3单选4多选5判断)")
+    @ApiModelProperty(value = "题目类型(0单选、1多选、2判断、3填空、4简答题)")
     private Integer questionType;
 
     @ApiModelProperty(value = "题目题干")

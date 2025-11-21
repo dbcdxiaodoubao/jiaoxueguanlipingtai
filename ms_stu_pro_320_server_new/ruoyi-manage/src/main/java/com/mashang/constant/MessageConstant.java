@@ -84,5 +84,15 @@ public class MessageConstant {
 
     public static final String TEST_TIME_ERROR="试卷时段状态有误";
 
+    public static final String TEST_USER_ERROR="该试卷关联用户不是您，创建失败";
+
+    public static final String QUESTION_TYPE_ERROR="题目类型错误";
+
+    public static final String TEST_NOT_FOUND="该答卷对应的试卷不存在或已经被删除";
+
+    public static final String TEST_QUESTION_ERROR="其中一个题目与答卷对应不上";
+
+    public static final String TEST_TYPE_ERROR="只能选择 0、固定试卷 1、时段试卷 2、班级试卷";
+
 
 }

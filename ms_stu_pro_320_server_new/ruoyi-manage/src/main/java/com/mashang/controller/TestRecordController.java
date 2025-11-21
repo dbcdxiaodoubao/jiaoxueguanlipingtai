@@ -11,6 +11,7 @@ import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.utils.SecurityUtils;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,12 +20,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 
 @RestController
 @RequestMapping("/record")
 @Api(tags = "考试记录")
+@Validated
 public class TestRecordController extends BaseController {
     @Autowired
     private ITestAnswerService testAnswerService;
@@ -32,7 +35,8 @@ public class TestRecordController extends BaseController {
     @GetMapping("/page")
     @ApiOperation("根据提交时间倒叙分页查询该学生所有做过的试卷基本信息")
     @PreAuthorize("@ss.hasPermi('student:test:list')")
-    public TableDataInfo<List<TestRecordListVo>> pageTestRecord(@Validated PageQuery pageQuery, Long subjectId){
+    @ApiImplicitParam(name = "subjectId",value = "学科id",required = true)
+    public TableDataInfo<List<TestRecordListVo>> pageTestRecord(@Validated PageQuery pageQuery,@NotNull(message = "学科id不能为空") Long subjectId){
         TestRecordQuery testRecordQuery = new TestRecordQuery();
         Long userId = SecurityUtils.getUserId();
         testRecordQuery.setUserId(userId);

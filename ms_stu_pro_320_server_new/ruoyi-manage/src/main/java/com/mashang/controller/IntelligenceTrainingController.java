@@ -14,6 +14,7 @@ import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.utils.SecurityUtils;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -50,6 +51,7 @@ public class IntelligenceTrainingController extends BaseController {
     @PostMapping("/create/{randomTestId}")
     @ApiOperation("创建随机答卷")
     @PreAuthorize("@ss.hasPermi('student:random:create')")
+    @ApiImplicitParam(name = "randomTestId",value = "随机试卷id",required = true)
     public AjaxResult createRandomTest(@PathVariable Long randomTestId){
         return toAjax(testAnswerService.createRandomTest(randomTestId));
     }
@@ -57,6 +59,7 @@ public class IntelligenceTrainingController extends BaseController {
     @GetMapping("/info/{randomTestId}")
     @ApiOperation("开始答题（查看随机答卷详情）")
     @PreAuthorize("@ss.hasPermi('student:random:info')")
+    @ApiImplicitParam(name = "randomTestId",value = "随机试卷id",required = true)
     public R<TestAnswerInfo> getRandomInfo(@PathVariable Long randomTestId){
         TestAnswerInfo randomInfo = testAnswerService.getRandomInfo(randomTestId);
         return R.ok(randomInfo);
