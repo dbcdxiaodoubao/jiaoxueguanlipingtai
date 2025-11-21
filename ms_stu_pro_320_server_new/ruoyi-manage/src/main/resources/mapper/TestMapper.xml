@@ -60,7 +60,7 @@
             ms_test AS t2
             ON
                 t1.test_id = t2.test_id AND
-                t2.test_type = 4
+                t2.test_type = 3
                 LEFT JOIN
             ms_subjects AS t3
             ON

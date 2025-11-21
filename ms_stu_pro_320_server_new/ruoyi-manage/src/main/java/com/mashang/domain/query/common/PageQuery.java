@@ -11,11 +11,11 @@ import javax.validation.constraints.NotNull;
 @Data
 public class PageQuery {
 
-    @ApiModelProperty("分页大小")
+    @ApiModelProperty(value = "分页大小",required = true)
     @NotNull(message = "分页大小不能为空")
     private Integer pageSize;
 
-    @ApiModelProperty("第几页")
+    @ApiModelProperty(value = "第几页",required = true)
     @NotNull(message = "第几页不能为空")
     private Integer pageNum;
 }

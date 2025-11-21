@@ -71,7 +71,7 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test>
             throw new ServiceException(MessageConstant.SUBJECT_NOT_CORRESPOND_TO_GRADE);
         }
         if (!TestUtils.isNeed(testPageQuery.getTestType())) {
-            throw new ServiceException("只能选择 1、固定试卷 2、时段试卷 5、班级试卷");
+            throw new ServiceException(MessageConstant.TEST_TYPE_ERROR);
         }
         Page<TestListVo> testListVoPage = PageHelper.startPage(pageQuery);
         baseMapper.pageStudentTests(testPageQuery, userId);

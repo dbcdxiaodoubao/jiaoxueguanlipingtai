@@ -16,8 +16,10 @@ import com.mashang.domain.query.student.TestSubmit;
 import com.mashang.domain.query.student.TestSubmitQuery;
 import com.mashang.domain.vo.management.ManageTestListVo;
 import com.mashang.domain.vo.management.TestDtlVo;
+import com.mashang.domain.vo.student.SubjectsListByGradeVo;
 import com.mashang.domain.vo.student.TestAnswerInfo;
 import com.mashang.domain.vo.student.TestListVo;
+import com.mashang.service.ISubjectsService;
 import com.mashang.service.ITestAnswerService;
 import com.mashang.service.ITestService;
 import com.ruoyi.common.core.controller.BaseController;
@@ -26,6 +28,7 @@ import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.utils.SecurityUtils;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +36,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -43,6 +47,8 @@ public class TestCenterController extends BaseController {
     private ITestService testService;
     @Autowired
     private ITestAnswerService testAnswerService;
+    @Autowired
+    private ISubjectsService subjectsService;
 
     @GetMapping("/student/list")
     @ApiOperation("查询属于当前学生的未完成的答卷（固定，时段，班级答卷）")
@@ -56,7 +62,8 @@ public class TestCenterController extends BaseController {
     @GetMapping("/student/info/{testAnswerId}")
     @ApiOperation("查询答卷查询详情信息")
     @PreAuthorize("@ss.hasPermi('student:test:info')")
-    public R<TestAnswerInfo> getStudentTestInfo( @PathVariable Long testAnswerId){
+    @ApiImplicitParam(name = "testAnswerId",value = "答卷id",required = true)
+    public R<TestAnswerInfo> getStudentTestInfo(@PathVariable Long testAnswerId){
         TestAnswerInfo studentTestInfo = testAnswerService.getStudentTestInfo(testAnswerId);
         return R.ok(studentTestInfo);
     }
@@ -64,7 +71,7 @@ public class TestCenterController extends BaseController {
     @PutMapping("/student/submit")
     @ApiOperation("提交试卷")
     @PreAuthorize("@ss.hasPermi('student:test:submit')")
-    public AjaxResult submitTest(@RequestBody TestSubmitQuery testSubmitQuery){
+    public AjaxResult submitTest(@Validated @RequestBody TestSubmitQuery testSubmitQuery){
         TestSubmit testSubmit = TestAnswerMapping.INSTANCE.toTestSubmit(testSubmitQuery);
         return toAjax(testAnswerService.submitTest(testSubmit));
     }
@@ -77,6 +84,14 @@ public class TestCenterController extends BaseController {
         Long userId = SecurityUtils.getUserId();
         Page<TestListVo> testListVos = testService.pageStudentTests(pageQuery, testPageQuery,userId);
         return getDataTable(testListVos);
+    }
+
+    @GetMapping("/student/subjects")
+    @ApiOperation("根据学生的年级查询学科列表")
+    @PreAuthorize("@ss.hasPermi('student:subject:list')")
+    public R<List<SubjectsListByGradeVo>> listByGrade(){
+        List<SubjectsListByGradeVo> subjectsListByGradeVos = subjectsService.listByGrade();
+        return R.ok(subjectsListByGradeVos);
     }
 
 //    @GetMapping

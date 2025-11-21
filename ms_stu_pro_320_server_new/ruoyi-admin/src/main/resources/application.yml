@@ -74,8 +74,8 @@ spring:
     # 数据库索引
     database: 0
     # 密码
-    password:
-    change-me
+    password: change-me
+    # 连接超时时间
     timeout: 10s
     lettuce:
       pool:

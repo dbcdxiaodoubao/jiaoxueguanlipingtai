@@ -3,6 +3,7 @@ package com.mashang.domain.vo.student;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.mashang.domain.model.Option;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -10,12 +11,13 @@ import lombok.Data;
 import java.util.List;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class WrongBookListVo {
 
     @ApiModelProperty(value = "答题id")
     private Integer questionAnswerId;
 
-    @ApiModelProperty(value = "题目类型")
+    @ApiModelProperty(value = "题目类型(0单选、1多选、2判断、3填空、4简答题)")
     private Integer questionType;
 
     @ApiModelProperty("学科名称")
