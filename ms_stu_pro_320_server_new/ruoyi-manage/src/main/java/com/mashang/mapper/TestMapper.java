@@ -85,6 +85,13 @@ public interface TestMapper extends BaseMapper<Test> {
     List<com.mashang.domain.vo.teacher.TestListVo> pageQueryTeacher(@Param("page") Page<Test> page,
                                                                     @Param("query") com.mashang.domain.query.teacher.TestPageQuery query,
                                                                     @Param("grade") Long grade);
+
+    /**
+     * 根据试卷名称查询是否有相同试卷
+     * @param testName
+     * @return
+     */
+    Integer haveTestByName(String testName);
 }
 
 

@@ -20,5 +20,4 @@ public class Option {
     @JsonProperty("text")
     @ApiModelProperty("文本")
     private String text;
-
 }

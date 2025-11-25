@@ -26,7 +26,7 @@ public class TestDtlVo  {
     @ApiModelProperty(value = "学科id")
     private Integer subjectId;
 
-    @ApiModelProperty(value = "试卷类型")
+    @ApiModelProperty(value = "试卷类型（0固定 1时段 2班级 3视频 4随机 5任务）")
     private Integer testType;
 
     @ApiModelProperty(value = "建议考试时长（分钟）")

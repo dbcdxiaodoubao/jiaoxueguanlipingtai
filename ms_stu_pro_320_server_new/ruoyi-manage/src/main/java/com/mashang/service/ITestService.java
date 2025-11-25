@@ -114,4 +114,11 @@ public interface ITestService extends IService<Test> {
      * @param classIds
      */
     void insert(Test test, List<Integer> classIds);
+
+    /**
+     * 根据试卷名称查询是否有相同试卷
+     * @param testName
+     * @return
+     */
+    Integer haveTestByName(String testName);
 }

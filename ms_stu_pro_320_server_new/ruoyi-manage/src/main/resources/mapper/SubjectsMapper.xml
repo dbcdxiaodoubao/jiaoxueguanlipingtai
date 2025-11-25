@@ -24,4 +24,20 @@
             ms_subjects AS t1
         where t1.subject_name = #{subjectName} And t1.grade = #{grade} And t1.del_flag = '0'
     </select>
+
+    <select id="selectGradeById" resultType="Integer">
+        SELECT
+            grade
+        FROM
+            ms_subjects
+        WHERE subject_id = #{subjectId}
+    </select>
+
+    <select id="selectGradeByIName" resultType="Integer">
+        SELECT
+            grade
+        FROM
+            ms_subjects
+        WHERE subject_name = #{subjectName}
+    </select>
 </mapper>

@@ -17,6 +17,7 @@ import com.mashang.service.IQuestionService;
 import com.mashang.service.ISubjectsService;
 import com.mashang.service.ITestService;
 import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.R;
 import com.ruoyi.common.core.page.TableDataInfo;
 import io.swagger.annotations.Api;
@@ -54,6 +55,13 @@ public class SubjectsController extends BaseController {
         List<SubjectsListVo> list = subjectsService.list(grade);
 
         return getDataTable(page.getResult(),page.getTotal());
+    }
+
+    @GetMapping
+    @ApiOperation("查询学科信息列表(不含分页)")
+    @PreAuthorize("@ss.hasPermi('manage:subject:list')")
+    public AjaxResult listNoPage(){
+        return AjaxResult.success(subjectsService.list());
     }
 
     @GetMapping("/dtl/{subjectsId}")

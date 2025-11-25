@@ -22,4 +22,18 @@ public interface IAdminService extends IService<SysUser> {
      * @return
      */
     AdminDtlVo selectById(Long userId);
+
+    /**
+     * 通过用户id封禁用户
+     * @param userId
+     * @return
+     */
+    Integer banById(Long userId);
+
+    /**
+     * 通过用户id解禁用户
+     * @param userId
+     * @return
+     */
+    Integer noBanById(Long userId);
 }

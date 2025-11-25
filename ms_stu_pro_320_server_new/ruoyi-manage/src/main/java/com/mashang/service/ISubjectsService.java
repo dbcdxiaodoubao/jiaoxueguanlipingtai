@@ -35,4 +35,11 @@ public interface ISubjectsService extends IService<Subjects> {
      */
     List<SubjectsListByGradeVo> listByGrade();
 
+    /**
+     * 通过学科id查年级
+     * @param subjectId
+     * @return
+     */
+    Integer selectGradeById(Integer subjectId);
+
 }

@@ -50,10 +50,10 @@ public class knowledgeController extends BaseController {
         return R.ok(knowledgeService.selectBySubjectId(subjectId));
     }
 
-    @GetMapping("/dtl")
+    @GetMapping("/dtl/{knowledgeId}")
     @ApiOperation("查询知识点详情")
     @PreAuthorize("@ss.hasPermi('manage:knowledge:dtl')")
-    public R<KnowledgeDtlVo> dtl(Integer knowledgeId){
+    public R<KnowledgeDtlVo> dtl(@PathVariable @Validated Integer knowledgeId){
         return R.ok(knowledgeService.selectDtl(knowledgeId));
     }
 

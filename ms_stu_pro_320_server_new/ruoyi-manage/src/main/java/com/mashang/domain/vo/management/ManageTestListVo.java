@@ -22,7 +22,7 @@ public class ManageTestListVo {
     private String testName;
 
     @ApiModelProperty("学科")
-    private String subject;
+    private String subjectName;
 
     @ApiModelProperty(value = "年级")
     private Integer grade;

@@ -58,6 +58,9 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test>
     @Autowired
     private SubjectUtils subjectUtils;
 
+    @Autowired
+    private SubjectsMapper subjectsMapper;
+
     /**
      * 查询学生所有的答卷列表
      *
@@ -102,7 +105,8 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test>
 
     @Override
     public List<ManageTestListVo> list(TestListQuery testListQuery) {
-        return testMapper.list(testListQuery);
+        List<ManageTestListVo> list = testMapper.list(testListQuery);
+        return list;
     }
 
     @Override
@@ -182,6 +186,11 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test>
         for (Integer classId : classIds) {
             testClassMapper.insert(new TestClass().setTestId(test.getTestId()).setClassId(classId));
         }
+    }
+
+    @Override
+    public Integer haveTestByName(String testName) {
+        return testMapper.haveTestByName(testName);
     }
 
 

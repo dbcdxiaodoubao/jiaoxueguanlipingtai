@@ -12,6 +12,7 @@ import com.mashang.domain.query.management.TestListQuery;
 import com.mashang.domain.query.management.TestUpdate;
 import com.mashang.domain.vo.management.ManageTestListVo;
 import com.mashang.domain.vo.management.TestDtlVo;
+import com.mashang.service.ISubjectsService;
 import com.mashang.service.ITestAnswerService;
 import com.mashang.service.ITestService;
 import com.ruoyi.common.core.controller.BaseController;
@@ -35,6 +36,9 @@ public class MageTestController extends BaseController {
     private ITestService testService;
     @Autowired
     private ITestAnswerService testAnswerService;
+
+    @Autowired
+    private ISubjectsService subjectsService;
 
     @GetMapping
     @ApiOperation("管理端查询试卷列表")
@@ -60,6 +64,12 @@ public class MageTestController extends BaseController {
     @ApiOperation("新增试卷")
     @PreAuthorize("@ss.hasPermi('manage:test:insert')")
     public R insert(@RequestBody @Validated TestCreat testCreat){
+        if(subjectsService.selectGradeById(testCreat.getSubjectId())!=testCreat.getGrade()){
+            return R.fail("新增试卷的年级应和所选科目的年级一样");
+        }
+        if(testService.haveTestByName(testCreat.getTestName())!=0){
+            return R.fail("该试卷名称已经存在，请重命名");
+        }
         if(testCreat.getTestType()<0||testCreat.getTestType()>5){
             return R.fail("试卷类型非法，应为0-5");
         }
@@ -74,7 +84,7 @@ public class MageTestController extends BaseController {
     @PutMapping
     @ApiOperation("修改试卷")
     @PreAuthorize("@ss.hasPermi('manage:test:update')")
-    public R update(TestUpdate testUpdate){
+    public R update(@RequestBody @Validated TestUpdate testUpdate){
         testService.updateById(TestMapping.INSTANCE.toUpdate(testUpdate));
         testService.breakTestQuestion(testUpdate.getTestId());
         for(QuestionTestCreat questionTestCreat: testUpdate.getQuestion()){
@@ -83,10 +93,10 @@ public class MageTestController extends BaseController {
         return R.ok();
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{testIdq}")
     @ApiOperation("删除试卷")
     @PreAuthorize("@ss.hasPermi('manage:test:list')")
-    public R delete(Integer testId){
+    public R delete(@PathVariable @Validated Integer testId){
         if (testService.haveTestAnswer(testId) != 0){
             return R.fail("该试卷下存在答案请删除答案再删除试卷");
         }

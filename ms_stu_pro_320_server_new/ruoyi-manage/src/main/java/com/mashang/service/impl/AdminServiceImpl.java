@@ -27,4 +27,14 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, SysUser>
     public AdminDtlVo selectById(Long userId) {
         return adminMapper.selectById(userId);
     }
+
+    @Override
+    public Integer banById(Long userId) {
+        return adminMapper.banById(userId);
+    }
+
+    @Override
+    public Integer noBanById(Long userId) {
+        return adminMapper.noBanById(userId);
+    }
 }

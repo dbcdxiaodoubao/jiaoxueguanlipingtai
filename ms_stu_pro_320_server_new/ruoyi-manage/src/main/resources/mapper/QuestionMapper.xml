@@ -71,6 +71,7 @@
             <if test="questionType != null and questionType!=0">
                 AND t1.question_type = #{questionType}
             </if>
+        ORDER BY t1.create_time DESC
     </select>
 
     <resultMap id="selectDtl" type="questionDtlVo" autoMapping="true">

@@ -32,7 +32,7 @@ public class QuestionDtlVo  {
     @ExcelProperty("题目难度（1-10）")
     private Integer questionDifficulty;
 
-    @ApiModelProperty(value = "题目类型")
+    @ApiModelProperty(value = "题目类型（0 单选 1 多选 2 判断 3 填空 4 简答）")
     @ExcelProperty("题目类型")
     private Integer questionType;
 
@@ -47,7 +47,7 @@ public class QuestionDtlVo  {
     @ApiModelProperty(value = "题目选项")
     @TableField(value = "`option`",typeHandler = JacksonTypeHandler.class)
     @ExcelProperty("题目选项")
-    private Option option;
+    private List<Option> option;
 
     @ApiModelProperty(value = "题目解析")
     @ExcelProperty("题目解析")

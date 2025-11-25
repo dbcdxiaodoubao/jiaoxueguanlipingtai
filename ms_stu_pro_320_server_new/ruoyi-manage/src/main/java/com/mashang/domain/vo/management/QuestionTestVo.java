@@ -8,6 +8,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @ApiModel(value="试卷中的题目")
 public class QuestionTestVo {
@@ -23,5 +25,5 @@ public class QuestionTestVo {
 
     @ApiModelProperty(value = "题目选项")
     @TableField(value = "`option`",typeHandler = JacksonTypeHandler.class)
-    private Option option;
+    private List<Option> option;
 }

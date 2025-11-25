@@ -16,15 +16,19 @@ import lombok.Data;
 @ApiModel(value="知识点列表")
 public class KnowledgeListVo {
 
+    @ApiModelProperty(value = "知识点id")
+    private Integer knowledgeId;
+
     @ApiModelProperty(value = "学科id")
     private Integer subjectId;
 
-    @ApiModelProperty("学科名称")
+    @ApiModelProperty(value = "学科名称")
     private String subjectName;
 
     @ApiModelProperty(value = "知识点年级(1-12分别代表一年级到高三)")
     private Integer grade;
 
-    @ApiModelProperty("一级知识点数量")
-    private Integer FirstLevelKnowledge;
+    @ApiModelProperty(value = "一级知识点数量")
+    private Integer firstLevelKnowledge;
+
 }

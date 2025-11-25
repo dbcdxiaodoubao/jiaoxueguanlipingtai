@@ -31,6 +31,20 @@ public interface SubjectsMapper extends BaseMapper<Subjects> {
      */
     Integer selectBySubjectNameGrade(@Param("subjectName")String subjectName
             ,@Param("grade") Integer grade);
+
+    /**
+     * 通过学科id查年级
+     * @param subjectId
+     * @return
+     */
+    Integer selectGradeById(Integer subjectId);
+
+    /**
+     * 通过学科id查年级
+     * @param subjectName
+     * @return
+     */
+    Integer selectGradeByIName(String subjectName);
 }
 
 

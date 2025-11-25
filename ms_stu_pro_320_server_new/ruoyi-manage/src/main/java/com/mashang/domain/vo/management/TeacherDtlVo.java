@@ -1,5 +1,6 @@
 package com.mashang.domain.vo.management;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.annotation.Excel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -41,6 +42,7 @@ public class TeacherDtlVo {
 
     /** 出生日期 */
     @ApiModelProperty(value = "出生日期")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date birthday;
 
     /** 手机号码 */

@@ -60,6 +60,11 @@ public class SubjectsServiceImpl extends ServiceImpl<SubjectsMapper, Subjects>
     }
 
     @Override
+    public Integer selectGradeById(Integer subjectId) {
+        return subjectsMapper.selectGradeById(subjectId);
+    }
+
+    @Override
     public Integer selectBySubjectNameGrade(String subjectName, Integer grade) {
         return subjectsMapper.selectBySubjectNameGrade(subjectName, grade);
     }

@@ -12,6 +12,9 @@ import javax.validation.constraints.NotNull;
 @ApiModel(value="修改知识点")
 public class KnowledgeUpdate {
 
+    @ApiModelProperty(value = "知识点id")
+    private Integer knowledgeId;
+
     @ApiModelProperty(value = "知识点年级(1-12分别代表一年级到高三)", required = true)
     @NotNull(message = "年级不能为空")
     private Integer grade;
