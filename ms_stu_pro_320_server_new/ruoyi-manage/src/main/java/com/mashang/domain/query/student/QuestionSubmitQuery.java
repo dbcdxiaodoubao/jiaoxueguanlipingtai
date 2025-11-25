@@ -18,7 +18,7 @@ public class QuestionSubmitQuery {
     @ApiModelProperty(value = "用户答案")
     private String userAnswer;
 
-    @ApiModelProperty(value = "题目类型",required = true)
+    @ApiModelProperty(value = "题目类型（0 单选 1 多选 2 判断 3 填空 4 简答）",required = true)
     @NotNull(message = "题目类型不能为空")
     private Integer questionType;
 

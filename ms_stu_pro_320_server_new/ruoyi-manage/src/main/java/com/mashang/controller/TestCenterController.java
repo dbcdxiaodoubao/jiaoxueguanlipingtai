@@ -51,7 +51,7 @@ public class TestCenterController extends BaseController {
     private ISubjectsService subjectsService;
 
     @GetMapping("/student/list")
-    @ApiOperation("查询属于当前学生的未完成的答卷（固定，时段，班级答卷）")
+    @ApiOperation(value = "查询属于当前学生的未完成的答卷（固定，时段，班级答卷）",notes = "只能查出这三种未完成的答卷")
     @PreAuthorize("@ss.hasPermi('student:test:list')")
     public R<List<TestListVo>> getStudentTests(){
         Long userId = SecurityUtils.getUserId();
@@ -60,7 +60,7 @@ public class TestCenterController extends BaseController {
     }
 
     @GetMapping("/student/info/{testAnswerId}")
-    @ApiOperation("查询答卷查询详情信息")
+    @ApiOperation(value = "查询答卷查询详情信息",notes = "可根据考试记录来获取答卷id")
     @PreAuthorize("@ss.hasPermi('student:test:info')")
     @ApiImplicitParam(name = "testAnswerId",value = "答卷id",required = true)
     public R<TestAnswerInfo> getStudentTestInfo(@PathVariable Long testAnswerId){
@@ -69,7 +69,7 @@ public class TestCenterController extends BaseController {
     }
 
     @PutMapping("/student/submit")
-    @ApiOperation("提交试卷")
+    @ApiOperation(value = "提交试卷",notes = "必须得是未完成的试答卷,智能训练模块提交答卷效果更佳")
     @PreAuthorize("@ss.hasPermi('student:test:submit')")
     public AjaxResult submitTest(@Validated @RequestBody TestSubmitQuery testSubmitQuery){
         TestSubmit testSubmit = TestAnswerMapping.INSTANCE.toTestSubmit(testSubmitQuery);
@@ -77,7 +77,7 @@ public class TestCenterController extends BaseController {
     }
 
     @GetMapping("/student/page")
-    @ApiOperation("根据条件分页查询答卷列表（固定，时段，班级答卷）")
+    @ApiOperation(value = "根据条件分页查询答卷列表（固定，时段，班级答卷）",notes = "只能查出这三种的答卷")
     @PreAuthorize("@ss.hasPermi('student:test:list')")
     public TableDataInfo<List<TestListVo>> pageStudentTests(@Validated PageQuery pageQuery,@Validated TestPageQuery testPageQuery){
 

@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,11 +33,11 @@ public class TestRecordController extends BaseController {
     @Autowired
     private ITestAnswerService testAnswerService;
 
-    @GetMapping("/page")
+    @GetMapping("/page/{subjectId}")
     @ApiOperation("根据提交时间倒叙分页查询该学生所有做过的试卷基本信息")
     @PreAuthorize("@ss.hasPermi('student:test:list')")
     @ApiImplicitParam(name = "subjectId",value = "学科id",required = true)
-    public TableDataInfo<List<TestRecordListVo>> pageTestRecord(@Validated PageQuery pageQuery,@NotNull(message = "学科id不能为空") Long subjectId){
+    public TableDataInfo<List<TestRecordListVo>> pageTestRecord(@Validated PageQuery pageQuery,@NotNull(message = "学科id不能为空")@PathVariable Long subjectId){
         TestRecordQuery testRecordQuery = new TestRecordQuery();
         Long userId = SecurityUtils.getUserId();
         testRecordQuery.setUserId(userId);

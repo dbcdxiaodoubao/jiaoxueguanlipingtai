@@ -22,7 +22,7 @@ public class TestRecordListVo {
     @ApiModelProperty(value = "答卷状态（0待批改 1已完成 2未完成）")
     private Integer status;
 
-    @ApiModelProperty(value = "试卷类型")
+    @ApiModelProperty(value = "试卷类型（0固定 1时段 2班级 3视频 4随机 5任务）")
     private Integer testType;
 
     @ApiModelProperty(value = "学科名称")

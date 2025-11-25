@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,7 +35,7 @@ public class VideoLessonController extends BaseController {
     private ITestAnswerService testAnswerService;
 
     @GetMapping("/student/test")
-    @ApiOperation("查询未完成的视频答卷信息列表")
+    @ApiOperation(value = "查询未完成的视频答卷信息列表",notes = "只能查看未完成的视频试卷")
     @PreAuthorize("@ss.hasPermi('student:video:test')")
     public R<List<VideoTestVo>> getVideoTests(){
         Long userId = SecurityUtils.getUserId();
@@ -42,11 +43,11 @@ public class VideoLessonController extends BaseController {
         return R.ok(videoTests);
     }
 
-    @GetMapping("/student/page")
+    @GetMapping("/student/page/{subjectId}")
     @PreAuthorize("@ss.hasPermi('student:video:page')")
         @ApiOperation("根据条件分页查询对应的视频和关联的答卷信息")
     @ApiImplicitParam(name = "subjectId",value = "学科id",required = true)
-    public TableDataInfo<List<VideoTestVo>> pageVideoTests(@Validated PageQuery pageQuery,@NotNull(message = "学科id不能为空") Long subjectId){
+    public TableDataInfo<List<VideoTestVo>> pageVideoTests(@Validated PageQuery pageQuery,@NotNull(message = "学科id不能为空")@PathVariable Long subjectId){
         VideoTestPageQuery videoTestPageQuery = new VideoTestPageQuery();
         Long userId = SecurityUtils.getUserId();
         videoTestPageQuery.setUserId(userId);
