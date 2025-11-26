@@ -27,7 +27,7 @@ public class KnowledgeDtlVo {
     @NotBlank(message = "知识点名称不能为空")
     private String knowledgeName;
 
-    @ApiModelProperty(value = "父节点id (0代表为一级知识点)", required = true)
+    @ApiModelProperty(value = "父节点id (0代表为根节点)", required = true)
     @NotNull(message = "父节点id不能为空")
     private Integer parentId;
 }

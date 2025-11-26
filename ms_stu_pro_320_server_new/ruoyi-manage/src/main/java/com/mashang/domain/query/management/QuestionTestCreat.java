@@ -7,6 +7,9 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 @Data
 @ApiModel(value="试卷所关联的问题")
 public class QuestionTestCreat {
@@ -18,6 +21,8 @@ public class QuestionTestCreat {
     private Integer order;
 
     @ApiModelProperty("题目id")
+    @NotNull(message = "题目id不能为空")
+    @Min(value = 1, message = "题目id不能为0")
     private Long questionId;
 
 }
