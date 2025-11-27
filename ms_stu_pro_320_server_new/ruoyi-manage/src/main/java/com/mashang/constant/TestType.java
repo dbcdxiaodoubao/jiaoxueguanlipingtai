@@ -23,13 +23,15 @@ public class TestType {
         public static final Integer VIDEO_EXAM = 3;
 
         /**
-         * 任务试卷 - 老师发布的试卷，只有被选中的班级才可看到，由老师发布
-         */
-        public static final Integer TASK_EXAM = 4;
-
-        /**
          * 随机试卷
          */
-        public static final Integer RANDOM_EXAM = 5;
+        public static final Integer RANDOM_EXAM = 4;
+
+        /**
+         * 任务试卷 - 老师发布的试卷，只有被选中的班级才可看到，由老师发布
+         */
+        public static final Integer TASK_EXAM = 5;
+
+
 
     }

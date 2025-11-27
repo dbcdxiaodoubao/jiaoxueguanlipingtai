@@ -12,6 +12,7 @@ import com.mashang.comming.QuestionAnswerMapping;
 import com.mashang.comming.TestAnswerMapping;
 import com.mashang.constant.MessageConstant;
 import com.mashang.constant.StatusConstant;
+import com.mashang.constant.TestType;
 import com.mashang.domain.entity.QuestionAnswer;
 import com.mashang.domain.entity.Test;
 import com.mashang.domain.entity.TestAnswer;
@@ -111,13 +112,14 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
                 throw new ServiceException(MessageConstant.EXAM_NOT_EXIST);
             }
 
-            if (test.getStartTime() != null && new Date().before(test.getStartTime())) {
-                throw new ServiceException(MessageConstant.EXAM_NOT_START);
+            if (testAnswer.getStatus().equals(StatusConstant.EXAM_PAPER_STATUS_INCOMPLETE)) {
+                if (test.getStartTime() != null && new Date().before(test.getStartTime())) {
+                    throw new ServiceException(MessageConstant.EXAM_NOT_START);
+                }
+                if (test.getDeadline() != null && new Date().after(test.getDeadline())) {
+                    throw new ServiceException(MessageConstant.EXAM_ALREADY_END);
+                }
             }
-            if (test.getDeadline() != null && new Date().after(test.getDeadline())) {
-                throw new ServiceException(MessageConstant.EXAM_ALREADY_END);
-            }
-
             result.setSuggestDuration(test.getSuggestDuration());
             result.setQuestionNum(test.getQuestionNum());
         } else if (testAnswer.getRandomTestId() != null) {
@@ -184,6 +186,17 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
             if (test.getSuggestDuration() != null && test.getSuggestDuration() < testSubmit.getDuration()) {
                 throw new ServiceException(MessageConstant.ANSWER_SHEET_TIMEOUT);
             }
+            Integer testType = test.getTestType();
+            if (testType.equals(TestType.TIME_PERIOD_EXAM)) {
+                Date date = new Date();
+                if (test.getStartTime() == null || date.before(test.getStartTime())) {
+                    throw new ServiceException(MessageConstant.EXAM_NOT_START);
+                }
+
+                if (test.getDeadline() == null || date.after(test.getDeadline())) {
+                    throw new ServiceException(MessageConstant.EXAM_ALREADY_END);
+                }
+            }
         }
         //先改题目
         List<QuestionSubmit> questionSubmits = testSubmit.getQuestionSubmits();
@@ -197,7 +210,7 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
             } else if (QuestionUtils.isObjective(questionType)) {
                 String userAnswer = questionSubmit.getUserAnswer();
                 QuestionAnswer questionAnswer = questionAnswerMapper.selectById(questionSubmit.getQuestionAnswerId());
-                if (questionAnswer == null ||!questionAnswer.getTestAnswerId().equals(testSubmit.getTestAnswerId())) {
+                if (questionAnswer == null || !questionAnswer.getTestAnswerId().equals(testSubmit.getTestAnswerId())) {
                     throw new ServiceException(MessageConstant.TEST_QUESTION_ERROR);
                 }
                 //获取正确答案 可待优化
@@ -210,7 +223,7 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
                     questionSubmit.setStatus(StatusConstant.ANSWER_STATUS_WRONG);
                     questionSubmit.setUserQuestionScore(0);
                 }
-            }else {
+            } else {
                 throw new ServiceException(MessageConstant.QUESTION_TYPE_ERROR);
             }
         }

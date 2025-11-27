@@ -85,7 +85,7 @@
         SUM(IF(t3.question_type IN(0,1,2),1,0)) AS auto_checking,
         IF(t1.`status`=1,t1.user_test_score,NULL) AS final_score,
         t4.subject_name,
-        IFNULL( t2.test_type, 6 ) AS test_type
+        IFNULL( t2.test_type, 4 ) AS test_type
         FROM
         ms_test_answer AS t1
         LEFT JOIN
