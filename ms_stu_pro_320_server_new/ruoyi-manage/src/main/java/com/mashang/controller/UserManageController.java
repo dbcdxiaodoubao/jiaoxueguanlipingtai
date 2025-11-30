@@ -12,6 +12,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,7 @@ public class UserManageController {
         return studentService.pageQuery(query);
     }
 
-    @PutMapping("/exitClass/{userId}")
+    @DeleteMapping("/exitClass/{userId}")
     @ApiOperation("移除学生")
     @PreAuthorize("@ss.hasPermi('teacher:user:delete')")
     @Log(title = "移除学生", businessType = BusinessType.DELETE)

@@ -1,6 +1,7 @@
 package com.mashang.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -16,6 +17,8 @@ import com.mashang.constant.TestType;
 import com.mashang.domain.entity.QuestionAnswer;
 import com.mashang.domain.entity.Test;
 import com.mashang.domain.entity.TestAnswer;
+import com.mashang.domain.param.teacher.TestCorrect;
+import com.mashang.domain.param.teacher.TestCorrectParam;
 import com.mashang.domain.query.manage.TestAnswerPageQuery;
 import com.mashang.domain.entity.*;
 import com.mashang.domain.query.common.PageQuery;
@@ -374,7 +377,7 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
      */
     @Override
     public TableDataInfo testAnswerlist(TestAnswerPageQuery pageQuery, Integer status) {
-        List<Long> userIds;
+        List<Long> userIds=null;
         if (StringUtils.isNotNull(pageQuery.getClassId())) {
             //查出班级学生id集合
             LambdaQueryWrapper<SysUser> UserQueryWrapper = new LambdaQueryWrapper<SysUser>()
@@ -385,11 +388,13 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
                     .collect(Collectors.toList());
         } else {
             List<Integer> classIds = classMapper.selectClassIds(SecurityUtils.getUserId());
-            userIds = sysUserMapper.selectObjs(new LambdaQueryWrapper<SysUser>()
-                            .select(SysUser::getUserId)
-                            .in(SysUser::getClassId, classIds)).stream()
-                    .map(obj -> (Long) obj)
-                    .collect(Collectors.toList());
+            if(ObjectUtil.isNotEmpty(classIds)){
+                userIds = sysUserMapper.selectObjs(new LambdaQueryWrapper<SysUser>()
+                                .select(SysUser::getUserId)
+                                .in(SysUser::getClassId, classIds)).stream()
+                        .map(obj -> (Long) obj)
+                        .collect(Collectors.toList());
+            }
         }
         Page<TestAnswerListVo> list = baseMapper.testAnswerList(new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize())
                 , pageQuery.getSubjectId(), userIds, status);
@@ -431,16 +436,16 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
     }
 
     /**
-     * 手动批改主观题
-     *
-     * @param questionAnswerList 答题列表
+     * 主观题批改
+     * @param testCorrectParam
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void correct(List<QuestionAnswer> questionAnswerList) {
+    public void correct(TestCorrectParam testCorrectParam) {
         //获取答题对应试卷
-        TestAnswer testAnswer = getById(questionAnswerList.get(0).getTestAnswerId());
-        for (QuestionAnswer questionAnswer : questionAnswerList) {
+        TestAnswer testAnswer = getById(testCorrectParam.getTestAnswerId());
+        List<TestCorrect> testCorrectList = testCorrectParam.getTestCorrectList();
+        for (TestCorrect questionAnswer : testCorrectList) {
             //查出该答题的原数据
             QuestionAnswer one = questionAnswerService.lambdaQuery()
                     .eq(QuestionAnswer::getQuestionAnswerId, questionAnswer.getQuestionAnswerId()).one();

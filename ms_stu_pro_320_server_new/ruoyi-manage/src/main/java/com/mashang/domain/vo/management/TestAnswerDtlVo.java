@@ -22,6 +22,9 @@ public class TestAnswerDtlVo {
     @ApiModelProperty(value = "答卷人")
     private String nickName;
 
+    @ApiModelProperty(value = "答卷状态（0待批改 1已完成 2未完成）")
+    private Integer status;
+
     @ApiModelProperty(value = "试卷总分")
     private Integer sumScore;
 

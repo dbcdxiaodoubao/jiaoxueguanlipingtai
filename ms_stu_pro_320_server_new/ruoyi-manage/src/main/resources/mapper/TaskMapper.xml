@@ -12,6 +12,7 @@
     </resultMap>
 
     <resultMap id="taskTestMap" type="TaskDtlVo" autoMapping="true">
+        <id property="taskId" column="task_id"/>
         <collection property="taskTests" ofType="TaskTestVo" autoMapping="true"/>
     </resultMap>
     <select id="listStudentTasks" resultMap="listStudentTasksMap">
@@ -40,6 +41,7 @@
 
     <select id="detail" resultMap="taskTestMap" parameterType="java.lang.Integer">
         select
+            ta.task_id,
             ta.task_name,
             ta.grade,
             te.test_id,

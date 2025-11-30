@@ -69,6 +69,7 @@
         <foreach item="classId" collection="classIds" separator="," open="(" close=")">
             #{classId}
         </foreach>
+        order by u.join_class_time desc
     </select>
 
 </mapper>

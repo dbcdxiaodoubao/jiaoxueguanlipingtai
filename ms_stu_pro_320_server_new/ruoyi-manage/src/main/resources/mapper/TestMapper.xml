@@ -190,6 +190,7 @@
         <if test="query.subjectId!=null">
             and s.subject_id=#{query.subjectId}
         </if>
+        order by t.create_time desc
     </select>
 
     <select id="haveTestByName" resultType="Integer">

@@ -10,6 +10,9 @@ import java.util.List;
 @ApiModel("任务详情vo")
 public class TaskDtlVo {
 
+    @ApiModelProperty(value = "任务id")
+    private Integer taskId;
+
     @ApiModelProperty(value = "任务年级(1-12分别代表一年级到高三)")
     private Integer grade;
 

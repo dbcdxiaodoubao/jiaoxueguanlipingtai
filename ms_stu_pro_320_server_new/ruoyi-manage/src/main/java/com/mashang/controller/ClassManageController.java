@@ -5,7 +5,10 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mashang.comming.ClassMapping;
 import com.mashang.domain.entity.Class;
+import com.mashang.domain.param.teacher.ClassInsert;
+import com.mashang.domain.param.teacher.ClassUpdate;
 import com.mashang.domain.query.teacher.ClassPageQuery;
+import com.mashang.domain.vo.teacher.ClassDtlVo;
 import com.mashang.service.IClassService;
 import com.mashang.service.IStudentService;
 import com.mashang.service.ITeacherServicee;
@@ -54,19 +57,21 @@ public class ClassManageController {
     @GetMapping("/{classId}")
     @ApiOperation("查询班级详情")
     @PreAuthorize("@ss.hasPermi('teacher:class:query')")
-    public R<String> selectById(@PathVariable @Validated Integer classId){
-        return R.ok(classService.getById(classId).getClassName());
+    public R<ClassDtlVo> selectById(@PathVariable @Validated Integer classId){
+        Class aClass = classService.getById(classId);
+        return R.ok(classMapping.toClassDtlVo(aClass));
     }
 
-    @PutMapping("/{classId}")
+    @PutMapping()
     @ApiOperation("修改班级信息")
     @PreAuthorize("@ss.hasPermi('teacher:class:update')")
     @Log(title = "修改班级信息", businessType = BusinessType.UPDATE)
-    public R<Void> update(@NotNull(message = "班级名称为空") @ApiParam("班级名称") String className,
-                          @NotNull(message = "班级id为空") @ApiParam("班级id") @PathVariable Integer classId){
-        Class aClass = classService.lambdaQuery().eq(Class::getClassName, className).ne(Class::getClassId, classId).one();
+    public R<Void> update(@RequestBody @Validated ClassUpdate classUpdate){
+        Class aClass = classService.lambdaQuery().eq(Class::getClassName, classUpdate.getClassName())
+                .ne(Class::getClassId, classUpdate.getClassId()).one();
         if(ObjectUtil.isNotNull(aClass))return R.fail("班级名称已存在");
-        return R.result(classService.updateById(new Class().setClassId(classId).setClassName(className)));
+        return R.result(classService.updateById(new Class().setClassId(classUpdate.getClassId())
+                .setClassName(classUpdate.getClassName())));
     }
 
     @DeleteMapping("/{classId}")
@@ -75,9 +80,10 @@ public class ClassManageController {
     @Log(title = "删除班级", businessType = BusinessType.DELETE)
     public R<Void> delete(@NotNull(message = "班级id为空") @ApiParam("班级id") @PathVariable Integer classId){
         //检查该班级下是否存在学生
-        List<SysUser> list = studentService.lambdaQuery().eq(SysUser::getClassId, classId)
-                .ne(SysUser::getUserId, SecurityUtils.getUserId()).list();
-        if (ObjectUtil.isNotEmpty(list))return R.fail("该班级下存在学生，请先移除学生");
+
+        if (studentService.lambdaQuery().select(SysUser::getUserId)
+                .eq(SysUser::getClassId, classId)
+                .ne(SysUser::getUserId, SecurityUtils.getUserId()).exists())return R.fail("该班级下存在学生，请先移除学生");
 
         /*//解除教师与该班级的绑定
         teacherService.lambdaUpdate().eq(SysUser::getClassId, classId)
@@ -90,7 +96,8 @@ public class ClassManageController {
     @ApiOperation("添加班级")
     @PreAuthorize("@ss.hasPermi('teacher:class:add')")
     @Log(title = "添加班级", businessType = BusinessType.INSERT)
-    public R<Void> add(@NotNull(message = "班级名称为空") @ApiParam("班级名称") String className){
+    public R<Void> add(@RequestBody @Validated ClassInsert classInsert){
+        String className = classInsert.getClassName();
         Class aClass = classService.lambdaQuery().eq(Class::getClassName, className).one();
         if(ObjectUtil.isNotNull(aClass))return R.fail("班级名称已存在");
         return R.result(classService.save(new Class().setClassName(className)

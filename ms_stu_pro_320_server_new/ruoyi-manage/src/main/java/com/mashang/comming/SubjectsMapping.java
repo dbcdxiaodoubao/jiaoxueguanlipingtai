@@ -5,6 +5,7 @@ import com.mashang.domain.query.management.SubjectsCreat;
 import com.mashang.domain.query.management.SubjectsUpdate;
 import com.mashang.domain.vo.management.SubjectsDtlVo;
 import com.mashang.domain.vo.student.SubjectsListByGradeVo;
+import com.mashang.domain.vo.teacher.SubjectsListVo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
@@ -12,7 +13,7 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface SubjectsMapping {
 
     SubjectsMapping INSTANCE = Mappers.getMapper(SubjectsMapping.class);
@@ -25,4 +26,6 @@ public interface SubjectsMapping {
     List<SubjectsListByGradeVo> toSubjectsListByGradeVoList(List<Subjects> subjects);
 
     Subjects toUpdate(SubjectsUpdate subjectsUpdate);
+
+    List<SubjectsListVo> toSubjectsListVo(List<Subjects> list);
 }

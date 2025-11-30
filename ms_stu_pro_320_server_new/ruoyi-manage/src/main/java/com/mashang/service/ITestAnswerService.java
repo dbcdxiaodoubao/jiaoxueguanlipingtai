@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.mashang.domain.entity.QuestionAnswer;
 import com.mashang.domain.entity.TestAnswer;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.mashang.domain.param.teacher.TestCorrectParam;
 import com.mashang.domain.query.manage.TestAnswerPageQuery;
 import com.mashang.domain.query.common.PageQuery;
 import com.mashang.domain.query.student.TestRecordQuery;
@@ -101,7 +102,7 @@ public interface ITestAnswerService extends IService<TestAnswer> {
 
     /**
      * 手动批改主观题
-     * @param questionAnswerList 批改信息
+     * @param testCorrectParam 批改信息
      */
-    void correct(List<QuestionAnswer> questionAnswerList);
+    void correct(TestCorrectParam testCorrectParam);
 }

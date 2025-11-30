@@ -2,6 +2,7 @@ package com.mashang.service;
 
 import com.mashang.domain.entity.Task;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.mashang.domain.param.manage.TaskCreate;
 import com.mashang.domain.vo.management.TaskDtlVo;
 import com.mashang.domain.vo.student.TaskListVo;
 
@@ -23,11 +24,10 @@ public interface ITaskService extends IService<Task> {
 
     /**
      * 新增任务
-     * @param task
-     * @param testIds
+     * @param taskCreate
      * @return
      */
-    boolean add(Task task, List<Integer> testIds);
+    boolean add(TaskCreate taskCreate);
 
     /**
      * 修改任务

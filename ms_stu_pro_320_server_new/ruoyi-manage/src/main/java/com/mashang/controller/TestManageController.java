@@ -1,10 +1,13 @@
 package com.mashang.controller;
 
 import com.mashang.comming.ClassMapping;
+import com.mashang.comming.SubjectsMapping;
 import com.mashang.domain.entity.Class;
 import com.mashang.domain.entity.Subjects;
 import com.mashang.domain.entity.Test;
+import com.mashang.domain.param.teacher.TestUpdate;
 import com.mashang.domain.query.teacher.TestPageQuery;
+import com.mashang.domain.vo.teacher.SubjectsListVo;
 import com.mashang.domain.vo.teacher.TestClassListVo;
 import com.mashang.domain.vo.teacher.TestDtlVo;
 import com.mashang.domain.vo.teacher.TestListVo;
@@ -36,6 +39,7 @@ public class TestManageController {
     private final ISubjectsService subjectsService;
     private final IClassService classService;
     private final ClassMapping classMapping;
+    private final SubjectsMapping subjectsMapping;
 
     @GetMapping("/list")
     @ApiOperation("分页查询试卷列表")
@@ -48,8 +52,8 @@ public class TestManageController {
     @ApiOperation("修改试卷信息")
     @PreAuthorize("@ss.hasPermi('teacher:test:update')")
     @Log(title = "修改试卷信息", businessType = BusinessType.UPDATE)
-    public R<Void> update(@ApiParam("修改试卷信息") @RequestBody Test test, @ApiParam("绑定班级id集合") List<Integer> classIds) {
-        testService.update(test, classIds);
+    public R<Void> update(@RequestBody @Validated TestUpdate testUpdate) {
+        testService.update(testUpdate);
         return R.ok();
     }
 
@@ -84,9 +88,9 @@ public class TestManageController {
     @GetMapping("/subjects")
     @ApiOperation("查询学科列表")
     @PreAuthorize("@ss.hasPermi('teacher:test:list')")
-    public R<List<Subjects>> listSubjects() {
-        return R.ok(subjectsService.lambdaQuery().eq(Subjects::getGrade,SecurityUtils.getLoginUser().getUser().getGrade())
-                .list());
+    public R<List<SubjectsListVo>> listSubjects() {
+        return R.ok(subjectsMapping.toSubjectsListVo(subjectsService.lambdaQuery()
+                .eq(Subjects::getGrade,SecurityUtils.getLoginUser().getUser().getGrade()).list()));
     }
 
     @GetMapping("/classes")

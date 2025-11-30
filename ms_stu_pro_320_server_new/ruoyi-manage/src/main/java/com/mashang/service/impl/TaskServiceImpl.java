@@ -2,11 +2,12 @@ package com.mashang.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.mashang.comming.TaskMapping;
 import com.mashang.constant.MessageConstant;
 import com.mashang.constant.RoleType;
-import com.mashang.domain.entity.Class;
 import com.mashang.domain.entity.Task;
 import com.mashang.domain.entity.TaskTest;
+import com.mashang.domain.param.manage.TaskCreate;
 import com.mashang.domain.vo.management.TaskDtlVo;
 import com.mashang.domain.vo.student.TaskListVo;
 import com.mashang.mapper.ClassMapper;
@@ -46,6 +47,9 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task>
     @Autowired
     private TaskTestMapper taskTestMapper;
 
+    @Autowired
+    private TaskMapping taskMapping;
+
     /**
      * 查询当前学生所有学习任务列表
      *
@@ -74,17 +78,17 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task>
 
     /**
      * 新增任务
-     * @param task
-     * @param testIds
+     * @param taskCreate
      * @return
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean add(Task task, List<Integer> testIds) {
+    public boolean add(TaskCreate taskCreate) {
+        Task task = taskMapping.toPo(taskCreate);
         //新增任务记录
         save(task);
         //绑定试卷数据
-        for (Integer testId : testIds) {
+        for (Integer testId : taskCreate.getTestIds()) {
             taskTestMapper.insert(new TaskTest().setTaskId(task.getTaskId()).setTestId(testId));
         }
         return true;

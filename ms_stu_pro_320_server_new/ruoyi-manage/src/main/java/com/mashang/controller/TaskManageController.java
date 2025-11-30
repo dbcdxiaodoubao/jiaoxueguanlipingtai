@@ -6,9 +6,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mashang.comming.TaskMapping;
 import com.mashang.domain.entity.Task;
 import com.mashang.domain.entity.TaskTest;
+import com.mashang.domain.param.manage.TaskCreate;
+import com.mashang.domain.param.manage.TaskUpdate;
 import com.mashang.domain.query.manage.TaskPageQuery;
 import com.mashang.domain.vo.management.TaskDtlVo;
-import com.mashang.domain.vo.student.TaskListVo;
 import com.mashang.service.ITaskService;
 import com.mashang.service.ITaskTestService;
 import com.ruoyi.common.core.domain.R;
@@ -22,8 +23,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/task")
@@ -41,37 +40,36 @@ public class TaskManageController {
     public TableDataInfo list(@Validated TaskPageQuery query) {
         Page<Task> page=new Page<>(query.getPageNum(),query.getPageSize());
         taskService.page(page,new LambdaQueryWrapper<Task>()
-                .eq(ObjectUtil.isNotNull(query.getGrade()),Task::getGrade,query.getGrade()));
+                .eq(ObjectUtil.isNotNull(query.getGrade()),Task::getGrade,query.getGrade())
+                .orderByDesc(Task::getCreateTime));
         return new TableDataInfo(taskMapping.toTaskListVoList(page.getRecords()),page.getTotal());
     }
 
     @PostMapping
     @ApiOperation("创建任务")
     @PreAuthorize("@ss.hasPermi('teacher:task:insert')")
-    public R<Void> add(@RequestBody Task task,@ApiParam("任务关联的试卷id") @RequestParam ArrayList<Integer> testIds) {
+    public R<Void> add(@RequestBody @Validated TaskCreate taskCreate) {
         // 判断任务名称是否存在
         if(taskService.lambdaQuery()
-                .eq(Task::getTaskName,task.getTaskName())
-                .eq(Task::getGrade,task.getGrade())
+                .eq(Task::getTaskName, taskCreate.getTaskName())
+                .eq(Task::getGrade, taskCreate.getGrade())
                 .exists()
         )return R.fail("任务名称已存在");
-        return R.result(taskService.add(task,testIds));
+        return R.result(taskService.add(taskCreate));
     }
 
     @PutMapping
     @ApiOperation("修改任务")
     @PreAuthorize("@ss.hasPermi('teacher:task:update')")
-    public R<Void> update(@RequestBody Task task,
-                          @ApiParam("任务关联的试卷id")
-                          @RequestParam ArrayList<Integer> testIds) {
+    public R<Void> update(@RequestBody @Validated TaskUpdate taskUpdate) {
         // 判断任务名称是否存在
         if(taskService.lambdaQuery()
-                .eq(Task::getTaskName,task.getTaskName())
-                .eq(Task::getGrade,task.getGrade())
-                .ne(Task::getTaskId,task.getTaskId())
+                .eq(Task::getTaskName,taskUpdate.getTaskName())
+                .eq(Task::getGrade,taskUpdate.getGrade())
+                .ne(Task::getTaskId,taskUpdate.getTaskId())
                 .exists()
         )return R.fail("任务名称已存在");
-        return R.result(taskService.update(task,testIds));
+        return R.result(taskService.updateById(taskMapping.toPo(taskUpdate)));
     }
 
     @DeleteMapping("/{taskId}")

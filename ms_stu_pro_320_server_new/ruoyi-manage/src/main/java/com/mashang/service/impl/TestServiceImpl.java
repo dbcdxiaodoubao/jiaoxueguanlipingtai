@@ -1,39 +1,33 @@
 package com.mashang.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.mashang.comming.TestMapping;
 import com.mashang.constant.MessageConstant;
-import com.mashang.constant.TestType;
+import com.mashang.domain.entity.Subjects;
 import com.mashang.domain.entity.Test;
-import com.mashang.domain.entity.TestAnswer;
 import com.mashang.domain.entity.TestClass;
+import com.mashang.domain.param.teacher.TestUpdate;
 import com.mashang.domain.query.common.PageQuery;
 import com.mashang.domain.query.management.QuestionTestCreat;
 import com.mashang.domain.query.management.TestListQuery;
 import com.mashang.domain.query.student.*;
 import com.mashang.domain.vo.management.ManageTestListVo;
 import com.mashang.domain.vo.management.TestDtlVo;
-import com.mashang.domain.vo.student.QuestionAnswerVo;
-import com.mashang.domain.vo.student.TestAnswerInfo;
 import com.mashang.domain.vo.student.TestListVo;
 import com.mashang.domain.vo.student.VideoTestVo;
 import com.mashang.mapper.*;
-import com.mashang.service.IQuestionAnswerService;
 import com.mashang.service.ITestService;
 import com.mashang.util.SubjectUtils;
 import com.mashang.util.TestUtils;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -143,17 +137,15 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test>
 
     /**
      * 教师端修改试卷
-     *
-     * @param test
-     * @param classIds
+     * @param testUpdate
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void update(Test test, List<Integer> classIds) {
-        Integer testId = test.getTestId();
-        testMapper.updateById(test);
+    public void update(TestUpdate testUpdate) {
+        Integer testId = testUpdate.getTestId();
+        testMapper.updateById(testMapping.toPo(testUpdate));
         testClassMapper.delete(new LambdaQueryWrapper<TestClass>().eq(TestClass::getTestId, testId));
-        for (Integer classId : classIds) {
+        for (Integer classId : testUpdate.getClassIds()) {
             testClassMapper.insert(new TestClass().setTestId(testId).setClassId(classId));
         }
     }
@@ -166,10 +158,19 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test>
      */
     @Override
     public com.mashang.domain.vo.teacher.TestDtlVo getById(Integer testId) {
-        com.mashang.domain.vo.teacher.TestDtlVo testDtlVo = testMapping.toTestDtlVo(testMapper.selectById(testId));
+        //根据试卷id查询试卷信息
+        Test test = testMapper.selectById(testId);
+        //根据学科id获取学科名称
+        Subjects subject = subjectsMapper.selectById(test.getSubjectId());
+        //把查询到的试卷信息转化为vo
+        com.mashang.domain.vo.teacher.TestDtlVo testDtlVo = testMapping.toTestDtlVo(test);
+        //查询试卷相关的班级信息
         List<Object> list = testClassMapper.selectObjs(new LambdaQueryWrapper<TestClass>()
                 .select(TestClass::getClassId).eq(TestClass::getTestId, testId));
+        //给vo的classIds属性赋值
         testDtlVo.setClassIds(list.stream().map(Integer.class::cast).collect(Collectors.toList()));
+        //给vo的subjectName属性赋值
+        testDtlVo.setSubjectName(subject.getSubjectName());
         return testDtlVo;
     }
 

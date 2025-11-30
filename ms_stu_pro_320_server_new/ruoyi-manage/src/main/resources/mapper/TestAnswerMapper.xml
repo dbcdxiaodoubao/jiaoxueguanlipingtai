@@ -139,6 +139,7 @@
                     #{userId}
                 </foreach>
             </if>
+            order by ta.submit_time desc
 
     </select>
 
@@ -153,6 +154,7 @@
             ta.test_answer_id,
             ta.test_name,
             u.nick_name,
+            ta.status,
             ta.sum_score,
             ta.duration,
             ta.user_test_score,
@@ -170,7 +172,7 @@
             left join ms_task_test tt on ta.test_id=tt.test_id and tt.del_flag='0'
             left join ms_task task on tt.task_id=task.task_id
             left join sys_user u on ta.user_id=u.user_id
-        where ta.test_answer_id=#{testAnswerId} and ta.del_flag='0' and ta.status=0
+        where ta.test_answer_id=#{testAnswerId} and ta.del_flag='0'
     </select>
     <select id="selectIdsByUserIds" resultType="java.lang.Integer">
         select test_answer_id from ms_test_answer where del_flag='0' and user_id in

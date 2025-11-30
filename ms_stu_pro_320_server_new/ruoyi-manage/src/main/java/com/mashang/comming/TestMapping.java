@@ -19,4 +19,6 @@ public interface TestMapping {
     Test toUpdate(TestUpdate testUpdate);
 
     TestDtlVo toTestDtlVo(Test test);
+
+    Test toPo(com.mashang.domain.param.teacher.TestUpdate testUpdate);
 }

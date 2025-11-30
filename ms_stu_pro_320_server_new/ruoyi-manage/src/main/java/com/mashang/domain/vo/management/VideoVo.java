@@ -8,6 +8,9 @@ import lombok.Data;
 @ApiModel("视频详情vo")
 public class VideoVo {
 
+    @ApiModelProperty("视频id")
+    private Integer videoId;
+
     @ApiModelProperty("学科名称")
     private String subjectName;
 

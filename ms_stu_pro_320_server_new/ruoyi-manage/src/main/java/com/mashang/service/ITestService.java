@@ -3,6 +3,7 @@ package com.mashang.service;
 import com.github.pagehelper.Page;
 import com.mashang.domain.entity.Test;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.mashang.domain.param.teacher.TestUpdate;
 import com.mashang.domain.query.common.PageQuery;
 import com.mashang.domain.query.management.QuestionTestCreat;
 import com.mashang.domain.query.management.TestListQuery;
@@ -95,11 +96,10 @@ public interface ITestService extends IService<Test> {
     List<com.mashang.domain.vo.teacher.TestListVo> pageQueryTeacher(com.mashang.domain.query.teacher.TestPageQuery query);
 
     /**
-     * 教师端修改试卷信息
-     * @param test
-     * @param classIds
+     * 修改试卷信息
+     * @param testUpdate
      */
-    void update(Test test, List<Integer> classIds);
+    void update(TestUpdate testUpdate);
 
     /**
      * 教师端查询试卷详情

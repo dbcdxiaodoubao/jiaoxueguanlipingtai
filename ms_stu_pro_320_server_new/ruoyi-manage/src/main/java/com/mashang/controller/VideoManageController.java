@@ -1,6 +1,9 @@
 package com.mashang.controller;
 
+import com.mashang.comming.VideoMapping;
 import com.mashang.domain.entity.Video;
+import com.mashang.domain.param.manage.VideoCreate;
+import com.mashang.domain.param.manage.VideoUpdate;
 import com.mashang.domain.query.manage.VideoPageQuery;
 import com.mashang.domain.vo.management.VideoVo;
 import com.mashang.service.IVideoService;
@@ -23,6 +26,7 @@ import javax.validation.constraints.NotNull;
 public class VideoManageController {
 
     private final IVideoService videoService;
+    private final VideoMapping videoMapping;
 
     @GetMapping("/list")
     @ApiOperation("视频列表")
@@ -43,15 +47,15 @@ public class VideoManageController {
     @PostMapping
     @ApiOperation("添加视频")
     @PreAuthorize("@ss.hasPermi('teacher:video:insert')")
-    public R<Void> add(@RequestBody Video video){
-        return R.result(videoService.save(video));
+    public R<Void> add(@RequestBody @Validated VideoCreate videoCreate){
+        return R.result(videoService.save(videoMapping.toPo(videoCreate)));
     }
 
     @PutMapping
     @ApiOperation("修改视频")
     @PreAuthorize("@ss.hasPermi('teacher:video:update')")
-    public R<Void> update(@RequestBody Video video){
-        return R.result(videoService.updateById(video));
+    public R<Void> update(@RequestBody @Validated VideoUpdate videoUpdate){
+        return R.result(videoService.updateById(videoMapping.toPo(videoUpdate)));
     }
 
     @DeleteMapping("/{videoId}")

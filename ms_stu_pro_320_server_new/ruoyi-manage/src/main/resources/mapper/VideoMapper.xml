@@ -17,10 +17,12 @@
         <if test="grade != null">
             and v.grade=#{grade}
         </if>
+        order by v.create_time desc
     </select>
 
     <select id="query" resultType="com.mashang.domain.vo.management.VideoVo" parameterType="java.lang.Integer">
         select
+            v.video_id,
             v.grade,
             v.video_name,
             s.subject_name,
