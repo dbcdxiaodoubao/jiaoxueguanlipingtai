@@ -17,6 +17,7 @@
             ms_knowledge t2
             ON t2.subject_id = t1.subject_id
                 AND t2.parent_id = 0
+                AND t2.del_flag = 0
         WHERE  t1.del_flag = 0
         <if test="grade != null and grade != 0 ">
             AND t1.grade = #{grade}

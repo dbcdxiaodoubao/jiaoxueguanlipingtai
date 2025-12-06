@@ -14,10 +14,10 @@ import java.util.List;
 
 
 @Data
-@ApiModel(value="试卷创建")
+@ApiModel(value="试卷修改")
 public class TestUpdate {
 
-    @ApiModelProperty(value = "试卷主键" , required = true)
+    @ApiModelProperty(value = "试卷id" , required = true)
     @NotNull(message = "试卷id不能为空")
     private Integer testId;
 
@@ -33,7 +33,7 @@ public class TestUpdate {
     @NotNull(message = "学科不能为空")
     private Integer subjectId;
 
-    @ApiModelProperty(value = "试卷类型",required = true)
+    @ApiModelProperty(value = "试卷类型（0固定 1时段 2班级 3视频 4随机 5任务）",required = true)
     @NotNull(message = "试卷类型不能为空")
     private Integer testType;
 

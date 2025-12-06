@@ -12,6 +12,8 @@ public class StuLoginInfoVo {
 
   @ApiModelProperty("日志id")
   private Integer infoId;
+  @ApiModelProperty("用户名")
+  private String userName;
   @ApiModelProperty("登录IP地址")
   private String ipaddr;
   @ApiModelProperty("登录地点")

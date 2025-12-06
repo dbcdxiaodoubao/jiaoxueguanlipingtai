@@ -3,9 +3,19 @@
 <mapper namespace="com.mashang.mapper.StuLogininfoMapper">
 
     <select id="list" resultType="stuLoginInfoVo">
-        select *
-        from sys_logininfor
-        where user_name = #{userName}
+        SELECT
+            tl.*
+        FROM
+            sys_user AS tu
+                INNER JOIN sys_logininfor AS tl
+                           ON tu.user_name = tl.user_name
+                INNER JOIN sys_user_role AS tur
+                           ON tu.user_id = tur.user_id
+        WHERE
+            tur.role_id = 3
+        <if test="userName != '' and userName != null">
+            AND tl.user_name = #{userName}
+        </if>
     </select>
 
 
