@@ -12,6 +12,9 @@ import java.util.List;
 @Alias("TestDtlVoTeacher")
 public class TestDtlVo {
 
+    @ApiModelProperty(value = "试卷主键")
+    private Integer testId;
+
     @ApiModelProperty(value = "试卷名称")
     private String testName;
 

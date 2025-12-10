@@ -154,7 +154,7 @@
             ta.test_answer_id,
             ta.test_name,
             u.nick_name,
-            ta.status,
+            ta.status taStatus,
             ta.sum_score,
             ta.duration,
             ta.user_test_score,

@@ -68,7 +68,7 @@ public class TestAnswerController {
     @ApiOperation("分页查询答卷列表")
     @PreAuthorize("@ss.hasPermi('teacher:tsetanswer:list')")
     public TableDataInfo list(@Validated TestAnswerPageQuery pageQuery) {
-        return testAnswerService.testAnswerlist(pageQuery,null);
+        return testAnswerService.testAnswerlist(pageQuery,StatusConstant.ANSWER_STATUS_CORRECT);
     }
 
     @GetMapping("/classList")
