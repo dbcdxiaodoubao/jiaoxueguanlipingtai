@@ -121,7 +121,7 @@ public class AdminController extends BaseController {
     @PreAuthorize("@ss.hasPermi('system:user:edit')")
     @Log(title = "用户管理", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@Validated @RequestBody UserUpdateQuery userUpdateQuery)
+    public R edit(@Validated @RequestBody UserUpdateQuery userUpdateQuery)
     {
         SysUser user = UserMapping.INSTANCE.toUpdate(userUpdateQuery);
 
@@ -133,41 +133,42 @@ public class AdminController extends BaseController {
         userService.checkUserDataScope(user.getUserId());
         roleService.checkRoleDataScope(user.getRoleIds());
         if(user.getUserId()==null || user.getUserId()==0){
-            return AjaxResult.error("用户id不能为空");
+            return R.fail("用户id不能为空");
         }
         user.setUpdateBy(getUsername());
-        return toAjax(userService.updateUser(user));
+        userService.updateUser(user);
+        return R.ok();
     }
 
     @ApiOperation("封禁用户")
     @PutMapping("/ban/{userId}")
-    public AjaxResult ban(@PathVariable Long userId) {
+    public R ban(@PathVariable Long userId) {
         if (userId == null || userId == 0) {
-            return AjaxResult.error("用户id不能为空");
+            return R.fail("用户id不能为空");
         }
         SysUser sysUser = userService.selectUserById(userId);
         if (sysUser == null) {
-            return AjaxResult.error("该用户不存在");
+            return R.fail("该用户不存在");
         }
 
         adminService.banById(userId);
 
-        return AjaxResult.success("封禁成功");
+        return R.ok();
     }
 
     @ApiOperation("解禁用户")
     @PutMapping("/noBan/{userId}")
-    public AjaxResult noBan(@PathVariable Long userId) {
+    public R noBan(@PathVariable Long userId) {
         if (userId == null || userId == 0) {
-            return AjaxResult.error("用户id不能为空");
+            return R.fail("用户id不能为空");
         }
         SysUser sysUser = userService.selectUserById(userId);
         if (sysUser == null) {
-            return AjaxResult.error("该用户不存在");
+            return R.fail("该用户不存在");
         }
 
-        adminService.banById(userId);
+        adminService.noBanById(userId);
 
-        return AjaxResult.success("封禁成功");
+        return R.ok();
     }
 }

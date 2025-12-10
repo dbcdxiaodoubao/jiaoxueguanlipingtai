@@ -30,7 +30,7 @@ public class UserCreatQuery {
     @ApiModelProperty(value = "年龄")
     private Long age;
 
-    @ApiModelProperty(value = "角色ID",required = true)
+    @ApiModelProperty(value = "角色ID(3为学生、4为教师、5为管理员)",required = true)
     private Long roleId;
 
     /** 用户性别 */
