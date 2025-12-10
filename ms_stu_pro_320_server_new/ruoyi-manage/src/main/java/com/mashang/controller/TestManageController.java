@@ -1,11 +1,17 @@
 package com.mashang.controller;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.mashang.comming.ClassMapping;
 import com.mashang.comming.SubjectsMapping;
+import com.mashang.comming.TestMapping;
+import com.mashang.constant.StatusConstant;
 import com.mashang.domain.entity.Class;
 import com.mashang.domain.entity.Subjects;
 import com.mashang.domain.entity.Test;
+import com.mashang.domain.param.teacher.TTestCreat;
 import com.mashang.domain.param.teacher.TestUpdate;
+import com.mashang.domain.query.management.QuestionTestCreat;
+import com.mashang.domain.query.management.TestCreat;
 import com.mashang.domain.query.teacher.TestPageQuery;
 import com.mashang.domain.vo.teacher.SubjectsListVo;
 import com.mashang.domain.vo.teacher.TestClassListVo;
@@ -40,6 +46,7 @@ public class TestManageController {
     private final IClassService classService;
     private final ClassMapping classMapping;
     private final SubjectsMapping subjectsMapping;
+    private final TestMapping testMapping;
 
     @GetMapping("/list")
     @ApiOperation("分页查询试卷列表")
@@ -99,5 +106,33 @@ public class TestManageController {
     public R<List<TestClassListVo>> listClasses() {
         return R.ok(classMapping.toTestClassListVo(classService.lambdaQuery()
                 .eq(Class::getTeacherId,SecurityUtils.getUserId()).list()));
+    }
+
+    @PostMapping
+    @ApiOperation("新增试卷")
+    @PreAuthorize("@ss.hasPermi('teacher:test:add')")
+    public R<Void> insert(@RequestBody @Validated TTestCreat ttestCreat){
+        if(!subjectsService.selectGradeById(ttestCreat.getSubjectId()).equals(ttestCreat.getGrade())){
+            return R.fail("新增试卷的年级应和所选科目的年级一样");
+        }
+        if(testService.haveTestByName(ttestCreat.getTestName())!=0){
+            return R.fail("该试卷名称已经存在");
+        }
+        if(ttestCreat.getTestType()<0||ttestCreat.getTestType()>5){
+            return R.fail("试卷类型不合法，应为0-5");
+        }
+        TestCreat testCreat=new TestCreat(ttestCreat.getTestName(),ttestCreat.getGrade(),ttestCreat.getSubjectId(),
+                ttestCreat.getTestType(),ttestCreat.getSuggestDuration(),ttestCreat.getQuestion());
+        Test test = testMapping.toCreat(testCreat);
+        testService.save(test);
+        for(QuestionTestCreat questionTestCreat: testCreat.getQuestion()){
+            testService.linkTestQuestion(test.getTestId(),questionTestCreat);
+        }
+        //如果是班级试卷进行绑定班级
+        if (testCreat.getTestType().equals(StatusConstant.EXAM_PAPER_TYPE_CLASS)){
+            if (ObjectUtil.isEmpty(ttestCreat.getClassIds()))return R.fail("班级试卷班级绑定id为空");
+            testService.linkTestClass(test.getTestId(),ttestCreat.getClassIds());
+        }
+        return R.ok();
     }
 }

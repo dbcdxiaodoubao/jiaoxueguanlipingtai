@@ -1,11 +1,10 @@
-package com.mashang.domain.query.management;
+package com.mashang.domain.param.teacher;
 
-import com.mashang.domain.vo.management.QuestionTestVo;
+import com.mashang.domain.query.management.QuestionTestCreat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.apache.ibatis.type.Alias;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -13,12 +12,10 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-
 @Data
 @ApiModel(value="试卷创建")
-@AllArgsConstructor
-@NoArgsConstructor
-public class TestCreat {
+@Alias("TTestCreat")
+public class TTestCreat {
 
     @ApiModelProperty(value = "试卷名称",required = true)
     @NotBlank(message = "试卷名称不能为空")
@@ -44,4 +41,7 @@ public class TestCreat {
     @NotEmpty(message = "题目不能为空")
     @Valid
     private List<QuestionTestCreat> question;
+
+    @ApiModelProperty(value = "绑定班级id集合")
+    private List<Integer> classIds;
 }

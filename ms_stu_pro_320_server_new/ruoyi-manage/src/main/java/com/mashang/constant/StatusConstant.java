@@ -46,4 +46,7 @@ public class StatusConstant {
     public static final String EXAM_PAPER_STATUS_PENDING_DESC = "待批改";
     public static final String EXAM_PAPER_STATUS_COMPLETED_DESC = "已完成";
     public static final String EXAM_PAPER_STATUS_INCOMPLETE_DESC = "未完成";
+
+    // 试卷类型
+    public static final Integer EXAM_PAPER_TYPE_CLASS = 2;
 }

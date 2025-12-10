@@ -194,6 +194,18 @@ public class TestServiceImpl extends ServiceImpl<TestMapper, Test>
         return testMapper.haveTestByName(testName);
     }
 
+    /**
+     * 绑定班级试卷班级
+     * @param testId
+     * @param classIds
+     */
+    @Override
+    public void linkTestClass(Integer testId, List<Integer> classIds) {
+        for (Integer classId : classIds) {
+            testClassMapper.insert(new TestClass().setTestId(testId).setClassId(classId));
+        }
+    }
+
 
 }
 

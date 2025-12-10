@@ -121,4 +121,6 @@ public interface ITestService extends IService<Test> {
      * @return
      */
     Integer haveTestByName(String testName);
+
+    void linkTestClass(Integer testId, List<Integer> classIds);
 }
