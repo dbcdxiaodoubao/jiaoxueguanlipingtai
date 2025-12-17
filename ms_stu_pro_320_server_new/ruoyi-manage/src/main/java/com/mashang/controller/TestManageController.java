@@ -6,6 +6,7 @@ import com.mashang.comming.SubjectsMapping;
 import com.mashang.comming.TestMapping;
 import com.mashang.constant.StatusConstant;
 import com.mashang.domain.entity.Class;
+import com.mashang.domain.entity.Question;
 import com.mashang.domain.entity.Subjects;
 import com.mashang.domain.entity.Test;
 import com.mashang.domain.param.teacher.TTestCreat;
@@ -18,6 +19,7 @@ import com.mashang.domain.vo.teacher.TestClassListVo;
 import com.mashang.domain.vo.teacher.TestDtlVo;
 import com.mashang.domain.vo.teacher.TestListVo;
 import com.mashang.service.IClassService;
+import com.mashang.service.IQuestionService;
 import com.mashang.service.ISubjectsService;
 import com.mashang.service.ITestService;
 import com.ruoyi.common.annotation.Log;
@@ -47,6 +49,7 @@ public class TestManageController {
     private final ClassMapping classMapping;
     private final SubjectsMapping subjectsMapping;
     private final TestMapping testMapping;
+    private final IQuestionService questionService;
 
     @GetMapping("/list")
     @ApiOperation("分页查询试卷列表")
@@ -120,6 +123,11 @@ public class TestManageController {
         }
         if(ttestCreat.getTestType()<0||ttestCreat.getTestType()>5){
             return R.fail("试卷类型不合法，应为0-5");
+        }
+        for (QuestionTestCreat questionTestCreat : ttestCreat.getQuestion()) {
+            if(!questionService.lambdaQuery().eq(Question::getQuestionId,questionTestCreat.getQuestionId()).exists()){
+                return R.fail("所关联的题目不存在:"+questionTestCreat.getQuestionId());
+            }
         }
         TestCreat testCreat=new TestCreat(ttestCreat.getTestName(),ttestCreat.getGrade(),ttestCreat.getSubjectId(),
                 ttestCreat.getTestType(),ttestCreat.getSuggestDuration(),ttestCreat.getQuestion());

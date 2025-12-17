@@ -463,6 +463,18 @@ public class TestAnswerServiceImpl extends ServiceImpl<TestAnswerMapper, TestAns
         }
         //更新答卷分数
         updateById(testAnswer);
+
+        //检查整张答卷答题状态 如果答题状态全部不为待批改则更新答卷状态 完成
+        boolean isNotDone = questionAnswerService.lambdaQuery()
+                .eq(QuestionAnswer::getTestAnswerId, testAnswer.getTestAnswerId())
+                .eq(QuestionAnswer::getStatus, StatusConstant.ANSWER_STATUS_PENDING)
+                .exists();
+
+        if (!isNotDone){
+            lambdaUpdate().eq(TestAnswer::getTestAnswerId, testAnswer.getTestAnswerId())
+                    .set(TestAnswer::getStatus, StatusConstant.EXAM_PAPER_STATUS_COMPLETED)
+                    .update();
+        }
     }
 
 }

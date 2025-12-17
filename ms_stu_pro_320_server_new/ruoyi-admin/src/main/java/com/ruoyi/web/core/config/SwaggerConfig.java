@@ -137,7 +137,7 @@ public class SwaggerConfig
                     return declaringClass== TaskCenterController.class||declaringClass== TestCenterController.class
                             || declaringClass== VideoLessonController.class||declaringClass== IntelligenceTrainingController.class
                             ||declaringClass== TestRecordController.class||declaringClass== WrongBookController.class
-                            || declaringClass==SysLoginController.class;
+                            || declaringClass==SysLoginController.class || declaringClass== PersonInfoController.class;
                 })
                 .paths(PathSelectors.any())
                 .build()
