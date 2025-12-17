@@ -135,4 +135,11 @@
         ORDER BY DATE(create_time) ;
     </select>
 
+
+    <select id="haveQuestionById" resultType="Integer">
+        SELECT COUNT(*)
+        FROM ms_question
+        WHERE question_id = #{questionId}
+    </select>
+
 </mapper>

@@ -74,6 +74,14 @@ public interface QuestionMapper extends BaseMapper<Question> {
      */
     List<MonthQuestion> monthQuestionList();
 
+
+    /**
+     * 通过问题id查询是否存在问题
+     * @param questionId
+     * @return
+     */
+    Integer haveQuestionById(Long questionId);
+
 }
 
 

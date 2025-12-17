@@ -12,6 +12,7 @@ import com.mashang.domain.query.management.TestListQuery;
 import com.mashang.domain.query.management.TestUpdate;
 import com.mashang.domain.vo.management.ManageTestListVo;
 import com.mashang.domain.vo.management.TestDtlVo;
+import com.mashang.service.IQuestionService;
 import com.mashang.service.ISubjectsService;
 import com.mashang.service.ITestAnswerService;
 import com.mashang.service.ITestService;
@@ -39,6 +40,9 @@ public class MageTestController extends BaseController {
 
     @Autowired
     private ISubjectsService subjectsService;
+
+    @Autowired
+    private IQuestionService questionService;
 
     @GetMapping
     @ApiOperation("管理端查询试卷列表")
@@ -83,11 +87,14 @@ public class MageTestController extends BaseController {
 
     @PutMapping
     @ApiOperation("修改试卷")
-    @PreAuthorize("@ss.hasPermi('manage:test:update')")
+    @PreAuthorize("@ss.hasPermi('manage:test:list')")
     public R update(@RequestBody @Validated TestUpdate testUpdate){
         testService.updateById(TestMapping.INSTANCE.toUpdate(testUpdate));
         testService.breakTestQuestion(testUpdate.getTestId());
         for(QuestionTestCreat questionTestCreat: testUpdate.getQuestion()){
+            if(questionService.haveQuestionById(questionTestCreat.getQuestionId())==0){
+                return R.fail("questionId为"+questionTestCreat.getQuestionId()+"的题目不存在");
+            }
             testService.linkTestQuestion(testUpdate.getTestId(),questionTestCreat);
         }
         return R.ok();

@@ -118,6 +118,11 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
        return questionMapper.insert(QuestionMapping.INSTANCE.toCreat(questionCteat));
     }
 
+    @Override
+    public Integer haveQuestionById(Long questionId) {
+        return questionMapper.haveQuestionById(questionId);
+    }
+
 
 }
 
