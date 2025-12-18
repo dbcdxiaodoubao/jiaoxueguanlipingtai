@@ -21,7 +21,7 @@ public class RandomTestQuery {
     @ApiModelProperty("判断题数")
     private Integer judgmentNum;
 
-    @ApiModelProperty(value = "题目难度（1-10）",required = true)
+    @ApiModelProperty(value = "题目难度（1-5）",required = true)
     @NotNull(message = "题目难度不能为空")
     private Integer questionDifficult;
 }

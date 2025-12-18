@@ -100,7 +100,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
             throw new ServiceException("题目类型非法，应为0-4", 500);
         }
         if(questionCteat.getQuestionDifficulty()<1 || questionCteat.getQuestionDifficulty()>10){
-            throw new ServiceException("题目难度非法，应为1-10", 500);
+            throw new ServiceException("题目难度非法，应为1-5", 500);
         }
         if(questionCteat.getQuestionScore()<=0){
             throw new ServiceException("题目分数应大于0", 500);

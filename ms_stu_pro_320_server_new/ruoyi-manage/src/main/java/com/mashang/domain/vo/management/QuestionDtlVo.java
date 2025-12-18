@@ -28,8 +28,8 @@ public class QuestionDtlVo  {
     @ExcelProperty("题目分数")
     private Integer questionScore;
 
-    @ApiModelProperty(value = "题目难度（1-10）")
-    @ExcelProperty("题目难度（1-10）")
+    @ApiModelProperty(value = "题目难度（1-5）")
+    @ExcelProperty("题目难度（1-5）")
     private Integer questionDifficulty;
 
     @ApiModelProperty(value = "题目类型（0 单选 1 多选 2 判断 3 填空 4 简答）")

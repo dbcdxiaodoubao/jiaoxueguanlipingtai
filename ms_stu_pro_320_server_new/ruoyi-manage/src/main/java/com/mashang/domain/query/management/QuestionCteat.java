@@ -29,8 +29,8 @@ public class QuestionCteat {
     @NotNull(message = "题目分数不能为空")
     private Integer questionScore;
 
-    @ApiModelProperty(value = "题目难度（1-10）", required = true)
-    @Excel(name = "题目难度（1-10）")
+    @ApiModelProperty(value = "题目难度（1-5）", required = true)
+    @Excel(name = "题目难度（1-5）")
     @NotNull(message = "题目难度不能为空")
     private Integer questionDifficulty;
 
