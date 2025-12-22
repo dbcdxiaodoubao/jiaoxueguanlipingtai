@@ -10,6 +10,7 @@ import com.ruoyi.common.core.domain.entity.SysUser;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.Date;
 import java.util.List;
 
 public interface StudentMapper  extends BaseMapper<SysUser> {
@@ -63,4 +64,12 @@ public interface StudentMapper  extends BaseMapper<SysUser> {
      */
     @Select("select nick_name from sys_user where user_id = #{userId}")
     String selectNickNameById(Integer userId);
+
+    /**
+     * 获取用户登录时间
+     * @param username
+     * @return
+     */
+    @Select("select login_time from sys_logininfor where user_name = #{username} and status = '0'")
+    List<Date> getLoginTimeList(String username);
 }

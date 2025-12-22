@@ -1,5 +1,6 @@
 package com.mashang.domain.vo.student;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -19,5 +20,6 @@ public class LoginInfoVo {
     private String userName;
 
     @ApiModelProperty("登录时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private List<Date> loginTime;
 }

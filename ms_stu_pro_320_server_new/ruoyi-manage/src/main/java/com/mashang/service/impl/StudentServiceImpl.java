@@ -72,7 +72,7 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, SysUser>
      * 获取用户登录日志
      * @return
      */
-    @Override
+    /*@Override
     public LoginInfoVo loginInfo() {
         List<SysLogininfor> list = Db.lambdaQuery(SysLogininfor.class)
                 .eq(SysLogininfor::getUserName, SecurityUtils.getUsername())
@@ -81,6 +81,13 @@ public class StudentServiceImpl extends ServiceImpl<StudentMapper, SysUser>
                 .list();
         //获取登录时间集合
         List<Date> loginTimeList = list.stream().map(SysLogininfor::getLoginTime).collect(Collectors.toList());
+        return new LoginInfoVo(SecurityUtils.getUsername(), loginTimeList);
+    }*/
+
+    @Override
+    public LoginInfoVo loginInfo() {
+        //获取登录时间集合
+        List<Date> loginTimeList = baseMapper.getLoginTimeList(SecurityUtils.getUsername());
         return new LoginInfoVo(SecurityUtils.getUsername(), loginTimeList);
     }
 
