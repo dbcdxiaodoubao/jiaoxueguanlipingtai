@@ -1,6 +1,7 @@
 package com.mashang.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.mashang.domain.entity.Class;
 import com.mashang.domain.vo.student.LoginInfoVo;
 import com.mashang.domain.vo.student.StudentInfoVo;
@@ -42,12 +43,13 @@ public class PersonInfoController extends BaseController {
     @ApiOperation("输入口令加入班级")
     @PreAuthorize("@ss.hasPermi('student:personinfo:joinclass')")
     public R<Void> joinClass(@ApiParam("班级口令") @PathVariable @NotNull(message = "班级口令不能为空") String classPassword){
-        SysUser student = studentService.getById(SecurityUtils.getUserId());
+        Long grade = studentService.getOne(new LambdaQueryWrapper<SysUser>().select(SysUser::getGrade)
+                .eq(SysUser::getUserId,SecurityUtils.getUserId())).getGrade();
         Class aClass = classService.lambdaQuery().eq(Class::getClassPassword, classPassword).one();
         if (aClass == null){
             return R.fail("口令不存在");
         }
-        if (!aClass.getGrade().equals(student.getGrade().intValue())){
+        if (!aClass.getGrade().equals(grade.intValue())){
             return R.fail("学生年级与加入班级年级不一致");
         }
         studentService.joinClass(aClass.getClassId());
@@ -57,7 +59,7 @@ public class PersonInfoController extends BaseController {
     @GetMapping("/loginInfo")
     @ApiOperation("获取用户登录日志")
     @PreAuthorize("@ss.hasPermi('student:personinfo:logininfo')")
-    private R<LoginInfoVo> loginInfo(){
+    public R<LoginInfoVo> loginInfo(){
         return R.ok(studentService.loginInfo());
     }
 
